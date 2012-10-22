@@ -1,0 +1,7 @@
+INSTALLATION (RAW NOTESS)
+
+1. Install node.js
+2. Install NPM
+run:
+3. npm install -g node-inspector
+4. install socket.io, express and node trought npm
