@@ -1,7 +1,37 @@
-var socket = io.connect('http://192.168.0.111');
-
 var GLOBAL_MYID;
 var sgame = new SnakeGame();
+
+var log = new function() {
+	this.start = new Date();
+	this.emits = 0;
+	this.updates = 0;
+	
+	this.emitsPerSec = function() {
+		var now = new Date();
+		var seconds = (now - this.start)/1000;
+		return (this.emits/seconds).toFixed(2);
+	}
+
+	this.updatesPerSec = function() {
+		var now = new Date();
+		var seconds = (now - this.start)/1000;
+		return (this.updates/seconds).toFixed(2);
+	}
+	
+	this.addUpdate = function() {
+		this.updates++;
+		$('#updates_counter').text(this.updates);
+		$('#updates_ps').text(this.updatesPerSec());
+	}
+	
+	this.addEmit = function() {
+		this.emits++;
+		$('#emits_counter').text(this.emits);
+		$('#emits_ps').text(this.emitsPerSec());
+	}
+}
+
+var socket = io.connect('http://localhost');
 
 socket.on('id', function(id) {
 	GLOBAL_MYID = id;
@@ -31,20 +61,24 @@ socket.on('user disconnected', function(id) {
 	$("#player"+id).remove();
 });
 
+
 /**
- * This triggers on a movements update from the server, it is a "ticked"
- * update that happen on a predetermined interval. It only data of players
+ * This triggers on a movements update from the server, it is a timed
+ * update that happen on a predetermined interval. It only has data of players
  * who actually has moved.
+ * {playerID: direction, playerID: direction}
  */
 socket.on('movements', function(movements) {
-	$("#movement_number").text(parseInt($("#movement_number").text())+1)
-	console.log("movements inc");
+	log.addUpdate();
+	//console.log("movements inc");
 	
 	// Update game engine
+	//update local obejct
+	
 	for (var i=0; i<sgame.players.length; i++) {
 		var player = sgame.players[i];
-		if (movements[player.id]) player.lastMoveInput = movements[player.id];
-		else player.lastMoveInput = null;
+		player.moves.push(movements[player.id]);
+		player.lastMoveInput = movements[player.id];
 	}
 	
 	// Update GUI (testing)
@@ -53,10 +87,19 @@ socket.on('movements', function(movements) {
 		imgEle.removeClass();
 		
 		var player = sgame.players[i];
+		
 		if (player.lastMoveInput) {
+			imgEle.text("");
+			imgEle.addClass('center_inner keyboard_arrow keyboard_'+player.lastMoveInput);
+		}
+		else {
+			imgEle.addClass('undefined');
+			imgEle.text("undefined")
+		}
+		/*if (player.lastMoveInput) {
 			imgEle.text(player.lastMoveInput);
 			//imgEle.addClass('center_inner keyboard_arrow keyboard_'+player.lastMoveInput);
-		}
+		}*/
 	}
 });
 
@@ -89,5 +132,6 @@ $(document).ready(function() {
 	setInterval(function(){
 		var direction = directions[Math.floor(Math.random()*directions.length)];
 		socket.emit('move input', direction);
-	}, 1000/SpamPerSecond)
+		log.addEmit();
+	}, 1000/SpamPerSecond);
 });

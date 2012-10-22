@@ -13,9 +13,8 @@ server.listen(80);
 /** SECTION 2: Project specific class instanciation **/
 /*************************************************************/
 
-var SnakeGame = require('./common/snake');
+var SnakeGame = require('./common/snakegame');
 var Player = require('./common/player');
-var Coordinate = require('./common/coordinate');
 
 /** SECTION 3: Http request handling **/
 /*************************************************************/
@@ -35,16 +34,16 @@ app.use(express.static(__dirname + '/common'));
 
 io.sockets.on('connection', function (socket) {
 
-	// Send initial game data
+	// Send initial game data to new player
 	for (var i=0; i<sgame.players.length; i++) {
 		socket.emit('user connected', sgame.players[i].id);
 	}
 	
-	// Add to game logic
+	// Add new player to game logic
 	sgame.players.push(new Player(socket.id));
 	console.log("It is now "+sgame.players.length+" players");
 	
-	// Announce new user
+	// Announce new player to current players
 	io.sockets.emit('user connected', socket.id);
 	
 	// The internal disconnect trigger
@@ -59,14 +58,17 @@ io.sockets.on('connection', function (socket) {
 	
 	// Custom triggers
 	socket.on("move input", function(direction) {
+		console.log("** move input ** "+socket.id+" : "+direction);
 		sgame.getPlayerById(socket.id).lastMoveInput = direction;
 	});
+	
 });
+
 
 
 /** SECTION 5: Game logic **/
 /*************************************************************/
-var MovesPerSecond = 10;
+var MovesPerSecond = 3;
 
 var sgame = new SnakeGame();
 
@@ -74,10 +76,15 @@ setInterval(function(){
 	var movements = {};
 	for (var i=0; i<sgame.players.length; i++) {
 		var player = sgame.players[i];
-		if (player.lastMoveInput) {
-			movements[player.id] = player.lastMoveInput;
+		var lastMove = player.lastMoveInput;
+
+		if (lastMove) {
+			movements[player.id] = lastMove;
 			player.lastMoveInput = null;
 		}
+		
+		// Set that last move input has happened
+		player.moves.push(lastMove);
 	}
 	
 	io.sockets.emit('movements', movements);

@@ -1,7 +1,8 @@
-INSTALLATION (RAW NOTESS)
+INSTALLATION
 
-1. Install node.js
-2. Install NPM
-run:
-3. npm install -g node-inspector
-4. install socket.io, express and node trought npm
+1. Install node.js [http://nodejs.org/]
+2. Clone the project from github.
+3. Open a cmd window in the server folder of this project, then run "npm install [modulename]".
+The modules are:
+	- express
+	- socket.io

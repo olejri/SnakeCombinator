@@ -1,4 +1,4 @@
-#movement_counter {
+#output {
 	width: 100%;
 	text-align: center
 }
@@ -18,6 +18,10 @@
 	margin: 5px 0 5px 55px;
 	width: 50px;
 	height: 50px;
+}
+
+#players .movement .undefined {
+	color: red;
 }
 
 .keyboard_arrow {

@@ -1,6 +1,5 @@
 function SnakeGame() {
 	this.players = [];
-	
 }
 SnakeGame.prototype.deletePlayerById = function(id) {
 	for (var i=0; i<this.players.length; i++) {
