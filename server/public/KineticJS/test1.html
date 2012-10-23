@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			canvas {
+				border: 1px solid #9C9898;
+			}
+		</style>
+		<script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.0.js"></script>
+		<script>
+			window.onload = function() {
+				
+				var stage = new Kinetic.Stage({
+					container : "container",
+					width : 500,
+					height : 500
+				});
+				
+				var layer = new Kinetic.Layer();
+				stage.add(layer);
+				for (var i=0; i<30; i++) {
+					var imageObj = new Image();
+					imageObj.src = "./pig.jpg";
+					imageObj.onload = function() {
+						
+						var animations = [];
+						
+						var pig = new Kinetic.Image({
+							x : Math.floor((Math.random()*500)+1),
+							y : Math.floor((Math.random()*500)+1),
+							image : imageObj,
+						});
+						layer.add(pig);
+						
+						var amplitude = Math.floor((Math.random()*150)+1);
+						var period = Math.floor((Math.random()*2000)+1);
+						// in ms
+						var centerX = stage.getWidth() / 2;
+				
+						var anim = new Kinetic.Animation({
+							func : function(frame) {
+								pig.setX(amplitude * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
+							},
+							node : layer
+						});
+						
+						anim.start();
+						
+						animations.push(anim);
+						
+					}
+				}
+			};
+		</script>
+	</head>
+	<body>
+		<div id="container"></div>
+	</body>
+</html>
