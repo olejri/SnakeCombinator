@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <script src="https://raw.github.com/kangax/fabric.js/master/dist/all.js"></script>
+  </head>
+  <body>
+    <canvas id="c" width="500" height="500" style="border:1px solid #ccc"></canvas>
+    <script>
+      // polyfill by @paulirish
+      if (!window.requestAnimationFrame ) {
+        window.requestAnimationFrame = (function() {
+          return window.webkitRequestAnimationFrame ||
+          window.mozRequestAnimationFrame ||
+          window.oRequestAnimationFrame ||
+          window.msRequestAnimationFrame ||
+          function( /* function FrameRequestCallback */ callback, /* DOMElement Element */ element ) {
+            window.setTimeout( callback, 1000 / 60 );
+          };
+        })();
+      }
+    </script>
+    <script>
+        var canvas = new fabric.Canvas('c', { selection: false });
+
+        setInterval(function() {
+          fabric.Image.fromURL('./pig.jpg', function(img) {
+            img.set('left', fabric.util.getRandomInt(200, 600)).set('top', -50);
+           //img.movingLeft = !!Math.round(Math.random());
+            canvas.add(img);
+          });
+        }, 100);
+
+        (function animate() {
+          canvas.forEachObject(function(obj) {
+            obj.left += (obj.movingLeft ? -1 : 1);
+            obj.top += 1;
+            if (obj.left > 900 || obj.top > 500) {
+              canvas.remove(obj);
+            }
+            else {
+              obj.setAngle(obj.getAngle() + 2);
+            }
+          });
+          canvas.renderAll();
+          window.requestAnimationFrame(animate);
+        })();
+   
+      
+    </script>
+  </body>
+</html>
