@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>EaselJS demo: Getting started</title>
+	<script src="easeljs-0.5.0.min.js"></script>
+	<script>
+	
+		var stage;
+		var pigMove;
+		function init() {
+			stage = new createjs.Stage("demoCanvas");
+			
+			
+			for (var i=0; i<30;i++) {
+				addPig();
+			}
+			
+			stage.update();
+			createjs.Ticker.addListener(window);
+			createjs.Ticker.setFPS(30);
+		}
+		
+		function addPig(){
+			var pig;
+			var randomX = Math.floor(Math.random()*501)
+			var randomY = Math.floor(Math.random()*501)
+			pig = new createjs.Bitmap('pig.jpg');
+			pig.x = randomX;
+			pig.y = randomY;
+			stage.addChild(pig);
+			
+			
+			
+			
+		}
+		
+		function tick() {
+			var l = stage.getNumChildren()-1;
+			for (var i=1; i<l; i++) {
+				var pig = stage.getChildAt(i);
+				pig.x = pig.x + 5;
+				if (pig.x > stage.canvas.width) { pig.x = 0; }
+			}
+			stage.update(); // important!!
+		}
+	</script>
+</head>
+<body onLoad="init();">
+	<canvas id="demoCanvas" width="500" height="500">
+		alternate content
+	</canvas>
+</body>
+</html>
