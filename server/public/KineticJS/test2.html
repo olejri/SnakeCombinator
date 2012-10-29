@@ -21,8 +21,8 @@
 					height : 500
 				});
 				
-				var layer = new Kinetic.Layer();
-				stage.add(layer);
+				mainLayer = new Kinetic.Layer();
+				stage.add(mainLayer);
 				for (var i=0; i<30; i++) {
 					var imageObj = new Image();
 					imageObj.onload = function() {
@@ -34,7 +34,7 @@
 							y : Math.floor((Math.random()*500)+1),
 							image : imageObj,
 						});
-						layer.add(pig);
+						mainLayer.add(pig);
 						
 						var amplitude = Math.floor((Math.random()*150)+1);
 						var period = Math.floor((Math.random()*2000)+1);
@@ -45,7 +45,7 @@
 							func : function(frame) {
 								pig.setX(amplitude * Math.sin(frame.time * 2 * Math.PI / period) + centerX);
 							},
-							node : layer
+							node : mainLayer
 						});
 						
 						anim.start();
@@ -56,9 +56,22 @@
 					imageObj.src = "./pig.jpg";
 				}
 			};
+			
+			function moveCamera(direction) {
+				var newX = mainLayer.getX();
+				if (direction == "left") newX -= 100;
+				else newX += 100;
+				
+				mainLayer.transitionTo({
+					x: newX,
+					duration: 0.1,
+				});
+			}
 		</script>
 	</head>
 	<body>
+		<button class="float: left;" onclick="moveCamera('left')">Camera LEFT</button>
+		<button class="float: left;" onclick="moveCamera('right')">Camera RIGHT</button>
 		<div id="container"></div>
 	</body>
 </html>
