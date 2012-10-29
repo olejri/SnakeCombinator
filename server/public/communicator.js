@@ -3,8 +3,11 @@ var communicator = new function() {
 	var newTicks = [];
 	
 	this.emitMovement = function(direction) {
-		socket.emit('move input', direction);
-		log.addEmit();
+		if (socket) {
+			socket.emit('move input', direction);
+			log.addEmit();
+		}
+		else console.log("EMIT ERROR: Not connected to server");
 	}
 
 	this.popTicks = function() {
@@ -97,6 +100,7 @@ var log = new function() {
 	this.start = new Date();
 	this.emits = 0;
 	this.updates = 0;
+	this.draws = 0;
 	
 	this.emitsPerSec = function() {
 		var now = new Date();
@@ -110,6 +114,12 @@ var log = new function() {
 		return (this.updates/seconds).toFixed(2);
 	}
 	
+	this.FPS = function() {
+		var now = new Date();
+		var seconds = (now - this.start)/1000;
+		return (this.draws/seconds).toFixed(2);
+	}
+	
 	this.addUpdate = function() {
 		this.updates++;
 		$('#updates_counter').text(this.updates);
@@ -120,6 +130,11 @@ var log = new function() {
 		this.emits++;
 		$('#emits_counter').text(this.emits);
 		$('#emits_ps').text(this.emitsPerSec());
+	}
+	
+	this.addDraw = function() {
+		this.draws++;
+		$('#fps').text(this.FPS());
 	}
 }
 
@@ -139,16 +154,15 @@ $(document).ready(function() {
 	
 	$(document).on('keydown', function(event) {
 		var moveDirection = keyCodeNameMapper[event.keyCode];
-		if (moveDirection) {
-			socket.emit('move input', moveDirection);
-		}
+		if (moveDirection) communicator.emitMovement(moveDirection);
+		event.preventDefault();
 	});
 	
 	
-	var SpamPerSecond = 10;
+	/*var SpamPerSecond = 10;
 	var directions = ['left', 'up', 'right', 'down'];
 	setInterval(function(){
 		var direction = directions[Math.floor(Math.random()*directions.length)];
 		communicator.emitMovement(direction);
-	}, 1000/SpamPerSecond);
+	}, 1000/SpamPerSecond);*/
 });

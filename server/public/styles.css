@@ -3,6 +3,12 @@
 	text-align: center
 }
 
+#output > span {
+	margin-right: 10px;
+	border-right: 1px solid black;	
+}
+
+
 #players > * {
 	float: left;
 	margin: 5px 5px;
@@ -27,10 +33,14 @@
 .keyboard_arrow {
 	width: 50px;
 	height: 50px;
-	background-image: url('/arrows_sprite.png');
+	background-image: url('/images/arrows_sprite.png');
 	background-repeat: no-repeat;
 }
 .keyboard_left {background-position: -0px -0px; top: 315px; left: 5px;}
 .keyboard_up {background-position: -50px -0px; top: 60px; left: 315px;}
 .keyboard_right {background-position: -100px -0px; top: 315px; right: 5px;}
 .keyboard_down {background-position: -150px -0px; bottom: 5px; left: 315px;}
+
+#gamegui {
+	clear: both;	
+}

@@ -2,25 +2,33 @@
 <html>
 <head>
 	<link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+	<div id="output">
+		<span>
+			Updates: <span id="updates_counter">0</span> (<span id="updates_ps">0</span> ps)
+		</span>
+		<span>
+			Emits: <span id="emits_counter">0</span>  (<span id="emits_ps">0</span> ps)
+		</span>
+		<span>
+			FPS: <span id=fps>0</span>
+		</span>
+	</div>
+
+	<div id="players"></div>
+
+	<div id="gamegui"></div>
+
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+	<script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.0.js"></script>
 	<script src="/snakegame.js"></script>
 	<script src="/player.js"></script>
 	<script src="/communicator.js"></script>
 	<script src="/guidrawer.js"></script>
 	<script src="/client.js"></script>
-</head>
-<body>
-	<div id="output">
-		<div>
-		Updates: <span id="updates_counter">0</span> (<span id="updates_ps">0</span> ps)
-		</div>
-		<div>
-			Emits: <span id="emits_counter">0</span>  (<span id="emits_ps">0</span> ps)
-		</div>
-	</div>
-	
-	<div id="players"></div>
+
 </body>
 </html>
 
