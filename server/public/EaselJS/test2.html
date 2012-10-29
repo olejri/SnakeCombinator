@@ -1,6 +1,17 @@
 <!DOCTYPE html>
 <html>
-<head>
+	<head>
+		<style>
+			body {
+				margin: 0px;
+				padding: 0px;
+			}
+			
+			canvas {
+				border: 1px solid #9C9898;
+			}
+		</style>
+
 	<title>EaselJS demo: Getting started</title>
 	<script src="easeljs-0.5.0.min.js"></script>
 	<script>
@@ -8,21 +19,36 @@
 		var stage;
 		var container;
 		var pigMove;
+		var graphics = new createjs.Graphics();
+		var maximum;
+		var minimum;
+		
 		function init() {
 			stage = new createjs.Stage("demoCanvas");
-			container = new createjs.Container();
-			stage.addChild(container);
-				
+			var g = new createjs.Graphics();
+			g.setStrokeStyle(1);
+			g.beginStroke(createjs.Graphics.getRGB(0,0,0,.7));
+			g.drawRect(0,0,500,500);
+			
+			var circle = new createjs.Shape(g);
+			container = new createjs.Container(500, 500);
+			container.x = 400;
+			container.y = 350;
+			container.regX = 250;
+			container.regY = 250;
+			var maximum = 5;
+			var minimum = -5;
+		
 			
 			
 			for (var i=0; i<30;i++) {
 				addPig();
 			}
-			
+			container.addChild(circle);
+			stage.addChild(container);
 			stage.update();
-			container.update();
-			createjs.Ticker.addListener(stage);
-			createjs.Ticker.setFPS(30);
+			createjs.Ticker.addListener(window);
+			
 		}
 		
 		function addPig(){
@@ -32,6 +58,7 @@
 			pig = new createjs.Bitmap('pig.jpg');
 			pig.x = randomX;
 			pig.y = randomY;
+			pig.speed = Math.floor(Math.random()*20);
 			container.addChild(pig);
 			
 			
@@ -39,28 +66,44 @@
 			
 		}
 		
+		function makeBorder() {
+			
+		}
+		
 		function tick() {
 			var l = container.getNumChildren()-1;
 			for (var i=1; i<l; i++) {
 				var pig = container.getChildAt(i);
-				pig.x = pig.x + 5;
-				if (pig.x > container.canvas.width) { pig.x = 0; }
+				
+				pig.x = pig.x + pig.speed;
+				if (pig.x > 480) { pig.x = 0; }
+				
 			}
-			stage.update(); // important!!
+// 			if (container.x > 200) {
+// 				container.x = 100;
+// 			} else {
+// 				container.x += 1;
+// 			} 
+			container.rotation += 2;
+ 			stage.update(); // important!!
 		}
 		
-		function moveContainer(){
-			container.x = container + 5;
+		function moveCamera(direction) {
+			var newX = container.x;
+			if (direction == "left") newX -= 10;
+			else newX += 10;
+			container.x = newX;
 			stage.update();
+			
 			
 		}
 	</script>
 </head>
 <body onLoad="init();">
-	<canvas id="demoCanvas" width="500" height="500">
+	<canvas id="demoCanvas" width="800" height="800">
 		alternate content
 	</canvas>
-	
-	<button onclick="moveContainer()"> Click </button>
+	<button class="float: left;" onclick="moveCamera('left')">Camera LEFT</button>
+	<button class="float: left;" onclick="moveCamera('right')">Camera RIGHT</button>
 </body>
 </html>
