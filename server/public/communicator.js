@@ -10,8 +10,11 @@ var communicator = new function() {
 		else console.log("EMIT ERROR: Not connected to server");
 	}
 
+	/**
+	 * Fetch all new ticks, and remove them from object
+	 */
 	this.popTicks = function() {
-		
+		return newTicks.splice(0, newTicks.length);
 	}
 	
 	this.getID = function() {
@@ -52,31 +55,34 @@ var communicator = new function() {
 
 
 		/**
-		 * This triggers on a movements update from the server, it is a timed
+		 * This triggers on a tick update from the server, it is a timed
 		 * update that happen on a predetermined interval. It only has data of players
 		 * who actually has moved.
-		 * {playerID: direction, playerID: direction}
+		 * 
+		 * Tick Object Format: {playerID: direction, playerID: direction, ...}
+		 * 
+		 * One tick contains player movements, an empty tick means that all players
+		 * are continueing in the same direction
 		 */
-		socket.on('movements', function(movements) {
+		socket.on('tick', function(tick) {
 			log.addUpdate();
-			//console.log("movements inc");
 			
 			// Update game engine
-			//update local obejct
-			
 			for (var i=0; i<sgame.players.length; i++) {
 				var player = sgame.players[i];
-				player.moves.push(movements[player.id]);
-				player.lastMoveInput = movements[player.id];
+				player.moves.push(tick[player.id]);
+				player.lastMoveInput = tick[player.id];
 			}
 			
-			// Update GUI (testing)
+			newTicks.push(tick);
+			
+			// Update Movement Output (debug only)
 			for (var i=0; i<sgame.players.length; i++) {
-				var imgEle = $("#player"+player.id).find('.movement').children();
-				imgEle.removeClass();
-				
 				var player = sgame.players[i];
 				
+				var imgEle = $("#player"+player.id).find('.movement').children();
+				imgEle.removeClass();
+
 				if (player.lastMoveInput) {
 					imgEle.text("");
 					imgEle.addClass('center_inner keyboard_arrow keyboard_'+player.lastMoveInput);
@@ -154,6 +160,9 @@ $(document).ready(function() {
 	
 	$(document).on('keydown', function(event) {
 		var moveDirection = keyCodeNameMapper[event.keyCode];
+		//sgame.players[0].snake.move(moveDirection);
+//		gui.draw(sgame.getBoardElements());
+		
 		if (moveDirection) communicator.emitMovement(moveDirection);
 		event.preventDefault();
 	});

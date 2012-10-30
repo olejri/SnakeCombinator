@@ -68,18 +68,18 @@ io.sockets.on('connection', function (socket) {
 
 /** SECTION 5: Game logic **/
 /*************************************************************/
-var MovesPerSecond = 3;
+var MovesPerSecond = 5;
 
 var sgame = new SnakeGame();
 
 setInterval(function(){
-	var movements = {};
+	var tick = {};
 	for (var i=0; i<sgame.players.length; i++) {
 		var player = sgame.players[i];
 		var lastMove = player.lastMoveInput;
 
 		if (lastMove) {
-			movements[player.id] = lastMove;
+			tick[player.id] = lastMove;
 			player.lastMoveInput = null;
 		}
 		
@@ -87,5 +87,5 @@ setInterval(function(){
 		player.moves.push(lastMove);
 	}
 	
-	io.sockets.emit('movements', movements);
+	io.sockets.emit('tick', tick);
 }, 1000/MovesPerSecond)

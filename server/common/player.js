@@ -2,10 +2,12 @@ function Player(id) {
 	this.id = id;
 	this.nick = "nonicked"
 	this.moves = [];
-	this.lastMoveInput = null; 	// Last move input from player, not to be confused by
-								// the last element in the moves array, since lastMoveInput
-								// can change multiple times before the server read it and set
-								// it to the player move.
+	this.lastMoveInput = null; 	// Last keyboard input move, not neccesary actual move
+	this.snake;
+	
+	this.createSnake = function(startX, startY) {
+		this.snake = new Snake(startX, startY);
+	}
 }
 
 if(typeof exports != 'undefined'){
