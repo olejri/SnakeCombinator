@@ -13,8 +13,11 @@ server.listen(80);
 /** SECTION 2: Project specific class instanciation **/
 /*************************************************************/
 
-var SnakeGame = require('./common/snakegame');
-var Player = require('./common/player');
+var Utils = require('./common/utils');
+utils = new Utils();
+SnakeGame = require('./common/snakegame');
+Player = require('./common/player');
+Snake = require('./common/snake');
 
 /** SECTION 3: Http request handling **/
 /*************************************************************/
@@ -34,22 +37,35 @@ app.use(express.static(__dirname + '/common'));
 
 io.sockets.on('connection', function (socket) {
 
-	// Send initial game data to new player
-	for (var i=0; i<sgame.players.length; i++) {
-		socket.emit('user connected', sgame.players[i].id);
-	}
+	// Send game data to new client
+	socket.emit('game', sgame);
 	
 	// Add new player to game logic
-	sgame.players.push(new Player(socket.id));
+	var newPlayer = new Player(socket.id);
+	sgame.joinGame(newPlayer);
 	console.log("It is now "+sgame.players.length+" players");
 	
 	// Announce new player to current players
-	io.sockets.emit('user connected', socket.id);
+	io.sockets.emit('user connected', newPlayer);
+	
+	// If enough players, start game, else stop it
+	var gameStarted = false;
+	var gameInterval;
+	if (!gameStarted && (sgame.players.length >= PlayersToStart)) {
+		gameInterval = setInterval(runGame, 1000/MovesPerSecond);
+		gameStarted = true;
+	}
 	
 	// The internal disconnect trigger
 	socket.on('disconnect', function () {
 		// Remove from game logic
 		sgame.deletePlayerById(socket.id);
+		
+		// Stop game if not enough players
+		if (sgame.players.length < PlayersToStart) {
+			clearInterval(gameInterval);
+			gameStarted = false;
+		}
 		
 		io.sockets.emit('user disconnected', socket.id);
 		
@@ -68,11 +84,14 @@ io.sockets.on('connection', function (socket) {
 
 /** SECTION 5: Game logic **/
 /*************************************************************/
-var MovesPerSecond = 5;
+var PlayersToStart = 2;
+var MovesPerSecond = 2;
+var GameWidth = 30;
+var GameHeight = 30;
 
-var sgame = new SnakeGame();
+var sgame = new SnakeGame(GameWidth, GameHeight);
 
-setInterval(function(){
+function runGame() {
 	var tick = {};
 	for (var i=0; i<sgame.players.length; i++) {
 		var player = sgame.players[i];
@@ -88,4 +107,4 @@ setInterval(function(){
 	}
 	
 	io.sockets.emit('tick', tick);
-}, 1000/MovesPerSecond)
+}

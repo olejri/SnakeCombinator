@@ -21,26 +21,33 @@ var communicator = new function() {
 		return socket.socket.sessionid;
 	}
 	
-	this.connect = function(ip) {
+	/**
+	 * Connects to a node.js WebSocket server to given IP, an essential part
+	 * of connecting to a server is receiving the game object afterwards. The
+	 * callback is run when this happen.
+	 */
+	this.connect = function(ip, gameReceivedCallback) {
 		
 		socket = io.connect(ip);
 		
-		socket.on('id', function(id) {
-			GLOBAL_MYID = id;
-			console.log("Connection accepted, id is "+id);
+		// Received game object from server
+		socket.on('game', function(gameObj) {
+			console.log(gameObj)
+			gameReceivedCallback(gameObj);
 		});
 
-		socket.on('user connected', function(id) {
-			console.log("User "+id+" connected");
-			
-			// Update game engine
-			sgame.players.push(new Player(id));
+		socket.on('user connected', function(playerObj) {
+			console.log(playerObj)
+			console.log("User "+playerObj.id+" connected");
 
-			// Update gui
-			var playerDiv = $('<div id="player'+id+'"></div>');
-			playerDiv.append('<div class="title">'+id+'</div>');
+			// Update game engine
+			sgame.joinGameFromObj(playerObj)
+
+			// Update test output gui
+			/*var playerDiv = $('<div id="player'+playerObj.id+'"></div>');
+			playerDiv.append('<div class="title">'+playerObj.id+'</div>');
 			playerDiv.append('<div class="movement center_outer"><div></div></div>');
-			$('#players').append(playerDiv)
+			$('#players').append(playerDiv)*/
 		});
 
 		socket.on('user disconnected', function(id) {

@@ -1,11 +1,11 @@
-function Snake(startX, startY) {
-	this.parts = [{x: startX, y: startY}];
-	var lastDirection;
+function Snake(parts, startDirection) {
+	this.parts = parts;
+	this.lastDirection = startDirection;
 	
 	this.move = function(direction) {
 		// No direction given == continue last direction
-		if (!direction) direction = lastDirection;
-		else if (!isAllowedDirection(direction)) direction = lastDirection;
+		if (!direction) direction = this.lastDirection;
+		else if (!this.isAllowedDirection(direction)) direction = this.lastDirection;
 		// Find x and y offset for direction
 		var offset;
 		if (direction == "left") offset = {x: -1, y: 0};
@@ -20,26 +20,16 @@ function Snake(startX, startY) {
 		// Delete last part
 		this.parts.splice(this.parts.length-1,1);
 		// Update lastDirection, and we are done!
-		lastDirection = direction;
+		this.lastDirection = direction;
 	}
-	
-	var isAllowedDirection = function(direction) {
-		if (direction == "left" && lastDirection == "right") return false;
-		else if (direction == "right" && lastDirection == "left") return false;
-		else if (direction == "up" && lastDirection == "down") return false;
-		else if (direction == "down" && lastDirection == "up") return false;
-		else return true;
-	}
-	
-	// Testdata
-	this.parts.push({x: startX+1, y: startY})
-	this.parts.push({x: startX+2, y: startY})
-	this.parts.push({x: startX+3, y: startY})
-	this.parts.push({x: startX+4, y: startY})
-	this.parts.push({x: startX+5, y: startY})
-	this.parts.push({x: startX+6, y: startY})
-	this.parts.push({x: startX+7, y: startY})
-	
+}
+Snake.prototype.isAllowedDirection = function(direction) {
+	//console.log("is allowed: "+direction+" when last was "+this.lastDirection);
+	if (direction == "left" && this.lastDirection == "right") return false;
+	else if (direction == "right" && this.lastDirection == "left") return false;
+	else if (direction == "up" && this.lastDirection == "down") return false;
+	else if (direction == "down" && this.lastDirection == "up") return false;
+	else return true;
 }
 
 if(typeof exports != 'undefined'){
