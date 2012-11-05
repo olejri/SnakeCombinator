@@ -2,6 +2,8 @@ function SnakeGame(width, height) {
 	this.width = width;
 	this.height = height;
 	this.players = [];
+	this.started = false;
+	this.runGameInterval;
 }
 /**
  * Since the WebSocket communicator can't transfer classes, but instead a plain 
@@ -36,7 +38,7 @@ SnakeGame.prototype.joinGameFromObj = function(objP) {
 SnakeGame.prototype.joinGame = function(player) {
 	var randX = utils.rand(2,this.width-2);
 	var randY = utils.rand(2,this.height-2);
-	var randDirection = ['left', 'right', 'up', 'down'][utils.rand(0,3)];
+	var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
 	player.createSnake(randX, randY, randDirection);
 	this.players.push(player);
 };

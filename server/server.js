@@ -49,11 +49,9 @@ io.sockets.on('connection', function (socket) {
 	io.sockets.emit('user connected', newPlayer);
 	
 	// If enough players, start game, else stop it
-	var gameStarted = false;
-	var gameInterval;
-	if (!gameStarted && (sgame.players.length >= PlayersToStart)) {
-		gameInterval = setInterval(runGame, 1000/MovesPerSecond);
-		gameStarted = true;
+	if (!sgame.started && (sgame.players.length >= PlayersToStart)) {
+		sgame.runGameInterval = setInterval(runGame, 1000/MovesPerSecond);
+		sgame.started = true;
 	}
 	
 	// The internal disconnect trigger
@@ -63,8 +61,8 @@ io.sockets.on('connection', function (socket) {
 		
 		// Stop game if not enough players
 		if (sgame.players.length < PlayersToStart) {
-			clearInterval(gameInterval);
-			gameStarted = false;
+			clearInterval(sgame.runGameInterval);
+			sgame.started = false;
 		}
 		
 		io.sockets.emit('user disconnected', socket.id);
@@ -91,6 +89,11 @@ var GameHeight = 30;
 
 var sgame = new SnakeGame(GameWidth, GameHeight);
 
+/**
+ * Run one game tick, checking if players want to move their snake, updating
+ * BUT NOT applying the moved direction to the players snake move history.
+ * Then finally emiting the tick to all players.
+ */
 function runGame() {
 	var tick = {};
 	for (var i=0; i<sgame.players.length; i++) {
