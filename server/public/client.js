@@ -1,20 +1,21 @@
 // TOP VARIABLES
 var gui;
-var sgame; // Instanciated by the communicator when the game has been received.
+var sgame;
 var utils = new Utils();
 //var communicator; In addition comes communicator variable created in communicator.js
 
 $(document).ready(function() {
 	
-	communicator.connect("http://129.241.102.253/", function(gameObj){
+	communicator.connect("http://78.91.6.242/", function(serverGameObj){
 		// This callback is run when the game data has been received
-		sgame = new SnakeGame();
-		sgame.makeGameFromObj(gameObj);
 		
+		sgame = new ClientSnakeGame(serverGameObj);
+
 		gui = new GameGUI({
+			GSD: 20, // Game Square Dimension, width/height of each game square
 			container: 'gamegui', 
-			gameWidth: sgame.width,
-			gameHeight: sgame.height,
+			gameWidth: sgame.settings.width,
+			gameHeight: sgame.settings.height,
 		});
 		
 		// INITIATE GUI

@@ -15,6 +15,9 @@ function Player(id) {
 		parts.push({x: startX+5, y: startY})
 		parts.push({x: startX+6, y: startY})
 		parts.push({x: startX+7, y: startY})
+		parts.push({x: startX+8, y: startY})
+		parts.push({x: startX+9, y: startY})
+		parts.push({x: startX+10, y: startY})
 		// Create
 		this.snake = new Snake(parts, startDirection);
 	}

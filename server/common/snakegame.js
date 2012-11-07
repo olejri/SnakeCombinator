@@ -1,50 +1,16 @@
-function SnakeGame(width, height) {
-	this.width = width;
-	this.height = height;
+function SnakeGame() {
 	this.players = [];
-	this.started = false;
-	this.runGameInterval;
 }
-/**
- * Since the WebSocket communicator can't transfer classes, but instead a plain 
- * JavaScript object, we need to convert the object to a SnakeGame class object.
- * In addition the server only contains the original positions of the snake parts, 
- * and the movements that has happened since. Therefore this method has to apply
- * ALL movements that has happen since the start of the game
- */
-SnakeGame.prototype.makeGameFromObj = function(obj) {
-	// Set normal game settings
-	this.width = obj.width;
-	this.height = obj.height;
-	// Create players
-	for (var p=0; p<obj.players.length; p++) {
-		this.joinGameFromObj(obj.players[p])
-	}
-};
-/**
- * Similar to makeGameFromObj this method joins with a Player object from a
- * object.
- */
-SnakeGame.prototype.joinGameFromObj = function(objP) {
-	var player = new Player(objP.id);
-	player.nick = objP.nick;
-	player.snake = new Snake(objP.snake.parts, objP.snake.lastDirection);
-	// Apply moves
-	for (var m=0; m<objP.moves.length; m++) {
-		player.snake.move(objP.moves[m]);
-	}
-	this.players.push(player);
-};
-SnakeGame.prototype.joinGame = function(player) {
-	var randX = utils.rand(2,this.width-2);
-	var randY = utils.rand(2,this.height-2);
+SnakeGame.prototype.addPlayer = function(player) {
+	var randX = utils.rand(2,this.settings.width-2);
+	var randY = utils.rand(2,this.settings.height-2);
 	var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
 	player.createSnake(randX, randY, randDirection);
 	this.players.push(player);
 };
 SnakeGame.prototype.deletePlayerById = function(id) {
 	for (var i=0; i<this.players.length; i++) {
-		if (this.players[i].id == id) this.players.splice(i,1);
+		if (this.players[i].id == id) return this.players.splice(i,1)[0];
 	}
 };
 SnakeGame.prototype.getPlayerById = function(id) {
@@ -56,42 +22,56 @@ SnakeGame.prototype.getPlayerById = function(id) {
 /**
  * Apply new ticks that the communicator has received.
  */
-SnakeGame.prototype.applyTicks = function() {
-	var newTicks = communicator.popTicks();
+SnakeGame.prototype.applyTicks = function(newTicks) {
 	for (var i=0; i<newTicks.length; i++) {
 		var tick = newTicks[i];
 		for (var p=0; p<this.players.length; p++) {
-			this.players[p].snake.move(tick[this.players[p].id]);
+			var player = this.players[p];
+			if (player.snake) player.snake.move(tick[player.id]);
 		}
+		// Event detections for current tick
+		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
+		if (!this.settings.otherCrashAllowed) this.checkForCrash();
 	}
 };
-SnakeGame.prototype.getBoardElements = function() {
-	this.applyTicks();
-	
-	var elements = [];
-	
+/**
+ * Check if any players snakehead crashed with it's own body. If so it runs 
+ * the crashedCallback function with the player object as parameter
+ */
+SnakeGame.prototype.checkForSelfCrash = function(crashedCallback) {
 	for (var i=0; i<this.players.length; i++) {
-		var snake = this.players[i].snake;
-		// Add head to elements list
-		elements.push(new BoardElement({
-			type: 'head',
-			x: snake.parts[0].x,
-			y: snake.parts[0].y
-		}));
-		// Add body parts
-		for (var s=1; s<this.players[i].snake.parts.length; s++) {
-			elements.push(new BoardElement({
-				type: 'body',
-				x: snake.parts[s].x,
-				y: snake.parts[s].y
-			}));
+		if (this.players[i].snake) {
+			if (this.players[i].snake.hasSelfCrash()) {
+				crashedCallback(this.players[i]);
+				this.players[i].snake = null;
+			}
 		}
 	}
-
-	return elements;
-	
 };
-
+SnakeGame.prototype.checkForCrash = function(crashedCallback) {
+	var crashedPlayers = [];
+	var counter = 0;
+	// Detect crashes
+	for (var i=0; i<this.players.length; i++) {
+		if (!this.players[i].snake) continue;
+		var head = this.players[i].snake.parts[0];
+		for (var k=0; k<this.players.length; k++) {
+			if (this.players[i].id != this.players[k].id) {
+				var snake = this.players[k].snake;
+				if (!snake) continue;
+				else if (snake.hasPartAtPosition(head.x, head.y)) {
+					crashedPlayers.push(this.players[i]);
+					break; // No need to check if crashed with other more players
+				}
+			}
+		}
+	}
+	// Delete snakes of players who crashed
+	for (var c=0; c<crashedPlayers.length; c++) {
+		crashedCallback(crashedPlayers[c]);
+		crashedPlayers[c].snake = null;
+	}
+};
 if(typeof exports != 'undefined'){
 	module.exports = SnakeGame;
 }

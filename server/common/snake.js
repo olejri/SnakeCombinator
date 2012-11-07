@@ -30,7 +30,20 @@ Snake.prototype.isAllowedDirection = function(direction) {
 	else if (direction == "up" && this.lastDirection == "down") return false;
 	else if (direction == "down" && this.lastDirection == "up") return false;
 	else return true;
-}
+};
+Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
+	if (!indexOffset) indexOffset = 0;
+	for (var i=indexOffset; i<this.parts.length; i++) {
+		if (this.parts[i].x == x) {
+			if (this.parts[i].y == y) return true;
+		}
+	}
+	return false;
+};
+Snake.prototype.hasSelfCrash = function() {
+	var head = this.parts[0];
+	return this.hasPartAtPosition(head.x, head.y, 1);
+};
 
 if(typeof exports != 'undefined'){
 	module.exports = Snake;

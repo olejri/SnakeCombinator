@@ -15,7 +15,7 @@ server.listen(80);
 
 var Utils = require('./common/utils');
 utils = new Utils();
-SnakeGame = require('./common/snakegame');
+ServerSnakeGame = require('./server_snakegame');
 Player = require('./common/player');
 Snake = require('./common/snake');
 
@@ -38,19 +38,19 @@ app.use(express.static(__dirname + '/common'));
 io.sockets.on('connection', function (socket) {
 
 	// Send game data to new client
-	socket.emit('game', sgame);
+	socket.emit('game', sgame.toClientJson());
 	
 	// Add new player to game logic
 	var newPlayer = new Player(socket.id);
-	sgame.joinGame(newPlayer);
+	sgame.addPlayer(newPlayer);
 	console.log("It is now "+sgame.players.length+" players");
 	
 	// Announce new player to current players
 	io.sockets.emit('user connected', newPlayer);
 	
 	// If enough players, start game, else stop it
-	if (!sgame.started && (sgame.players.length >= PlayersToStart)) {
-		sgame.runGameInterval = setInterval(runGame, 1000/MovesPerSecond);
+	if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart)) {
+		sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 		sgame.started = true;
 	}
 	
@@ -60,7 +60,7 @@ io.sockets.on('connection', function (socket) {
 		sgame.deletePlayerById(socket.id);
 		
 		// Stop game if not enough players
-		if (sgame.players.length < PlayersToStart) {
+		if (sgame.players.length < sgame.settings.playersToStart) {
 			clearInterval(sgame.runGameInterval);
 			sgame.started = false;
 		}
@@ -82,12 +82,14 @@ io.sockets.on('connection', function (socket) {
 
 /** SECTION 5: Game logic **/
 /*************************************************************/
-var PlayersToStart = 2;
-var MovesPerSecond = 2;
-var GameWidth = 30;
-var GameHeight = 30;
-
-var sgame = new SnakeGame(GameWidth, GameHeight);
+var sgame = new ServerSnakeGame({
+	'width': 30,
+	'height': 30,
+	'playersToStart': 2,
+	'speed': 1,
+	'selfCrashAllowed': false,
+	'otherCrashAllowed': false,
+});
 
 /**
  * Run one game tick, checking if players want to move their snake, updating

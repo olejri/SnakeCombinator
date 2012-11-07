@@ -32,32 +32,15 @@ var communicator = new function() {
 		
 		// Received game object from server
 		socket.on('game', function(gameObj) {
-			console.log(gameObj)
 			gameReceivedCallback(gameObj);
 		});
 
 		socket.on('user connected', function(playerObj) {
-			console.log(playerObj)
-			console.log("User "+playerObj.id+" connected");
-
-			// Update game engine
 			sgame.joinGameFromObj(playerObj)
-
-			// Update test output gui
-			/*var playerDiv = $('<div id="player'+playerObj.id+'"></div>');
-			playerDiv.append('<div class="title">'+playerObj.id+'</div>');
-			playerDiv.append('<div class="movement center_outer"><div></div></div>');
-			$('#players').append(playerDiv)*/
 		});
 
 		socket.on('user disconnected', function(id) {
-			console.log("User "+id+" disconnected");
-			
-			// Update game engine
-			sgame.deletePlayerById(id);
-			
-			// Update gui
-			$("#player"+id).remove();
+			eventhandler.playerLeft(sgame.deletePlayerById(id));
 		});
 
 
@@ -75,11 +58,11 @@ var communicator = new function() {
 			log.addUpdate();
 			
 			// Update game engine
-			for (var i=0; i<sgame.players.length; i++) {
+			/*for (var i=0; i<sgame.players.length; i++) {
 				var player = sgame.players[i];
 				player.moves.push(tick[player.id]);
 				player.lastMoveInput = tick[player.id];
-			}
+			}*/
 			
 			newTicks.push(tick);
 			
