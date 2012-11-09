@@ -26,9 +26,9 @@ var communicator = new function() {
 	 * of connecting to a server is receiving the game object afterwards. The
 	 * callback is run when this happen.
 	 */
-	this.connect = function(ip, gameReceivedCallback) {
+	this.connect = function(gameReceivedCallback) {
 		
-		socket = io.connect(ip);
+		socket = io.connect();
 		
 		// Received game object from server
 		socket.on('game', function(gameObj) {

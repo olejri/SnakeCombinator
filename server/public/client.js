@@ -6,7 +6,7 @@ var utils = new Utils();
 
 $(document).ready(function() {
 	
-	communicator.connect("http://78.91.6.242/", function(serverGameObj){
+	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
 		
 		sgame = new ClientSnakeGame(serverGameObj);
