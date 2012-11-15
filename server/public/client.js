@@ -8,8 +8,8 @@ $(document).ready(function() {
 	
 	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
-		
-		sgame = new ClientSnakeGame(serverGameObj);
+		sgame = new AiSnakeGame();
+		sgame.makeGameFromObj(serverGameObj);
 
 		gui = new GameGUI({
 			GSD: 20, // Game Square Dimension, width/height of each game square

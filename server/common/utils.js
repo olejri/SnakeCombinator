@@ -1,4 +1,4 @@
-function Utils(startX, startY) {
+function Utils() {
 	this.rand = function(min, max) {
 		return min + Math.floor(Math.random()*(max-min+1));
 	};

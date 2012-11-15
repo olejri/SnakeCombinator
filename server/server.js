@@ -83,12 +83,12 @@ io.sockets.on('connection', function (socket) {
 /** SECTION 5: Game logic **/
 /*************************************************************/
 var sgame = new ServerSnakeGame({
-	'width': 30,
-	'height': 30,
+	'width': 20,
+	'height': 20,
 	'playersToStart': 2,
-	'speed': 1,
-	'selfCrashAllowed': false,
-	'otherCrashAllowed': false,
+	'speed': 3,
+	'selfCrashAllowed': true,
+	'otherCrashAllowed': true,
 });
 
 /**

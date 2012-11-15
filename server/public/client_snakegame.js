@@ -1,23 +1,20 @@
 // Inherits from SnakeGame
 ClientSnakeGame.prototype = new SnakeGame(); 
 ClientSnakeGame.prototype.constructor = ClientSnakeGame;
+function ClientSnakeGame() {
+	
+}
 /**
  * @param serverGameObj	Game data object from server
  */
-function ClientSnakeGame(serverGameObj) {
-	// Set normal game settings
+ClientSnakeGame.prototype.makeGameFromObj = function(serverGameObj) {
 	this.settings = serverGameObj.settings;
 	// Create players
 	for (var p=0; p<serverGameObj.players.length; p++) {
 		this.joinGameFromObj(serverGameObj.players[p])
 	}
 	eventhandler.joinedGame();
-	
-	// Test data of le many snakes
-	/*for (var i=0; i<30; i++) {
-		this.addPlayer(new Player(""+Math.random(1000000)));
-	}*/
-}
+};
 /**
  * Similar to makeGameFromObj this method joins with a Player object from a
  * object.
@@ -33,18 +30,27 @@ ClientSnakeGame.prototype.joinGameFromObj = function(objP) {
 	eventhandler.playerJoined(player);
 	this.players.push(player);
 };
+/**
+ * Runs the parent method with <this> as object context, and a callBackFunction
+ * that should be run if snake crashed with itself.
+ */
 ClientSnakeGame.prototype.checkForSelfCrash = function() {
 	SnakeGame.prototype.checkForSelfCrash.call(this, function(player){
 		eventhandler.playerDied(player);
 	});
 };
+/**
+ * Runs the parent method with <this> as object context, and a callBackFunction
+ * that should be run if snakes crashed with other snakes.
+ */
 ClientSnakeGame.prototype.checkForCrash = function() {
 	SnakeGame.prototype.checkForCrash.call(this, function(player){
 		eventhandler.playerDied(player);
 	});
 };
 ClientSnakeGame.prototype.getBoardElements = function() {
-	this.applyTicks(communicator.popTicks());
+	var newTicks = communicator.popTicks();
+	if (newTicks.length > 0) this.applyTicks(newTicks);
 	
 	var elements = [];
 	

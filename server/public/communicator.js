@@ -88,32 +88,51 @@ var communicator = new function() {
 			}
 			
 		});
-		console.log("Connected to ip: " + ip);
+		console.log("Connected to WebSocket server");
 		
 	}
 }
 var log = new function() {
-	this.start = new Date();
-	this.emits = 0;
-	this.updates = 0;
-	this.draws = 0;
+	var smoothFactor = 0.7; // Higher makes the PerSecond change slower and smoother
 	
-	this.emitsPerSec = function() {
+	this.emits = 0;
+	this.lastEPS = 1;
+	this.lastEmit = new Date();
+	
+	this.updates = 0;
+	this.lastUPS = 1;
+	this.lastUpdate = new Date();
+	
+	this.draws = 0;
+	this.lastFPS = 1;
+	this.lastDraw = new Date();
+	
+	this.smoothCalculator = function(lastDate, lastPS) {
+		// Calculate seconds since last calculation
 		var now = new Date();
-		var seconds = (now - this.start)/1000;
-		return (this.emits/seconds).toFixed(2);
+		var seconds = (now - lastDate)/1000;
+		// Calculate per second value using smoothness factor
+		var newPS = 1/seconds;
+		var smoothPS = newPS*(1-smoothFactor) + lastPS*smoothFactor;
+		return smoothPS.toFixed(2);
+	};
+		
+	this.emitsPerSec = function() {
+		this.lastEPS = this.smoothCalculator(this.lastEmit, this.lastEPS);
+		this.lastEmit = new Date();
+		return this.lastEPS;
 	}
 
 	this.updatesPerSec = function() {
-		var now = new Date();
-		var seconds = (now - this.start)/1000;
-		return (this.updates/seconds).toFixed(2);
+		this.lastUPS = this.smoothCalculator(this.lastUpdate, this.lastUPS);
+		this.lastUpdate = new Date();
+		return this.lastUPS;
 	}
 	
 	this.FPS = function() {
-		var now = new Date();
-		var seconds = (now - this.start)/1000;
-		return (this.draws/seconds).toFixed(2);
+		this.lastFPS = this.smoothCalculator(this.lastDraw, this.lastFPS);
+		this.lastDraw = new Date();
+		return this.lastFPS;
 	}
 	
 	this.addUpdate = function() {
@@ -132,6 +151,7 @@ var log = new function() {
 		this.draws++;
 		$('#fps').text(this.FPS());
 	}
+	
 }
 
 $(document).ready(function() {

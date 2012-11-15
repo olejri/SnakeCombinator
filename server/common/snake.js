@@ -31,6 +31,13 @@ Snake.prototype.isAllowedDirection = function(direction) {
 	else if (direction == "down" && this.lastDirection == "up") return false;
 	else return true;
 };
+Snake.prototype.getAllowedDirections = function() {
+	var directions = ["left", "up", "right", "down"];
+	for (var i=0; i<directions.length; i++) {
+		if (!this.isAllowedDirection(directions[i])) directions.splice(i,1);
+	}
+	return directions;
+};
 Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
 	if (!indexOffset) indexOffset = 0;
 	for (var i=indexOffset; i<this.parts.length; i++) {
