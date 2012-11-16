@@ -5,7 +5,8 @@ var express = require('express')
 , http = require('http');
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, { log: false });
+io.set('log level', 1);
 
 server.listen(80);
 
@@ -72,7 +73,7 @@ io.sockets.on('connection', function (socket) {
 	
 	// Custom triggers
 	socket.on("move input", function(direction) {
-		console.log("** move input ** "+socket.id+" : "+direction);
+		//console.log("** move input ** "+socket.id+" : "+direction);
 		sgame.getPlayerById(socket.id).lastMoveInput = direction;
 	});
 	
@@ -87,29 +88,16 @@ var sgame = new ServerSnakeGame({
 	'height': 20,
 	'playersToStart': 2,
 	'speed': 3,
+	'foodSpawnRate': 3,
 	'selfCrashAllowed': true,
 	'otherCrashAllowed': true,
 });
 
 /**
- * Run one game tick, checking if players want to move their snake, updating
- * BUT NOT applying the moved direction to the players snake move history.
- * Then finally emiting the tick to all players.
+ * Run one game tick.
  */
 function runGame() {
-	var tick = {};
-	for (var i=0; i<sgame.players.length; i++) {
-		var player = sgame.players[i];
-		var lastMove = player.lastMoveInput;
-
-		if (lastMove) {
-			tick[player.id] = lastMove;
-			player.lastMoveInput = null;
-		}
-		
-		// Set that last move input has happened
-		player.moves.push(lastMove);
-	}
-	
-	io.sockets.emit('tick', tick);
+	var gameTick = sgame.generateTick();
+	io.sockets.emit('tick', gameTick.movement);
+	if (gameTick.foodSpawn) io.sockets.emit('food', gameTick.foodSpawn);
 }

@@ -57,13 +57,6 @@ var communicator = new function() {
 		socket.on('tick', function(tick) {
 			log.addUpdate();
 			
-			// Update game engine
-			/*for (var i=0; i<sgame.players.length; i++) {
-				var player = sgame.players[i];
-				player.moves.push(tick[player.id]);
-				player.lastMoveInput = tick[player.id];
-			}*/
-			
 			newTicks.push(tick);
 			
 			// Update Movement Output (debug only)
@@ -88,6 +81,11 @@ var communicator = new function() {
 			}
 			
 		});
+		
+		socket.on("food", function(food) {
+			sgame.addFood(food);
+		});
+		
 		console.log("Connected to WebSocket server");
 		
 	}

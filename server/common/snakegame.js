@@ -1,5 +1,8 @@
 function SnakeGame() {
 	this.players = [];
+	this.food = [];
+	
+	this.savedFoodSpawnChance = 0.0; // Remove from client in future
 }
 SnakeGame.prototype.addPlayer = function(player) {
 	var randX = utils.rand(2,this.settings.width-2);
@@ -7,6 +10,9 @@ SnakeGame.prototype.addPlayer = function(player) {
 	var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
 	player.createSnake(randX, randY, randDirection);
 	this.players.push(player);
+};
+SnakeGame.prototype.addFood = function(food) {
+	this.food.push(food);
 };
 SnakeGame.prototype.deletePlayerById = function(id) {
 	for (var i=0; i<this.players.length; i++) {
@@ -72,6 +78,56 @@ SnakeGame.prototype.checkForCrash = function(crashedCallback) {
 		crashedPlayers[c].snake = null;
 	}
 };
+SnakeGame.prototype.rollForFoodSpawn = function() {
+	var avgChanceIncrement = 1/(this.settings.foodSpawnRate*this.settings.speed);
+	var chanceIncrement = utils.randDec(0.0, avgChanceIncrement*2);
+	this.savedFoodSpawnChance = this.savedFoodSpawnChance + chanceIncrement;
+	//console.log("Increasing chance by "+chanceIncrement+" to "+this.savedFoodSpawnChance+" when average was "+avgChanceIncrement);
+	if (this.savedFoodSpawnChance > Math.random()) {
+		this.savedFoodSpawnChance -= 1.0;
+		return this.getRandomFoodPos();
+	}
+	else return false;
+};
+/**
+ * Add a random food to an open space on the game board.
+ * Note: Function averages at 8ms runtime at my computer (andre) with a 200x200 sized game.
+ */
+SnakeGame.prototype.getRandomFoodPos = function() {
+	// Create empty two dimensional array of positions
+	var positions = new Array(this.settings.width);
+	for (var x=0; x<this.settings.width; x++) {
+		positions[x] = new Array(this.settings.height);
+	}
+	// Iterate over all snake parts and set the positions as taken
+	for (var i=0; i<this.players.length; i++) {
+		for (var p=0; p<this.players[i].snake.parts.length; p++) {
+			var part = this.players[i].snake.parts[p];
+			if ((positions.length > part.x)&&(part.x >= 0)) {
+				if ((positions[part.x].length > part.y)&&(part.y >= 0)) {
+					positions[part.x][part.y] = true 
+				}
+			}
+		}
+	}
+	// Iterate over all food and set positions as taken
+	for (var i=0; i<this.food.length; i++) {
+		positions[this.food[i].x][this.food[i].y] = true;
+	}
+	// Create one dimensional array of FREE positions
+	var freePositions = [];
+	for (var x=0; x<positions.length; x++) {
+		for (var y=0; y<positions[x].length; y++) {
+			if (positions[x][y] != true) freePositions.push({'x': x, 'y': y});
+		}
+	}
+	if (freePositions.length != 0) {
+		var randomPosition = freePositions[utils.rand(0,freePositions.length-1)];
+		return randomPosition;
+	}
+	else console.log("No space for food.");
+
+}
 if(typeof exports != 'undefined'){
 	module.exports = SnakeGame;
 }
