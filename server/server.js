@@ -5,7 +5,7 @@ var express = require('express')
 , http = require('http');
 var app = express();
 var server = http.createServer(app);
-var io = require('socket.io').listen(server, { log: false });
+var io = require('socket.io').listen(server, { log: 2 });
 io.set('log level', 1);
 
 server.listen(80);
@@ -15,10 +15,10 @@ server.listen(80);
 /*************************************************************/
 
 var Utils = require('./common/utils');
+var SpellingMode = require('./common/modes/spelling');
 utils = new Utils();
 ServerSnakeGame = require('./server_snakegame');
-Player = require('./common/player');
-Snake = require('./common/snake');
+var Player = require('./common/player');
 
 /** SECTION 3: Http request handling **/
 /*************************************************************/
@@ -28,7 +28,7 @@ app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/public/index.html');
 });
 
-// Setting static folders, all files in these will be public
+// Setting static folders, all files (recursively) in these will be public
 app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/common'));
 
@@ -83,15 +83,20 @@ io.sockets.on('connection', function (socket) {
 
 /** SECTION 5: Game logic **/
 /*************************************************************/
+var spellingMode = new SpellingMode({
+	title: "Drikke",
+	words: ["Brus", "Saft", "Kaffe", "Kakao"],
+});
+
 var sgame = new ServerSnakeGame({
 	'width': 20,
 	'height': 20,
 	'playersToStart': 2,
 	'speed': 3,
-	'foodSpawnRate': 3,
+	'foodSpawnRate': 2,
 	'selfCrashAllowed': true,
 	'otherCrashAllowed': true,
-});
+},spellingMode);
 
 /**
  * Run one game tick.

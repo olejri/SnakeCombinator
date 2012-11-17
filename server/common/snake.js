@@ -1,8 +1,14 @@
-function Snake(parts, startDirection) {
-	this.parts = parts;
+function Snake(parts, partsDetail, startDirection) {
+	this.parts = parts; // List of the parts coordinate
+	this.partsDetail = partsDetail;
 	this.lastDirection = startDirection;
 	
-	this.move = function(direction) {
+	/**
+	 * 
+	 * @param direction:	Moved direction
+	 * @param foodRef:		Reference to the game food list
+	 */
+	this.move = function(direction, foodRef) {
 		// No direction given == continue last direction
 		if (!direction) direction = this.lastDirection;
 		else if (!this.isAllowedDirection(direction)) direction = this.lastDirection;
@@ -14,15 +20,28 @@ function Snake(parts, startDirection) {
 		else if (direction == "down") offset = {x: 0, y: 1};
 		// Prepend a new head part 
 		this.parts.unshift({
-			x: this.parts[0].x + offset.x,
-			y: this.parts[0].y + offset.y
+			'x': this.parts[0].x + offset.x,
+			'y': this.parts[0].y + offset.y
 		});
-		// Delete last part
-		this.parts.splice(this.parts.length-1,1);
+		// Check and eat food if head lands on it, if not delete last part.
+		if (!this.eatFoodIfOnIt(foodRef)) {
+			this.parts.splice(this.parts.length-1,1); // Delete last part
+		}
 		// Update lastDirection, and we are done!
 		this.lastDirection = direction;
 	}
 }
+Snake.prototype.eatFoodIfOnIt = function(foodRef) {
+	for (var i=0; i<foodRef.length; i++) {
+		if (utils.samePosition(this.parts[0], foodRef[i])) {
+			var food = foodRef.splice(i,1)[0];
+			console.log(food)
+			this.partsDetail.push({'type': food.type, 'details': food.details});
+			return true;
+		}
+	}
+	return false;
+};
 Snake.prototype.isAllowedDirection = function(direction) {
 	//console.log("is allowed: "+direction+" when last was "+this.lastDirection);
 	if (direction == "left" && this.lastDirection == "right") return false;
@@ -52,6 +71,4 @@ Snake.prototype.hasSelfCrash = function() {
 	return this.hasPartAtPosition(head.x, head.y, 1);
 };
 
-if(typeof exports != 'undefined'){
-	module.exports = Snake;
-}
+if(typeof exports != 'undefined') module.exports = Snake;

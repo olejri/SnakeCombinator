@@ -91,7 +91,7 @@ var communicator = new function() {
 	}
 }
 var log = new function() {
-	var smoothFactor = 0.7; // Higher makes the PerSecond change slower and smoother
+	var smoothFactor = 0.75; // Higher makes the PerSecond change slower and smoother
 	
 	this.emits = 0;
 	this.lastEPS = 1;
@@ -109,6 +109,7 @@ var log = new function() {
 		// Calculate seconds since last calculation
 		var now = new Date();
 		var seconds = (now - lastDate)/1000;
+		if (seconds == 0) return lastPS;
 		// Calculate per second value using smoothness factor
 		var newPS = 1/seconds;
 		var smoothPS = newPS*(1-smoothFactor) + lastPS*smoothFactor;

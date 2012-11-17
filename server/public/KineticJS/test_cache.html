@@ -1,0 +1,77 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <style>
+      body {
+        margin: 0px;
+        padding: 0px;
+      }
+      canvas {
+        border: 1px solid #9C9898;
+      }
+    </style>
+    <script src="http://www.html5canvastutorials.com/libraries/kinetic-v4.0.0.js"></script>
+    <script>
+      window.onload = function() {
+        var stage = new Kinetic.Stage({
+          container: "container",
+          width: 578,
+          height: 200
+        });
+
+        var layer = new Kinetic.Layer();
+		console.log(20 * this.x)
+        var star = new Kinetic.Text({
+			text : "A",
+	        fontSize: 13,
+	        fontFamily: 'Calibri',
+	        textFill: 'black',
+	        fontStyle: 'bold',
+	        align: 'center',
+	        width: 20,
+	        height: 20,
+	        padding: 2,
+	        fill: '#ddd',
+			stroke: '#555',
+			strokeWidth: 1,
+			cornerRadius: 4,
+		});
+
+        layer.add(star);
+        stage.add(layer);
+
+        // convert star node into a cached image
+        star.toImage({
+          // cached image will be 120 x 120
+          width: 20,
+          height: 20,
+          /*
+           * when star has been converted into an image,
+           * use the image to instantiate image objects and
+           * then add them to the layer
+           */
+          callback: function(img) {
+        	console.log(img)
+            for(var n = 0; n < 10; n++) {
+              var image = new Kinetic.Image({
+                image: img,
+                x: Math.random() * stage.getWidth(),
+                y: Math.random() * stage.getHeight(),
+                offset: 60,
+                draggable: true
+              });
+
+              layer.add(image);
+            }
+
+            layer.draw();
+          }
+        });
+      };
+
+    </script>
+  </head>
+  <body>
+    <div id="container"></div>
+  </body>
+</html>

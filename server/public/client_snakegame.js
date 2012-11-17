@@ -9,6 +9,8 @@ function ClientSnakeGame() {
  */
 ClientSnakeGame.prototype.makeGameFromObj = function(serverGameObj) {
 	this.settings = serverGameObj.settings;
+	// Create the correct Game Mode object with the mode data from server
+	this.mode = eval("new "+serverGameObj.modeType+"(serverGameObj.mode)");
 	// Create players
 	for (var p=0; p<serverGameObj.players.length; p++) {
 		this.joinGameFromObj(serverGameObj.players[p])
@@ -30,7 +32,7 @@ ClientSnakeGame.prototype.makeGameFromObj = function(serverGameObj) {
 ClientSnakeGame.prototype.joinGameFromObj = function(objP) {
 	var player = new Player(objP.id);
 	player.nick = objP.nick;
-	player.snake = new Snake(objP.snake.parts, objP.snake.lastDirection);
+	player.snake = new Snake(objP.snake.parts, objP.snake.partsDetail, objP.snake.lastDirection);
 	eventhandler.playerJoined(player);
 	this.players.push(player);
 };
@@ -62,20 +64,28 @@ ClientSnakeGame.prototype.getBoardElements = function() {
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
 		if (snake) { 
-			// Add head to elements list
-			snakeElements.push(new BoardElement({
-				type: 'head',
-				x: snake.parts[0].x,
-				y: snake.parts[0].y,
-			}));
-			// Add body parts
-			for (var s=1; s<this.players[i].snake.parts.length; s++) {
-				snakeElements.push(new BoardElement({
-					type: 'body',
-					x: snake.parts[s].x,
-					y: snake.parts[s].y,
-				}));
+			if (snake.parts.length != snake.partsDetail.length) {
+				console.log("Warning, snake parts and partsDetails not equal length");
 			}
+			
+			for (var s=0; s<snake.parts.length; s++) {
+				if (snake.partsDetail[s].type == "text") {
+					snakeElements.push(new BoardTextElement({
+						text: snake.partsDetail[s].details,
+						x: snake.parts[s].x,
+						y: snake.parts[s].y,
+					}));
+				}
+				else if (snake.partsDetail[s].type == "image") {
+					snakeElements.push(new BoardImageElement({
+						image: snake.partsDetail[s].details,
+						x: snake.parts[s].x,
+						y: snake.parts[s].y,
+					}));
+				}
+				else console.log("Unkown part type: "+snake.partsDetail[s].type);
+			}
+			
 		}
 	}
 	
@@ -84,8 +94,8 @@ ClientSnakeGame.prototype.getBoardElements = function() {
 	
 	for (var i=0; i<this.food.length; i++) {
 		var food = this.food[i];
-		foodElements.push(new BoardElement({
-			type: 'food',
+		foodElements.push(new BoardTextElement({
+			text: this.food[i].details,
 			x: food.x,
 			y: food.y,
 		}));

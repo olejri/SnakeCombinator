@@ -8,7 +8,7 @@ $(document).ready(function() {
 	
 	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
-		sgame = new AiSnakeGame();
+		sgame = new ClientSnakeGame();
 		sgame.makeGameFromObj(serverGameObj);
 
 		gui = new GameGUI({
@@ -19,7 +19,7 @@ $(document).ready(function() {
 		});
 		
 		// INITIATE GUI
-		var MAX_FPS = 30;
+		var MAX_FPS = 15;
 		setInterval(function(){
 			var didDraw = gui.draw(sgame.getBoardElements());
 			if (!didDraw) console.log("Did not draw!!");

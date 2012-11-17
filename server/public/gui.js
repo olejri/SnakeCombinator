@@ -1,23 +1,10 @@
 function GameGUI(options) {
 	
+	// Options
+	var GSD = options.GSD;
+	
 	// Avoids that the drawing methods runs twice at the same time
 	var IsDrawing = false;
-	
-	// Load images
-	var imgDir = "./images/"
-	var sources = {
-			head: 'head.png',
-			body: 'body.png',
-			food: 'food.png',
-	};
-	var images = {};
-	for (var type in sources) {
-		images[type] = new Image();
-		images[type].onload = function() {
-			console.log("Preloading image: "+this.src);
-		}
-		images[type].src = imgDir + sources[type];
-	}
 	
 	// Set up game canvas
 	var stage = new Kinetic.Stage({
@@ -30,7 +17,7 @@ function GameGUI(options) {
 	var snakeLayer = new Kinetic.Layer();
 	stage.add(snakeLayer);
 	
-	var foodLayer = new Kinetic.Layer();
+	foodLayer = new Kinetic.Layer();
 	stage.add(foodLayer);
 	
 	stage.draw(); // IS IT NEEDED??? need to test
@@ -66,9 +53,8 @@ function GameGUI(options) {
 		
 		try {
 			snakeLayer.removeChildren();
-			
 			for (var i=0; i<elements.length; i++) {
-				drawImageOn(elements[i], snakeLayer);
+				elements[i].addToLayer(snakeLayer, GSD);
 			}
 			snakeLayer.draw();
 			
@@ -81,12 +67,11 @@ function GameGUI(options) {
 	};
 	
 	function drawFood(elements) {
-		
 		try {
 			foodLayer.removeChildren();
 			
 			for (var i=0; i<elements.length; i++) {
-				drawImageOn(elements[i], foodLayer);
+				elements[i].addToLayer(foodLayer, GSD);
 			}
 			foodLayer.draw();
 			
@@ -98,21 +83,94 @@ function GameGUI(options) {
 		
 	};
 	
-	function drawImageOn(element, layer) {
-		var snakePart = new Kinetic.Image({
-			x : options.GSD * element.x,
-			y : options.GSD * element.y,
-			image : images[element.type],
-		});
-		layer.add(snakePart);
-	};
-	
 	
 }
 
-function BoardElement(data) {
-	this.type = data.type;
-	this.details = data.details;
-	this.x = data.x;
-	this.y = data.y;
+
+function BoardImageElement(values) {
+	this.x = values.x;
+	this.y = values.y;
+	this.imageName = values.image;
 }
+BoardImageElement.prototype.images = false;
+BoardImageElement.prototype.loadImages = function() {
+	var imgDir = "./images/"
+	var sources = {
+			head: 'head.png',
+			body: 'body.png',
+			food: 'food.png',
+			a: 'a.png',
+	};
+	var images = {};
+	for (var imageName in sources) {
+		images[imageName] = new Image();
+		images[imageName].onload = function() {
+			console.log("Preloading image: "+this.src);
+		}
+		images[imageName].src = imgDir + sources[imageName];
+	}
+	BoardImageElement.prototype.images = images;
+};
+
+BoardImageElement.prototype.addToLayer = function(layer, GSD) {
+	if (!this.images) this.loadImages();
+	
+	var snakePart = new Kinetic.Image({
+		x : GSD * this.x,
+		y : GSD * this.y,
+		image : this.images[this.imageName],
+	});
+	layer.add(snakePart);
+};
+
+function BoardTextElement(values) {
+	this.x = values.x;
+	this.y = values.y;
+	this.text = values.text;
+}
+BoardTextElement.prototype.images = {}; // Kinetic.Text element cache
+BoardTextElement.prototype.addToLayer = function(layer, GSD) {
+	if (this.images.hasOwnProperty(this.text)) {
+		// Load from cache
+		layer.add(new Kinetic.Image({
+			image: this.images[this.text],
+			x : GSD * this.x,
+			y : GSD * this.y,
+		}));
+	}
+	else {
+		// Create text element
+		var textEle = new Kinetic.Text({
+			text : this.text,
+	        fontSize: 13,
+	        fontFamily: 'Calibri',
+	        textFill: 'black',
+	        fontStyle: 'bold',
+	        align: 'center',
+	        width: GSD,
+	        height: GSD,
+	        padding: 2,
+	        fill: '#ddd',
+			stroke: '#555',
+			strokeWidth: 1,
+			cornerRadius: 4,
+		});
+		
+		// Cache image
+		var self = this;
+		textEle.toImage({
+			width: GSD,
+			height: GSD,
+			callback: function(img) {
+				var textImage = new Kinetic.Image({
+					image: img,
+					x : GSD * self.x,
+					y : GSD * self.y,
+				});
+				BoardTextElement.prototype.images[self.text] = img;
+			},
+		});
+		
+	}
+
+};
