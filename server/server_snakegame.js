@@ -1,4 +1,6 @@
 var SnakeGame = require('./common/snakegame');
+var Utils = require('./common/utils');
+var utils = new Utils();
 
 // Inherits from SnakeGame
 ServerSnakeGame.prototype = new SnakeGame();
@@ -31,7 +33,7 @@ function ServerSnakeGame(customSettings, mode) {
 	this.savedFoodSpawnChance = 0.0;
 	
 }
-ServerSnakeGame.prototype.toClientJson = function() {
+ServerSnakeGame.prototype.toJsonObject = function() {
 	return {
 		settings: this.settings,
 		modeType: this.mode.constructor.name,

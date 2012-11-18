@@ -35,7 +35,6 @@ Snake.prototype.eatFoodIfOnIt = function(foodRef) {
 	for (var i=0; i<foodRef.length; i++) {
 		if (utils.samePosition(this.parts[0], foodRef[i])) {
 			var food = foodRef.splice(i,1)[0];
-			console.log(food)
 			this.partsDetail.push({'type': food.type, 'details': food.details});
 			return true;
 		}

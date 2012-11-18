@@ -36,7 +36,7 @@ var communicator = new function() {
 		});
 
 		socket.on('user connected', function(playerObj) {
-			sgame.joinGameFromObj(playerObj)
+			sgame.addPlayerFromJsonObject(playerObj)
 		});
 
 		socket.on('user disconnected', function(id) {
@@ -152,35 +152,3 @@ var log = new function() {
 	}
 	
 }
-
-$(document).ready(function() {
-	
-	// Create the input capturing
-	var keyCodeNameMapper = {
-			37: 'left',		// Left arrow
-			38: 'up',		// Up arrow
-			39: 'right',	// Right arrow
-			40: 'down', 	// Down arrow
-			65: 'left',		// a
-			87: 'up',		// w
-			68: 'right',	// d
-			83: 'down',		// s
-	}
-	
-	$(document).on('keydown', function(event) {
-		var moveDirection = keyCodeNameMapper[event.keyCode];
-		//sgame.players[0].snake.move(moveDirection);
-//		gui.draw(sgame.getBoardElements());
-		
-		if (moveDirection) communicator.emitMovement(moveDirection);
-		event.preventDefault();
-	});
-	
-	
-	/*var SpamPerSecond = 10;
-	var directions = ['left', 'up', 'right', 'down'];
-	setInterval(function(){
-		var direction = directions[Math.floor(Math.random()*directions.length)];
-		communicator.emitMovement(direction);
-	}, 1000/SpamPerSecond);*/
-});

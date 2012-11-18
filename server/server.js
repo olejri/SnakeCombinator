@@ -17,8 +17,9 @@ server.listen(80);
 var Utils = require('./common/utils');
 var SpellingMode = require('./common/modes/spelling');
 utils = new Utils();
-ServerSnakeGame = require('./server_snakegame');
+var ServerSnakeGame = require('./server_snakegame');
 var Player = require('./common/player');
+
 
 /** SECTION 3: Http request handling **/
 /*************************************************************/
@@ -39,7 +40,7 @@ app.use(express.static(__dirname + '/common'));
 io.sockets.on('connection', function (socket) {
 
 	// Send game data to new client
-	socket.emit('game', sgame.toClientJson());
+	socket.emit('game', sgame.toJsonObject());
 	
 	// Add new player to game logic
 	var newPlayer = new Player(socket.id);

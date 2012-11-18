@@ -1,4 +1,6 @@
 function SnakeGame() {
+	this.mode;
+	this.settings;
 	this.players = [];
 	this.food = [];	// Each food contains x, y and a type.
 }

@@ -7,13 +7,13 @@ function ClientSnakeGame() {
 /**
  * @param serverGameObj	Game data object from server
  */
-ClientSnakeGame.prototype.makeGameFromObj = function(serverGameObj) {
+ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	this.settings = serverGameObj.settings;
 	// Create the correct Game Mode object with the mode data from server
 	this.mode = eval("new "+serverGameObj.modeType+"(serverGameObj.mode)");
 	// Create players
 	for (var p=0; p<serverGameObj.players.length; p++) {
-		this.joinGameFromObj(serverGameObj.players[p])
+		this.addPlayerFromJsonObject(serverGameObj.players[p])
 	}
 	eventhandler.joinedGame();
 	// Create food
@@ -29,7 +29,7 @@ ClientSnakeGame.prototype.makeGameFromObj = function(serverGameObj) {
  * Similar to makeGameFromObj this method joins with a Player object from a
  * object.
  */
-ClientSnakeGame.prototype.joinGameFromObj = function(objP) {
+ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	var player = new Player(objP.id);
 	player.nick = objP.nick;
 	player.snake = new Snake(objP.snake.parts, objP.snake.partsDetail, objP.snake.lastDirection);
@@ -54,7 +54,7 @@ ClientSnakeGame.prototype.checkForCrash = function() {
 		eventhandler.playerDied(player);
 	});
 };
-ClientSnakeGame.prototype.getBoardElements = function() {
+ClientSnakeGame.prototype.getGUIElements = function() {
 	var newTicks = communicator.popTicks();
 	if (newTicks.length > 0) this.applyTicks(newTicks);
 	

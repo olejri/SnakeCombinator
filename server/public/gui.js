@@ -162,6 +162,7 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 			width: GSD,
 			height: GSD,
 			callback: function(img) {
+				console.log("Cached img from Kinetic.Text");
 				var textImage = new Kinetic.Image({
 					image: img,
 					x : GSD * self.x,

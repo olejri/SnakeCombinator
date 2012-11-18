@@ -1,23 +1,20 @@
 // Inherits from ClientSnakeGame
-
 AiSnakeGame.prototype = new ClientSnakeGame(); 
 AiSnakeGame.prototype.constructor = AiSnakeGame;
-function AiSnakeGame() {
-
-	
+function AiSnakeGame() {	
 }
 /**
- * Overwrite SnakeGame method, but still run it. However this method runs the
+ * Overwrite SnakeGame method, but still run it. In addition this method runs the
  * ai tick decision afterwards.
  */
 AiSnakeGame.prototype.applyTicks = function(newTicks) {
 	SnakeGame.prototype.applyTicks.call(this, newTicks);
-	this.SimpleAIMove();
+	this.aiMove();
 };
 /**
  * Decides what move to do
  */
-AiSnakeGame.prototype.SimpleAIMove = function() {
+AiSnakeGame.prototype.aiMove = function() {
 	var snake = this.getPlayerById(communicator.getID()).snake; // Controlled snake
 	if (snake) {
 		var pos = snake.parts[0];	// Position of controlled snake's head

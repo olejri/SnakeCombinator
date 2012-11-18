@@ -15,14 +15,6 @@ function Utils() {
 		}
 		return false;
 	}
-	this.getClass = function(obj) {
-		  if (typeof obj === "undefined")
-			    return "undefined";
-			  if (obj === null)
-			    return "null";
-			  return Object.prototype.toString.call(obj)
-			    .match(/^\[object\s(.*)\]$/)[1];
-			}
 }
 
 if(typeof exports != 'undefined') module.exports = Utils;
