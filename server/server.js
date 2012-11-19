@@ -66,6 +66,7 @@ io.sockets.on('connection', function (socket) {
 			clearInterval(sgame.runGameInterval);
 			sgame.started = false;
 		}
+		if (sgame.players.length == 0) sgame.resetGame();
 		
 		io.sockets.emit('user disconnected', socket.id);
 		

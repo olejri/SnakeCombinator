@@ -127,6 +127,8 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 	else console.log("No space for food.");
 
 }
-
+SnakeGame.prototype.resetGame = function() {
+	this.food = [];
+};
 
 module.exports = ServerSnakeGame; // Can require it in node.js
