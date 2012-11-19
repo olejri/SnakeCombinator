@@ -15,7 +15,6 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	for (var p=0; p<serverGameObj.players.length; p++) {
 		this.addPlayerFromJsonObject(serverGameObj.players[p])
 	}
-	eventhandler.joinedGame();
 	// Create food
 	for (var i=0; i<serverGameObj.food.length; i++) {
 		this.addFood(serverGameObj.food[i]);
@@ -24,6 +23,7 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	/*for (var p=0; p<30; p++) {
 		this.addPlayer(new Player("lolid"));
 	}*/
+	$(this).trigger("joinedgame");
 };
 /**
  * Similar to makeGameFromObj this method joins with a Player object from a
@@ -33,26 +33,8 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	var player = new Player(objP.id);
 	player.nick = objP.nick;
 	player.snake = new Snake(objP.snake.parts, objP.snake.partsDetail, objP.snake.lastDirection);
-	eventhandler.playerJoined(player);
 	this.players.push(player);
-};
-/**
- * Runs the parent method with <this> as object context, and a callBackFunction
- * that should be run if snake crashed with itself.
- */
-ClientSnakeGame.prototype.checkForSelfCrash = function() {
-	SnakeGame.prototype.checkForSelfCrash.call(this, function(player){
-		eventhandler.playerDied(player);
-	});
-};
-/**
- * Runs the parent method with <this> as object context, and a callBackFunction
- * that should be run if snakes crashed with other snakes.
- */
-ClientSnakeGame.prototype.checkForCrash = function() {
-	SnakeGame.prototype.checkForCrash.call(this, function(player){
-		eventhandler.playerDied(player);
-	});
+	$(this).trigger("playerjoined", player);
 };
 ClientSnakeGame.prototype.getGUIElements = function() {
 	var newTicks = communicator.popTicks();

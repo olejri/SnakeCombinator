@@ -40,7 +40,7 @@ var communicator = new function() {
 		});
 
 		socket.on('user disconnected', function(id) {
-			eventhandler.playerLeft(sgame.deletePlayerById(id));
+			sgame.deletePlayerById(id);
 		});
 
 
@@ -74,19 +74,13 @@ var communicator = new function() {
 					imgEle.addClass('undefined');
 					imgEle.text("undefined")
 				}
-				/*if (player.lastMoveInput) {
-					imgEle.text(player.lastMoveInput);
-					//imgEle.addClass('center_inner keyboard_arrow keyboard_'+player.lastMoveInput);
-				}*/
 			}
 			
 		});
 		
-		socket.on("food", function(food) {
+		socket.on("foodspawn", function(food) {
 			sgame.addFood(food);
 		});
-		
-		console.log("Connected to WebSocket server");
 		
 	}
 }

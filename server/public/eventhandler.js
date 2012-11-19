@@ -1,19 +1,71 @@
 var eventhandler = new function() {
 	
-	this.joinedGame = function() {
-		console.log("Joined game");
+	var playerList = $('#players').find('ul');
+	
+	this.attatchGameTriggers = function(game) {
+		$(document).on('keydown', keydown);
+		$(game).on("died", onPlayerDied);
+		$(game).on("foodspawn", onFoodSpawn);
+		$(game).on("foodeaten", onFoodEaten);
+		$(game).on("joinedgame", onJoinedGame);
+		$(game).on("playerjoined", onPlayerJoined);
+		$(game).on("playerleft", onPlayerLeft);
+	};
+	
+	function onPlayerDied(event, player) {
+		console.log("Player died: "+player.nick);
 	}
 	
-	this.playerJoined = function(player) {
-		console.log("User "+player.id+" connected");
+	function onFoodSpawn(event, food) {
+		//console.log(food)
+	}
+	
+	function onFoodEaten(event, food) {
+		//console.log(food);
+	}
+	
+	function onJoinedGame() {
+		console.log("Joined game");
+		drawPlayerList();
+	}
+	
+	function onPlayerJoined(event, player) {
+		console.log("Player "+player.nick+" joined");
+		drawPlayerList();
+	}
+	
+	function onPlayerLeft(event, player) {
+		console.log("Player "+player.nick+" left");
+		drawPlayerList();
+	}
+	
+	var keyCodeNameMapper = {
+			37: 'left',		// Left arrow
+			38: 'up',		// Up arrow
+			39: 'right',	// Right arrow
+			40: 'down', 	// Down arrow
+			65: 'left',		// a
+			87: 'up',		// w
+			68: 'right',	// d
+			83: 'down',		// s
+	}
+	function keydown(event) {
+		var moveDirection = keyCodeNameMapper[event.keyCode];
+		if (moveDirection) communicator.emitMovement(moveDirection);
+		event.preventDefault();
 	}
 	
 	this.playerLeft = function(player) {
 		console.log("User "+player.id+" disconnected");
 	}
 	
-	this.playerDied = function(player) {
-		console.log("Player "+player.id+" died");
+	
+	function drawPlayerList() {
+		playerList.empty();
+		for (var i=0; i<sgame.players.length; i++) {
+			var player = sgame.players[i];
+			playerList.append('<li>'+player.nick+' ('+player.id+')</li>');
+		}
 	}
 	
 }

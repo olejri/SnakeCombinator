@@ -6,6 +6,10 @@ function Player(id) {
 	this.lastMoveInput = null; 	// Last keyboard input move, not neccesary actual move
 	this.snake;
 	
+	this.killSnake = function() {
+		this.snake = null;
+	};
+	
 	this.createSnake = function(startX, startY, startDirection, startBody) {
 		var parts = [{'x': startX, 'y': startY}];
 		var partsDetail = [{'type': 'image', 'details': 'head'}];

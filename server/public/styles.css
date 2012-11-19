@@ -10,43 +10,21 @@
 	border-right: 1px solid black;	
 }
 
-/*********** TEST PLAYER MOVEMENT ARROWS ****************/
-
-#players > * {
-	float: left;
-	margin: 5px 5px;
-	border: 1px solid black;
-}
-
-#players .title {
-	font-weight: bold;
-	border-bottom: 1px dotted black;
-}
-
-#players .movement {
-	margin: 5px 0 5px 55px;
-	width: 50px;
-	height: 50px;
-}
-
-#players .movement .undefined {
-	color: red;
-}
-
-.keyboard_arrow {
-	width: 50px;
-	height: 50px;
-	background-image: url('./images/arrows_sprite.png');
-	background-repeat: no-repeat;
-}
-.keyboard_left {background-position: -0px -0px; top: 315px; left: 5px;}
-.keyboard_up {background-position: -50px -0px; top: 60px; left: 315px;}
-.keyboard_right {background-position: -100px -0px; top: 315px; right: 5px;}
-.keyboard_down {background-position: -150px -0px; bottom: 5px; left: 315px;}
-
 /*********** Game GUI ****************/
-
-#gamegui canvas {
+#gamegui {
+	float:left;
 	border: 1px solid black;
+}
+#gamegui canvas {
 	clear: both;	
 }
+
+#players {
+	float:left;
+	border: 1px solid black;
+}
+#players ul {
+		
+}
+
+/*********** TEST PLAYER MOVEMENT ARROWS ****************/

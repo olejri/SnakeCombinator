@@ -48,6 +48,7 @@ ServerSnakeGame.prototype.addPlayer = function(player) {
 	var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
 	player.createSnake(randX, randY, randDirection, this.mode.getStartBody());
 	this.players.push(player);
+	$(this).trigger("playerjoined", player);
 };
 ServerSnakeGame.prototype.generateTick = function() {
 	var tick = {};
@@ -65,7 +66,7 @@ ServerSnakeGame.prototype.generateTick = function() {
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
 	
-	return {'movement': tick, 'foodSpawn': foodRoll};
+	return tick;
 };
 /**
  * Using the speed and spawn rate setting this function will increment the

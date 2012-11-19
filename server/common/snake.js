@@ -6,12 +6,15 @@ function Snake(parts, partsDetail, startDirection) {
 	/**
 	 * 
 	 * @param direction:	Moved direction
-	 * @param foodRef:		Reference to the game food list
+	 * @param allFood:		Reference to the game food list
+	 * 
+	 * @return				Wheter or not a food was eaten.
 	 */
-	this.move = function(direction, foodRef) {
+	this.move = function(direction, allFood) {
 		// No direction given == continue last direction
 		if (!direction) direction = this.lastDirection;
 		else if (!this.isAllowedDirection(direction)) direction = this.lastDirection;
+		else this.lastDirection = direction;
 		// Find x and y offset for direction
 		var offset;
 		if (direction == "left") offset = {x: -1, y: 0};
@@ -24,19 +27,20 @@ function Snake(parts, partsDetail, startDirection) {
 			'y': this.parts[0].y + offset.y
 		});
 		// Check and eat food if head lands on it, if not delete last part.
-		if (!this.eatFoodIfOnIt(foodRef)) {
+		var foodEaten = this.eatFoodIfOnIt(allFood)
+		if (!foodEaten) {
 			this.parts.splice(this.parts.length-1,1); // Delete last part
+			return false;
 		}
-		// Update lastDirection, and we are done!
-		this.lastDirection = direction;
+		else return foodEaten;
 	}
 }
-Snake.prototype.eatFoodIfOnIt = function(foodRef) {
-	for (var i=0; i<foodRef.length; i++) {
-		if (utils.samePosition(this.parts[0], foodRef[i])) {
-			var food = foodRef.splice(i,1)[0];
+Snake.prototype.eatFoodIfOnIt = function(allFood) {
+	for (var i=0; i<allFood.length; i++) {
+		if (utils.samePosition(this.parts[0], allFood[i])) {
+			var food = allFood.splice(i,1)[0];
 			this.partsDetail.push({'type': food.type, 'details': food.details});
-			return true;
+			return food;
 		}
 	}
 	return false;

@@ -1,3 +1,14 @@
+/**
+ * Base class for snake game logic.
+ * 
+ * Has the following triggers that can be subscribed to:
+ * @trigger died(player)		: 
+ * @trigger foodspawn(food)		: 
+ * @trigger foodeaten(food)		: 
+ * @trigger joinedgame()		: The client joined a game
+ * @trigger playerjoined(player): A new player joined
+ * @trigger playerleft(player)	:
+ */
 function SnakeGame() {
 	this.mode;
 	this.settings;
@@ -6,10 +17,13 @@ function SnakeGame() {
 }
 SnakeGame.prototype.addFood = function(food) {
 	this.food.push(food);
+	$(this).trigger("foodspawn", food);
 };
 SnakeGame.prototype.deletePlayerById = function(id) {
 	for (var i=0; i<this.players.length; i++) {
-		if (this.players[i].id == id) return this.players.splice(i,1)[0];
+		if (this.players[i].id == id) {
+			$(this).trigger("playerleft", this.players.splice(i,1)[0]);
+		}
 	}
 };
 SnakeGame.prototype.getPlayerById = function(id) {
@@ -26,7 +40,10 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		var tick = newTicks[i];
 		for (var p=0; p<this.players.length; p++) {
 			var player = this.players[p];
-			if (player.snake) player.snake.move(tick[player.id], this.food);
+			if (player.snake) {
+				var foodEaten = player.snake.move(tick[player.id], this.food);
+				if (foodEaten) $(this).trigger("foodeaten", foodEaten);
+			}
 		}
 		// Event detections for current tick
 		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
@@ -41,13 +58,13 @@ SnakeGame.prototype.checkForSelfCrash = function(crashedCallback) {
 	for (var i=0; i<this.players.length; i++) {
 		if (this.players[i].snake) {
 			if (this.players[i].snake.hasSelfCrash()) {
-				crashedCallback(this.players[i]);
-				this.players[i].snake = null;
+				this.players[i].killSnake();
+				$(this).trigger("died", this.players[i]);
 			}
 		}
 	}
 };
-SnakeGame.prototype.checkForCrash = function(crashedCallback) {
+SnakeGame.prototype.checkForCrash = function() {
 	var crashedPlayers = [];
 	var counter = 0;
 	// Detect crashes
@@ -59,7 +76,8 @@ SnakeGame.prototype.checkForCrash = function(crashedCallback) {
 				var snake = this.players[k].snake;
 				if (!snake) continue;
 				else if (snake.hasPartAtPosition(head.x, head.y)) {
-					crashedPlayers.push(this.players[i]);
+					this.players[i].killSnake();
+					$(this).trigger("died", this.players[i]);
 					break; // No need to check if crashed with other more players
 				}
 			}

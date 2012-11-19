@@ -11,15 +11,15 @@ io.set('log level', 1);
 server.listen(80);
 
 
-/** SECTION 2: Project specific class instanciation **/
+/** SECTION 2: Project specific  instantiation **/
 /*************************************************************/
 
 var Utils = require('./common/utils');
 var SpellingMode = require('./common/modes/spelling');
 utils = new Utils();
-var ServerSnakeGame = require('./server_snakegame');
+var ServerSnakeGame = require('./server-snakegame');
 var Player = require('./common/player');
-
+$ = require('jquery');
 
 /** SECTION 3: Http request handling **/
 /*************************************************************/
@@ -50,7 +50,7 @@ io.sockets.on('connection', function (socket) {
 	// Announce new player to current players
 	io.sockets.emit('user connected', newPlayer);
 	
-	// If enough players, start game, else stop it
+	// If enough players: start game
 	if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart)) {
 		sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 		sgame.started = true;
@@ -95,15 +95,17 @@ var sgame = new ServerSnakeGame({
 	'playersToStart': 2,
 	'speed': 3,
 	'foodSpawnRate': 2,
-	'selfCrashAllowed': true,
-	'otherCrashAllowed': true,
-},spellingMode);
+	'selfCrashAllowed': false,
+	'otherCrashAllowed': false,
+}, spellingMode);
+
+$(sgame).on("foodspawn", function(event, food){
+	io.sockets.emit('foodspawn', food);
+});
 
 /**
  * Run one game tick.
  */
 function runGame() {
-	var gameTick = sgame.generateTick();
-	io.sockets.emit('tick', gameTick.movement);
-	if (gameTick.foodSpawn) io.sockets.emit('food', gameTick.foodSpawn);
+	io.sockets.emit('tick', sgame.generateTick());
 }
