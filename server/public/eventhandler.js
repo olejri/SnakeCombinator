@@ -24,9 +24,9 @@ var eventhandler = new function() {
 		//console.log(food);
 	}
 	
-	function onJoinedGame() {
-		console.log("Joined game");
-		drawPlayerList();
+	function onJoinedGame(event, game) {
+		console.log("Joined game!")
+		$("#title").text(game.mode.title);
 	}
 	
 	function onPlayerJoined(event, player) {

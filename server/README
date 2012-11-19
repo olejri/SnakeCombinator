@@ -6,3 +6,4 @@ INSTALLATION
 The modules are:
 	- express
 	- socket.io
+	- jquery

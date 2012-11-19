@@ -19,11 +19,8 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	for (var i=0; i<serverGameObj.food.length; i++) {
 		this.addFood(serverGameObj.food[i]);
 	}
-	// Test data
-	/*for (var p=0; p<30; p++) {
-		this.addPlayer(new Player("lolid"));
-	}*/
-	$(this).trigger("joinedgame");
+
+	$(this).trigger("joinedgame", this);
 };
 /**
  * Similar to makeGameFromObj this method joins with a Player object from a

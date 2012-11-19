@@ -9,7 +9,8 @@ $(document).ready(function() {
 	
 	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
-		sgame = new AiSnakeGame();
+		sgame = new ClientSnakeGame();
+		eventhandler.attatchGameTriggers(sgame);
 		sgame.initFromJsonObject(serverGameObj);
 
 		gui = new GameGUI({
@@ -25,8 +26,6 @@ $(document).ready(function() {
 			var didDraw = gui.draw(sgame.getGUIElements());
 			if (!didDraw) console.log("Did not draw!!");
 		}, 1000/MAX_FPS);
-		
-		// Add 
-		eventhandler.attatchGameTriggers(sgame);
+
 	});
 });
