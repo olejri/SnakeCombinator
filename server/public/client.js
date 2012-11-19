@@ -21,7 +21,7 @@ $(document).ready(function() {
 		});
 		
 		// INITIATE GUI
-		var MAX_FPS = 15;
+		var MAX_FPS = 100;
 		setInterval(function(){
 			var didDraw = gui.draw(sgame.getGUIElements());
 			if (!didDraw) console.log("Did not draw!!");
