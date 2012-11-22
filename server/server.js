@@ -98,6 +98,7 @@ var sgame = new ServerSnakeGame({
 	'foodSpawnRate': 2,
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
+	'wallCrashAllowed': false,
 }, spellingMode);
 
 $(sgame).on("foodspawn", function(event, food){

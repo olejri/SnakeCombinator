@@ -48,6 +48,7 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		// Event detections for current tick
 		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
+		if (!this.settings.wallCrashAllowed) this.checkForWallCrash();
 	}
 };
 /**
@@ -81,6 +82,25 @@ SnakeGame.prototype.checkForCrash = function() {
 					break; // No need to check if crashed with other more players
 				}
 			}
+		}
+	}
+	// Delete snakes of players who crashed
+	for (var c=0; c<crashedPlayers.length; c++) {
+		crashedCallback(crashedPlayers[c]);
+		crashedPlayers[c].snake = null;
+	}
+};
+
+/**Check if any snakes crashed with the wall 
+ * 
+ */
+SnakeGame.prototype.checkForWallCrash = function() {
+	var crashedPlayers = [];
+	for (var i=0; i<this.players.length; i++) {
+		var head = this.players[i].snake.parts[0];
+		if(snake.hasCrashedIntoWall(head.x, head.y)){
+			this.players[i].killSnake();
+			$(this).trigger("died", this.players[i]);
 		}
 	}
 	// Delete snakes of players who crashed

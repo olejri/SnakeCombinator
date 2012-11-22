@@ -16,6 +16,7 @@ function ServerSnakeGame(customSettings, mode) {
         'foodSpawnRate'		: 1,	// Average seconds between each food spawn
         'selfCrashAllowed'	: false,// A snake can crash with it's own body?
         'otherCrashAllowed'	: false,// A snake can crash with other snakes?
+        'wallCrashAllowed'	: false,// A snake can crash with wall?
 	};
 
 	// Overwrite default values with given options

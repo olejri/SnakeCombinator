@@ -69,6 +69,14 @@ Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
 	}
 	return false;
 };
+
+Snake.prototype.hasCrashedIntoWall = function(x, y) {
+	//make it dynamic
+	if(0 > x || x > 20) return true;
+	else if (0 > y || y > 20) return true;
+	return false;
+};
+
 Snake.prototype.hasSelfCrash = function() {
 	var head = this.parts[0];
 	return this.hasPartAtPosition(head.x, head.y, 1);
