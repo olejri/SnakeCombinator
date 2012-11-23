@@ -117,46 +117,7 @@
 			<button class="float: left;" onclick="moveCamera('right')">Camera RIGHT</button>
 		</body>
 		</html>
-			var text;
-			
-			function init() {
-			 
-			    stage = new createjs.Stage("demoCanvas");
-			 
-		        graphic = new createjs.Graphics();
-		        graphic .beginFill(Graphics.getRGB(125,200,255,1));
-		        graphic.drawRoundRect(-30,-30,60,60,4);
-		        roundRectangle= new Shape(graphic);
-		 
-		        bitmap = new createjs.Bitmap("pig.png");
-		        bitmap.x = -bitmap.image.width*.5;
-		    	bitmap.y = -bitmap.image.width*.5;
-		 
-		    	text = new createjs.Text("Icon", "bold 16px Courier","#fff");
-		    	text.textAlign="center";
-		    	text.y = 50;
-		 
-		        //Container creation
-		        icon = new createjs.Container();
-		 
-		        //add the shape, text and image as child of the Container() object
-		        icon.addChild(roundRectangle);
-		        icon.addChild(bitmap);
-		    	icon.addChild(text);
-		        icon.x = 400;
-		        icon.y = 300;
-		        stage.addChild(icon);
-		    	stage.update();
-			 
-			    createjs.Ticker.setFPS(32);
-			    createjs.Ticker.addListener(window);
-			}
-			
-			function tick() {
-			  icon.rotation +=2;
-			  stage.update();
-			}
-				
+
 	</script>
 </head>
 <body onLoad="init();">
