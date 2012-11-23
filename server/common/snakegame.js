@@ -97,10 +97,13 @@ SnakeGame.prototype.checkForCrash = function() {
 SnakeGame.prototype.checkForWallCrash = function() {
 	var crashedPlayers = [];
 	for (var i=0; i<this.players.length; i++) {
-		var head = this.players[i].snake.parts[0];
-		if(snake.hasCrashedIntoWall(head.x, head.y)){
-			this.players[i].killSnake();
-			$(this).trigger("died", this.players[i]);
+		var snake = this.players[i].snake;
+		if (snake) {
+			var head = this.players[i].snake.parts[0];
+			if(snake.hasCrashedIntoWall(head.x, head.y)){
+				this.players[i].killSnake();
+				$(this).trigger("died", this.players[i]);
+			}
 		}
 	}
 	// Delete snakes of players who crashed

@@ -72,8 +72,9 @@ Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
 
 Snake.prototype.hasCrashedIntoWall = function(x, y) {
 	//make it dynamic
-	if(0 > x || x > 20) return true;
-	else if (0 > y || y > 20) return true;
+	
+	if(0 > x || x > sgame.width) return true;
+	else if (0 > y || y > sgame.height) return true;
 	return false;
 };
 
