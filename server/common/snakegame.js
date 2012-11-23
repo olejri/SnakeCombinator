@@ -95,14 +95,21 @@ SnakeGame.prototype.checkForCrash = function() {
  * 
  */
 SnakeGame.prototype.checkForWallCrash = function() {
+	var teleport = true;
 	var crashedPlayers = [];
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
 		if (snake) {
-			var head = this.players[i].snake.parts[0];
-			if(snake.hasCrashedIntoWall(head.x, head.y)){
-				this.players[i].killSnake();
-				$(this).trigger("died", this.players[i]);
+			if(teleport){
+				if(snake.hasCrashedIntoWall(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height)){
+					snake.teleportHead(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height);
+				}
+			}
+			else{
+				if(snake.hasCrashedIntoWall(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height)){
+					this.players[i].killSnake();
+					$(this).trigger("died", this.players[i]);
+				}
 			}
 		}
 	}

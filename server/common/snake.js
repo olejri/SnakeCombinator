@@ -2,7 +2,7 @@ function Snake(parts, partsDetail, startDirection) {
 	this.parts = parts; // List of the parts coordinate
 	this.partsDetail = partsDetail;
 	this.lastDirection = startDirection;
-	
+
 	/**
 	 * 
 	 * @param direction:	Moved direction
@@ -70,13 +70,31 @@ Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
 	return false;
 };
 
-Snake.prototype.hasCrashedIntoWall = function(x, y) {
-	//make it dynamic
-	
-	if(0 > x || x > sgame.width) return true;
-	else if (0 > y || y > sgame.height) return true;
+Snake.prototype.hasCrashedIntoWall = function(x, y, width, height) {
+	if(0 > x || x > width) return true;
+	else if (0 > y || y > height) return true;
 	return false;
 };
+
+Snake.prototype.teleportHead = function(x, y, width, height) {
+	var newX = x;
+	var newY = y;
+	if(0 > x){
+		newX = width;
+	} else if (x > 20){
+		newX = 0;
+	} else if (0 > y){
+		newY = height;
+	} else if (y > 20){
+		newY = 0;
+	}	
+	this.parts.unshift({
+		'x': newX,
+		'y': newY
+	});
+	this.parts.splice(this.parts.length-1,1);
+
+}
 
 Snake.prototype.hasSelfCrash = function() {
 	var head = this.parts[0];

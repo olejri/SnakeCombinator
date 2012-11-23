@@ -8,7 +8,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server, { log: 2 });
 io.set('log level', 1);
 
-server.listen(80);
+server.listen(3000);
 
 
 /** SECTION 2: Project specific  instantiation **/
