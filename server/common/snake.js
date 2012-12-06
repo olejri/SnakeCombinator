@@ -23,11 +23,11 @@ function Snake(parts, partsDetail, startDirection) {
 		else if (direction == "down") offset = {x: 0, y: 1};
 		// Prepend a new head part 
 		this.parts.unshift({
-			'x': this.parts[0].x + offset.x,
-			'y': this.parts[0].y + offset.y
+			'x': this.head().x + offset.x,
+			'y': this.head().y + offset.y
 		});
 		// Check and eat food if head lands on it, if not delete last part.
-		var foodEaten = this.eatFoodIfOnIt(allFood)
+		var foodEaten = this.eatFoodIfOnIt(allFood);
 		if (!foodEaten) {
 			this.parts.splice(this.parts.length-1,1); // Delete last part
 			return false;
@@ -70,35 +70,47 @@ Snake.prototype.hasPartAtPosition = function(x, y, indexOffset) {
 	return false;
 };
 
-Snake.prototype.hasCrashedIntoWall = function(x, y, width, height) {
-	if(0 > x || x > width) return true;
-	else if (0 > y || y > height) return true;
+Snake.prototype.hasCrashedIntoWall = function(width, height) {
+	if(0 > this.head().x || this.head().x >= width) return true;
+	else if (0 > this.head().y || this.head().y >= height) return true;
 	return false;
 };
 
-Snake.prototype.teleportHead = function(x, y, width, height) {
-	var newX = x;
-	var newY = y;
-	if(0 > x){
-		newX = width;
-	} else if (x > 20){
+Snake.prototype.teleportHead = function(width, height, allFood) {
+	var newX = this.head().x;
+	var newY = this.head().y;
+	if(0 > newX){
+		newX = width-1;
+	} else if (newX >= width){
 		newX = 0;
-	} else if (0 > y){
-		newY = height;
-	} else if (y > 20){
+	} else if (0 > newY){
+		newY = height-1;
+	} else if (newY >= height){
 		newY = 0;
 	}	
 	this.parts.unshift({
 		'x': newX,
 		'y': newY
 	});
-	this.parts.splice(this.parts.length-1,1);
+	var foodEaten = this.eatFoodIfOnIt(allFood);
+	if (!foodEaten) {
+		this.parts.splice(this.parts.length-1,1); // Delete last part
+		return false;
+	}
+	else return foodEaten;
+	
 
-}
+};
 
 Snake.prototype.hasSelfCrash = function() {
 	var head = this.parts[0];
 	return this.hasPartAtPosition(head.x, head.y, 1);
 };
+
+Snake.prototype.head = function() {
+	return this.parts[0];
+	
+};
+
 
 if(typeof exports != 'undefined') module.exports = Snake;

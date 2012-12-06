@@ -48,7 +48,8 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		// Event detections for current tick
 		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
-		if (!this.settings.wallCrashAllowed) this.checkForWallCrash();
+		if (!this.settings.teleportationAllowed) this.checkForAllowedTeleportation(false);
+		if (this.settings.teleportationAllowed) this.checkForAllowedTeleportation(true);
 	}
 };
 /**
@@ -94,19 +95,17 @@ SnakeGame.prototype.checkForCrash = function() {
 /**Check if any snakes crashed with the wall 
  * 
  */
-SnakeGame.prototype.checkForWallCrash = function() {
-	var teleport = true;
+SnakeGame.prototype.checkForAllowedTeleportation = function(teleport) {
 	var crashedPlayers = [];
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
 		if (snake) {
-			if(teleport){
-				if(snake.hasCrashedIntoWall(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height)){
-					snake.teleportHead(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height);
+			if(snake.hasCrashedIntoWall(this.settings.width, this.settings.height)){
+				if(teleport){
+					var foodEaten = snake.teleportHead(this.settings.width, this.settings.height, this.food);
+					if (foodEaten) $(this).trigger("foodeaten", foodEaten);
 				}
-			}
-			else{
-				if(snake.hasCrashedIntoWall(snake.parts[0].x, snake.parts[0].y, this.settings.width, this.settings.height)){
+				else{
 					this.players[i].killSnake();
 					$(this).trigger("died", this.players[i]);
 				}

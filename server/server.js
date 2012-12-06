@@ -8,7 +8,7 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server, { log: 2 });
 io.set('log level', 1);
 
-server.listen(3000);
+server.listen(80);
 
 
 /** SECTION 2: Project specific  instantiation **/
@@ -98,7 +98,7 @@ var sgame = new ServerSnakeGame({
 	'foodSpawnRate': 2,
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
-	'wallCrashAllowed': false,
+	'teleportationAllowed': true,
 }, spellingMode);
 
 $(sgame).on("foodspawn", function(event, food){
