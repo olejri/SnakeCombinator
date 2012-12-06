@@ -4,7 +4,7 @@ var eventhandler = new function() {
 	
 	this.attatchGameTriggers = function(game) {
 		$(document).on('keydown', keydown);
-		$(game).on("died", onPlayerDied);
+		$(game).on("snakedied", onSnakeDied);
 		$(game).on("foodspawn", onFoodSpawn);
 		$(game).on("foodeaten", onFoodEaten);
 		$(game).on("joinedgame", onJoinedGame);
@@ -12,8 +12,8 @@ var eventhandler = new function() {
 		$(game).on("playerleft", onPlayerLeft);
 	};
 	
-	function onPlayerDied(event, player) {
-		console.log("Player died: "+player.nick);
+	function onSnakeDied(event, player) {
+		console.log("Players snake died: "+player.nick);
 	}
 	
 	function onFoodSpawn(event, food) {

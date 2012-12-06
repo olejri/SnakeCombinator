@@ -44,25 +44,26 @@ ServerSnakeGame.prototype.toJsonObject = function() {
 	}
 };
 ServerSnakeGame.prototype.addPlayer = function(player) {
-	var randX = utils.rand(2,this.settings.width-2);
-	var randY = utils.rand(2,this.settings.height-2);
-	var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
-	player.createSnake(randX, randY, randDirection, this.mode.getStartBody());
-	this.players.push(player);
-	$(this).trigger("playerjoined", player);
+	var randPos = this.getRandomOpenPos();
+	if (randPos) {
+		var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
+		player.createSnake(randPos.x, randPos.y, randDirection, this.mode.getStartBody());
+		this.players.push(player);
+		$(this).trigger("playerjoined", player);
+	}
+	else console.log("No space for player");
 };
 ServerSnakeGame.prototype.generateTick = function() {
 	var tick = {};
 	for (var i=0; i<this.players.length; i++) {
 		var player = this.players[i];
-		var lastMove = player.lastMoveInput;
-		player.snake.move(lastMove, this.food); // Apply move to snake
-
-		if (lastMove) {
-			tick[player.id] = lastMove;
+		if (player.lastMoveInput) { // Player have set a moved direction
+			tick[player.id] = player.lastMoveInput;
 			player.lastMoveInput = null;
 		}
 	}
+	
+	this.applyTicks([tick]);
 	
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
@@ -85,13 +86,17 @@ SnakeGame.prototype.rollForFoodSpawn = function() {
 	//console.log("Increasing chance by "+chanceIncrement+" to "+this.savedFoodSpawnChance+" when average was "+avgChanceIncrement);
 	if (this.savedFoodSpawnChance > Math.random()) {
 		this.savedFoodSpawnChance -= 1.0;
-		return this.mode.convertToModeFood(this.getRandomOpenPos());
+		var foodPos = this.getRandomOpenPos();
+		if (foodPos) return this.mode.convertToModeFood(foodPos);
+		else console.log("No space for food");
 	}
 	else return false;
 };
 /**
- * Get a random position that is no occupied
+ * Get a random position that is not occupied
  * Note: Function averages at 8ms runtime at my computer (andre) with a 200x200 sized game.
+ * 
+ * @returns {x: positionX, y: positionY}
  */
 SnakeGame.prototype.getRandomOpenPos = function() {
 	// Create empty two dimensional array of positions
@@ -101,11 +106,13 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 	}
 	// Iterate over all snake parts and set the positions as taken
 	for (var i=0; i<this.players.length; i++) {
-		for (var p=0; p<this.players[i].snake.parts.length; p++) {
-			var part = this.players[i].snake.parts[p];
-			if ((positions.length > part.x)&&(part.x >= 0)) {
-				if ((positions[part.x].length > part.y)&&(part.y >= 0)) {
-					positions[part.x][part.y] = true 
+		if (this.players[i].snake) {
+			for (var p=0; p<this.players[i].snake.parts.length; p++) {
+				var part = this.players[i].snake.parts[p];
+				if ((positions.length > part.x)&&(part.x >= 0)) {
+					if ((positions[part.x].length > part.y)&&(part.y >= 0)) {
+						positions[part.x][part.y] = true 
+					}
 				}
 			}
 		}
@@ -121,12 +128,13 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 			if (positions[x][y] != true) freePositions.push({'x': x, 'y': y});
 		}
 	}
+	
 	if (freePositions.length != 0) {
 		var randomPosition = freePositions[utils.rand(0,freePositions.length-1)];
 		return randomPosition;
 	}
-	else console.log("No space for food.");
-
+	else return false;
+	
 }
 SnakeGame.prototype.resetGame = function() {
 	this.food = [];

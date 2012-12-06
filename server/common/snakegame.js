@@ -61,7 +61,7 @@ SnakeGame.prototype.checkForSelfCrash = function(crashedCallback) {
 		if (this.players[i].snake) {
 			if (this.players[i].snake.hasSelfCrash()) {
 				this.players[i].killSnake();
-				$(this).trigger("died", this.players[i]);
+				$(this).trigger("snakedied", this.players[i]);
 			}
 		}
 	}
@@ -79,7 +79,7 @@ SnakeGame.prototype.checkForCrash = function() {
 				if (!snake) continue;
 				else if (snake.hasPartAtPosition(head.x, head.y)) {
 					this.players[i].killSnake();
-					$(this).trigger("died", this.players[i]);
+					$(this).trigger("snakedied", this.players[i]);
 					break; // No need to check if crashed with other more players
 				}
 			}
@@ -107,7 +107,7 @@ SnakeGame.prototype.checkForAllowedTeleportation = function(teleport) {
 				}
 				else{
 					this.players[i].killSnake();
-					$(this).trigger("died", this.players[i]);
+					$(this).trigger("snakedied", this.players[i]);
 				}
 			}
 		}
