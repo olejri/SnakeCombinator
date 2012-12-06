@@ -1,9 +1,11 @@
 var communicator = new function() {
 	var socket;
 	var newTicks = [];
+	var lastEmitDirection = null;
 	
 	this.emitMovement = function(direction) {
-		if (socket) {
+		if (socket && lastEmitDirection != direction) {
+			lastEmitDirection = direction;
 			socket.emit('move input', direction);
 			log.addEmit();
 		}
