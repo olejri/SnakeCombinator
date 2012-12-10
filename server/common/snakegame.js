@@ -48,8 +48,8 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		// Event detections for current tick
 		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
-		if (!this.settings.teleportationAllowed) this.checkForAllowedTeleportation(false);
-		if (this.settings.teleportationAllowed) this.checkForAllowedTeleportation(true);
+		this.checkForTeleportation(this.settings.teleportationAllowed);
+		this.checkForValidation();
 	}
 };
 /**
@@ -95,7 +95,7 @@ SnakeGame.prototype.checkForCrash = function() {
 /**Check if any snakes crashed with the wall 
  * 
  */
-SnakeGame.prototype.checkForAllowedTeleportation = function(teleport) {
+SnakeGame.prototype.checkForTeleportation = function(teleport) {
 	var crashedPlayers = [];
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
@@ -118,5 +118,28 @@ SnakeGame.prototype.checkForAllowedTeleportation = function(teleport) {
 		crashedPlayers[c].snake = null;
 	}
 };
+
+
+SnakeGame.prototype.checkForValidation = function() {
+	for (var i=0; i<this.players.length; i++){
+		var snake = this.players[i].snake;
+		if (snake){
+			if(snake.isInValidationZone(this.settings.validationZoneDim, this.settings.width, this.settings.height)){
+				var score = this.mode.validateSnake(snake);
+				if(score > 0){
+					$(this).trigger("validationsuccess", {'player': this.players[i],'score': score});
+					snake.removeAndAwardParts(1);				
+										
+				}else {
+					$(this).trigger("validationfailure", this.players[i]);
+					snake.removeAndAwardParts(0);
+				}
+				
+			}
+		}
+	}
+	
+}
+
 
 if(typeof exports != 'undefined') module.exports = SnakeGame;

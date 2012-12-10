@@ -1,7 +1,7 @@
 function GameGUI(options) {
 	
 	// Options
-	var GSD = options.GSD;
+	var options = options;
 	
 	// Avoids that the drawing methods runs twice at the same time
 	var IsDrawing = false;
@@ -14,12 +14,16 @@ function GameGUI(options) {
 	});
 	
 	// Layers
+	var backgroundLayer = new Kinetic.Layer();
+	stage.add(backgroundLayer);
+
 	var snakeLayer = new Kinetic.Layer();
 	stage.add(snakeLayer);
 	
-	foodLayer = new Kinetic.Layer();
+	var foodLayer = new Kinetic.Layer();
 	stage.add(foodLayer);
 	
+	initBackground();
 	stage.draw(); // IS IT NEEDED??? need to test
 	
 	/**
@@ -54,7 +58,7 @@ function GameGUI(options) {
 		try {
 			snakeLayer.removeChildren();
 			for (var i=0; i<elements.length; i++) {
-				elements[i].addToLayer(snakeLayer, GSD);
+				elements[i].addToLayer(snakeLayer, options.GSD);
 			}
 			snakeLayer.draw();
 			
@@ -71,7 +75,7 @@ function GameGUI(options) {
 			foodLayer.removeChildren();
 			
 			for (var i=0; i<elements.length; i++) {
-				elements[i].addToLayer(foodLayer, GSD);
+				elements[i].addToLayer(foodLayer, options.GSD);
 			}
 			foodLayer.draw();
 			
@@ -82,6 +86,24 @@ function GameGUI(options) {
 		} 
 		
 	};
+	
+	
+	function initBackground(){
+		var validationZone = new Kinetic.Rect({
+	        x: options.GSD*(options.gameWidth/2 - options.validationZoneDim/2),
+	        y: options.GSD*(options.gameHeight/2 - options.validationZoneDim/2),
+	        width: options.GSD*options.validationZoneDim,
+	        height: options.GSD*options.validationZoneDim,
+	        stroke: 'green',
+	        strokeWidth: 2,
+	        cornerRadius: 4
+	      });
+			
+		backgroundLayer.add(validationZone);
+		
+		
+		backgroundLayer.draw();
+	}
 	
 	
 }

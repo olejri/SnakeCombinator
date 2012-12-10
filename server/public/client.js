@@ -18,6 +18,7 @@ $(document).ready(function() {
 			container: 'gamegui', 
 			gameWidth: sgame.settings.width,
 			gameHeight: sgame.settings.height,
+			validationZoneDim: sgame.settings.validationZoneDim,
 		});
 		
 		// INITIATE GUI

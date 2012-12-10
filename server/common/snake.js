@@ -102,6 +102,34 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 
 };
 
+
+Snake.prototype.isInValidationZone = function(validationZoneDim, width, height) {
+	widthDim = (width / 2) -1;
+	heightDim = (height / 2) -1;
+	validationZoneDim = validationZoneDim / 2;
+	if((this.head().x > widthDim - validationZoneDim  && this.head().x <= widthDim+validationZoneDim) &&
+			(this.head().y > heightDim - validationZoneDim  && this.head().y <= heightDim+validationZoneDim)) return true;
+	return false;
+};
+
+Snake.prototype.removeAndAwardParts = function(awardCount) {
+	if (!awardCount) awardCount = 0;
+	var i = 1;
+	while(this.parts.length>i) {
+		if (this.partsDetail[i].type != "plain"){
+			if (awardCount > 0){
+				this.partsDetail[i] = {'type': 'plain'};
+				awardCount--;
+			} else {
+				this.parts.splice(i, this.parts.length-i);
+				this.partsDetail.splice(i, this.partsDetail.length-i);
+			}
+		}
+		i++;
+	}	
+	
+};
+
 Snake.prototype.hasSelfCrash = function() {
 	var head = this.parts[0];
 	return this.hasPartAtPosition(head.x, head.y, 1);
@@ -109,7 +137,6 @@ Snake.prototype.hasSelfCrash = function() {
 
 Snake.prototype.head = function() {
 	return this.parts[0];
-	
 };
 
 

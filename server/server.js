@@ -78,7 +78,6 @@ io.sockets.on('connection', function (socket) {
 		//console.log("** move input ** "+socket.id+" : "+direction);
 		sgame.getPlayerById(socket.id).lastMoveInput = direction;
 	});
-	
 });
 
 
@@ -87,13 +86,14 @@ io.sockets.on('connection', function (socket) {
 /*************************************************************/
 var spellingMode = new SpellingMode({
 	title: "Drikke",
-	words: ["Brus", "Saft", "Kaffe", "Kakao"],
+	//words: ["BRUS", "SAFT", "KAFFE", "KAKAO", "VARMSAFT", "BRENNVIN", "VIN", "MELK", "VANN"],
+	words: ["BRUS"],
 });
 
 var sgame = new ServerSnakeGame({
 	'width': 20,
 	'height': 20,
-	'playersToStart': 2,
+	'playersToStart': 1,
 	'speed': 3,
 	'foodSpawnRate': 2,
 	'selfCrashAllowed': false,

@@ -4,10 +4,12 @@ var communicator = new function() {
 	var lastEmitDirection = null;
 	
 	this.emitMovement = function(direction) {
-		if (socket && lastEmitDirection != direction) {
-			lastEmitDirection = direction;
-			socket.emit('move input', direction);
-			log.addEmit();
+		if (socket) {
+			if (lastEmitDirection != direction) {
+				lastEmitDirection = direction;
+				socket.emit('move input', direction);
+				log.addEmit();
+			}
 		}
 		else console.log("EMIT ERROR: Not connected to server");
 	}

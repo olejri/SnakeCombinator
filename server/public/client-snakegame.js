@@ -62,6 +62,13 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 						y: snake.parts[s].y,
 					}));
 				}
+				else if (snake.partsDetail[s].type == "plain") {
+					snakeElements.push(new BoardTextElement({
+						text: " ",
+						x: snake.parts[s].x,
+						y: snake.parts[s].y,
+					}));
+				}
 				else console.log("Unkown part type: "+snake.partsDetail[s].type);
 			}
 			

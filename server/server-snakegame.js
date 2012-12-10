@@ -17,6 +17,7 @@ function ServerSnakeGame(customSettings, mode) {
         'selfCrashAllowed'	: false,// A snake can crash with it's own body?
         'otherCrashAllowed'	: false,// A snake can crash with other snakes?
         'teleportationAllowed'	: false,// A snake can crash with wall or teleport?
+        'validationZoneDim' : 2, //  
 	};
 
 	// Overwrite default values with given options
@@ -121,6 +122,15 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 	for (var i=0; i<this.food.length; i++) {
 		positions[this.food[i].x][this.food[i].y] = true;
 	}
+	// Set validation zone as taken
+	for (var x=0; x<this.settings.validationZoneDim; x++) {
+		for (var y=0; y<this.settings.validationZoneDim; y++) {
+			var xPos = this.settings.width/2 - this.settings.validationZoneDim + x;
+			var yPos = this.settings.heigth/2 - this.settings.validationZoneDim + y;
+			positions[xPos][yPos] = true;
+		}	
+	}
+	
 	// Create one dimensional array of FREE positions
 	var freePositions = [];
 	for (var x=0; x<positions.length; x++) {

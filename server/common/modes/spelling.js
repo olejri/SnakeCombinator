@@ -17,6 +17,22 @@ SpellingMode.prototype.getStartBody = function() {
 	return [randWord[0], randWord[1]];
 };
 
+SpellingMode.prototype.validateSnake = function(snake) {
+	var word = "";
+	for (var i=0; i < snake.partsDetail.length; i++) {
+		if (snake.partsDetail[i].type == "text"){
+			word = word + snake.partsDetail[i].details;
+		}
+	}
+	//console.log("Snake has "+ word);
+	for (var k=0; k < this.words.length; k++){
+		if (word.toUpperCase() == this.words[k].toUpperCase()) return word.length;
+	}
+	return 0;
+	
+};
+
+
 if(typeof exports != 'undefined'){
 	module.exports = SpellingMode;
 }

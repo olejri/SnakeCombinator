@@ -10,6 +10,8 @@ var eventhandler = new function() {
 		$(game).on("joinedgame", onJoinedGame);
 		$(game).on("playerjoined", onPlayerJoined);
 		$(game).on("playerleft", onPlayerLeft);
+		$(game).on("validationsuccess", onValidationSuccess);
+		$(game).on("validationfailure", onValidationFailure);
 	};
 	
 	function onSnakeDied(event, player) {
@@ -22,6 +24,14 @@ var eventhandler = new function() {
 	
 	function onFoodEaten(event, food) {
 		//console.log(food);
+	}
+	
+	function onValidationSuccess(event, data) {
+		console.log(data.player.nick + " scored a " + data.score + " letter word!");
+	}
+	
+	function onValidationFailure(event, player) {
+		console.log(player.nick + " thats not the right word!");
 	}
 	
 	function onJoinedGame(event, game) {
