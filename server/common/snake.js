@@ -103,12 +103,12 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 };
 
 
-Snake.prototype.isInValidationZone = function(validationZoneDim, width, height) {
-	widthDim = (width / 2) -1;
-	heightDim = (height / 2) -1;
-	validationZoneDim = validationZoneDim / 2;
-	if((this.head().x > widthDim - validationZoneDim  && this.head().x <= widthDim+validationZoneDim) &&
-			(this.head().y > heightDim - validationZoneDim  && this.head().y <= heightDim+validationZoneDim)) return true;
+Snake.prototype.isInValidationZone = function(width, height, validationZoneDim) {
+	var vZones = utils.vZonePositions(width, height, validationZoneDim);
+	for (var i=0; i<vZones.length; i++) {
+		var z = vZones[i];
+		if ((z.x == this.head().x) && (z.y == this.head().y)) return true;
+	}
 	return false;
 };
 

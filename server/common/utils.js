@@ -14,7 +14,19 @@ function Utils() {
 			}
 		}
 		return false;
-	}
+	};
+	this.vZonePositions = function(gameWidth, gameHeight, vZoneDim) {
+		var positions = [];
+		for (var x=0; x<vZoneDim; x++) {
+			for (var y=0; y<vZoneDim; y++) {
+				positions.push({
+					'x': gameWidth/2 - vZoneDim/2 + x, 
+					'y': gameHeight/2 - vZoneDim/2 + y
+				});
+			}	
+		}
+		return positions;
+	};
 }
 
 if(typeof exports != 'undefined') module.exports = Utils;

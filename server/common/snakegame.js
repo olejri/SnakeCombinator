@@ -124,7 +124,7 @@ SnakeGame.prototype.checkForValidation = function() {
 	for (var i=0; i<this.players.length; i++){
 		var snake = this.players[i].snake;
 		if (snake){
-			if(snake.isInValidationZone(this.settings.validationZoneDim, this.settings.width, this.settings.height)){
+			if(snake.isInValidationZone(this.settings.width, this.settings.height, this.settings.validationZoneDim)){
 				var score = this.mode.validateSnake(snake);
 				if(score > 0){
 					$(this).trigger("validationsuccess", {'player': this.players[i],'score': score});

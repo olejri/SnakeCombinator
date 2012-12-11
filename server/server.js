@@ -91,11 +91,11 @@ var spellingMode = new SpellingMode({
 });
 
 var sgame = new ServerSnakeGame({
-	'width': 20,
-	'height': 20,
+	'width': 6,
+	'height': 6,
 	'playersToStart': 1,
 	'speed': 3,
-	'foodSpawnRate': 2,
+	'foodSpawnRate': 1,
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
 	'teleportationAllowed': true,

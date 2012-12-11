@@ -89,9 +89,10 @@ function GameGUI(options) {
 	
 	
 	function initBackground(){
+		var firstValZone = utils.vZonePositions(options.gameWidth, options.gameHeight, options.validationZoneDim)[0];
 		var validationZone = new Kinetic.Rect({
-	        x: options.GSD*(options.gameWidth/2 - options.validationZoneDim/2),
-	        y: options.GSD*(options.gameHeight/2 - options.validationZoneDim/2),
+	        x: options.GSD*firstValZone.x,
+	        y: options.GSD*firstValZone.y,
 	        width: options.GSD*options.validationZoneDim,
 	        height: options.GSD*options.validationZoneDim,
 	        stroke: 'green',

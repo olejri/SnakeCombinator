@@ -123,12 +123,9 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 		positions[this.food[i].x][this.food[i].y] = true;
 	}
 	// Set validation zone as taken
-	for (var x=0; x<this.settings.validationZoneDim; x++) {
-		for (var y=0; y<this.settings.validationZoneDim; y++) {
-			var xPos = this.settings.width/2 - this.settings.validationZoneDim + x;
-			var yPos = this.settings.heigth/2 - this.settings.validationZoneDim + y;
-			positions[xPos][yPos] = true;
-		}	
+	var vZones = utils.vZonePositions(this.settings.width, this.settings.height, this.settings.validationZoneDim);
+	for (var i=0; i<vZones.length; i++) {
+		positions[vZones[i].x][vZones[i].y] = true;
 	}
 	
 	// Create one dimensional array of FREE positions
