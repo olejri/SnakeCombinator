@@ -2,7 +2,7 @@
 
 #output {
 	width: 100%;
-	text-align: center
+	text-align: left;
 }
 
 #output > span {
@@ -22,6 +22,7 @@
 #players {
 	float:left;
 	border: 1px solid black;
+	display: none;
 }
 #players ul {
 		

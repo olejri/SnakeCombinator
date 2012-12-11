@@ -29,7 +29,9 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	var player = new Player(objP.id);
 	player.nick = objP.nick;
-	player.snake = new Snake(objP.snake.parts, objP.snake.partsDetail, objP.snake.lastDirection);
+	if (objP.snake) {
+		player.snake = new Snake(objP.snake.parts, objP.snake.partsDetail, objP.snake.lastDirection);
+	}
 	this.players.push(player);
 	$(this).trigger("playerjoined", player);
 };

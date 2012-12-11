@@ -85,14 +85,13 @@ io.sockets.on('connection', function (socket) {
 /** SECTION 5: Game logic **/
 /*************************************************************/
 var spellingMode = new SpellingMode({
-	title: "Drikke",
-	//words: ["BRUS", "SAFT", "KAFFE", "KAKAO", "VARMSAFT", "BRENNVIN", "VIN", "MELK", "VANN"],
-	words: ["BRUS"],
+	title: "Dyr",
+	words: ["Katt", "Hund"],
 });
 
 var sgame = new ServerSnakeGame({
-	'width': 6,
-	'height': 6,
+	'width': 20,
+	'height': 20,
 	'playersToStart': 1,
 	'speed': 3,
 	'foodSpawnRate': 1,
