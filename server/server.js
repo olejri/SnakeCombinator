@@ -94,7 +94,7 @@ var sgame = new ServerSnakeGame({
 	'height': 20,
 	'playersToStart': 1,
 	'speed': 3,
-	'foodSpawnRate': 1,
+	'foodSpawnRate': 3,
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
 	'teleportationAllowed': true,
