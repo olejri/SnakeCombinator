@@ -1,3 +1,16 @@
+/*********** Page Layout ****************/
+
+#pageWrapper {
+	width: 1000px;
+	background-color: #FFF;
+	margin-left: auto;
+	margin-right: auto;
+	border-right: 1px solid black;
+}
+	
+
+
+
 /*********** TEST OUTPUT PANEL ****************/
 
 #output {

@@ -8,7 +8,8 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server, { log: 2 });
 io.set('log level', 1);
 
-server.listen(80);
+//changed from 80 to 34509
+server.listen(34509);
 
 
 /** SECTION 2: Project specific  instantiation **/
@@ -90,8 +91,8 @@ var spellingMode = new SpellingMode({
 });
 
 var sgame = new ServerSnakeGame({
-	'width': 20,
-	'height': 20,
+	'width': 30,
+	'height': 30,
 	'playersToStart': 1,
 	'speed': 3,
 	'foodSpawnRate': 3,

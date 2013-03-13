@@ -4,24 +4,34 @@
 	<link rel="stylesheet" href="/styles.css" />
 </head>
 <body>
-	<div id="output">
-		<span>
-			Updates: <span id="updates_counter">0</span> (<span id="updates_ps">0</span> ps)
-		</span>
-		<span>
-			Emits: <span id="emits_counter">0</span>  (<span id="emits_ps">0</span> ps)
-		</span>
-		<span>
-			FPS: <span id=fps>0</span>
-		</span>
-	</div>
+	<div id ="pageWrapper">
+		<div id="output">
+			<span>
+				Updates: <span id="updates_counter">0</span> (<span id="updates_ps">0</span> ps)
+			</span>
+			<span>
+				Emits: <span id="emits_counter">0</span>  (<span id="emits_ps">0</span> ps)
+			</span>
+			<span>
+				FPS: <span id=fps>0</span>
+			</span>
+		</div>
+		<h1 id="title"></h1>
+		<div id="gamegui"></div>
+		<div id="players">
+			<b>Players:</b>
+			<ul></ul>
+		</div>
+	</div> <!--  End of pageWrapper -->
 	
-	<h1 id="title"></h1>
-	<div id="gamegui"></div>
-	<div id="players">
-		<b>Players:</b>
-		<ul></ul>
-	</div>
+	
+	
+	
+	
+	
+	
+	
+	
 
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
@@ -37,6 +47,7 @@
 	<script src="/communicator.js"></script>
 	<script src="/gui.js"></script>
 	<script src="/client.js"></script>
+	
 
 </body>
 </html>
