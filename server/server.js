@@ -35,6 +35,8 @@ app.use(express.static(__dirname + '/public'));
 app.use(express.static(__dirname + '/common'));
 
 
+
+
 /** SECTION 4: Socket.IO communication **/
 /*************************************************************/
 
@@ -56,6 +58,8 @@ io.sockets.on('connection', function (socket) {
 		sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 		sgame.started = true;
 	}
+	
+	
 	
 	// The internal disconnect trigger
 	socket.on('disconnect', function () {
@@ -110,4 +114,17 @@ $(sgame).on("foodspawn", function(event, food){
  */
 function runGame() {
 	io.sockets.emit('tick', sgame.generateTick());
+	console.log('test');
 }
+
+
+/**
+ * Testing
+ */
+
+
+
+
+
+
+
