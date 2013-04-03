@@ -1,0 +1,66 @@
+.pagewrapper
+{
+   	margin-left: auto;
+   	margin-right: auto;
+   	width: 1006px;
+   	height: 600px;
+   	border-style: solid;
+  	border-width: 1px; 
+}
+
+.leftdiv 
+{
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	height: 600px;
+	width: 200px;
+}
+
+.middlediv
+{
+	float: left;	
+	width: 600px;
+	height: 600px;
+	border-style: solid;
+	border-width: 1px;
+	background-color: darkgreen;
+}
+
+.rightdiv
+{
+	float: left;
+	border-style: solid;
+	border-width: 1px;
+	height: 600px;
+	width: 200px;
+}
+
+.pagetitle
+{
+	color: white;
+	position: relative;
+	left: 130px;
+}
+
+
+.buttons
+{
+	position: relative;
+	left: 200px;	
+}
+
+#hostgame
+{
+	top: 60px;
+}
+
+#gamelobby
+{
+	top: 70px;
+}
+
+#levelmanager
+{
+	top: 80px;
+}

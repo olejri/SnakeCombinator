@@ -1,2 +1,2 @@
-node server.js
+node H:\GitHub\SnakeCombinator\website\server.js
 pause

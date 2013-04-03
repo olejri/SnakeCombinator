@@ -1,0 +1,64 @@
+.pagewrapper
+{
+   width: auto;
+   /* max-width: 320px; */ /* max_width works with iPhones, but doesn't format well with new Android phones and devices that are wider than 320px */
+   min-width: 0px;
+   height:auto;
+   border-style: none;
+}
+
+
+.leftdiv 
+{
+	height: 0px;
+	width: 0px;
+	visibility: hidden;
+}
+
+.middlediv
+{
+	float: left;	
+	width: auto;
+	height: auto;
+	border-style: solid;
+	border-width: 1px;
+	background-color: darkgreen;
+}
+
+.rightdiv
+{
+	height: 0px;
+	width: 0px;
+	visibility: hidden;
+}
+
+.pagetitle
+{
+	color: white;
+	position: relative;
+	left: 130px;
+}
+
+
+.buttons
+{
+	position: absolute;
+	left: 50%;
+	margin-left: -30px;
+	
+}
+
+#hostgame
+{
+	top: 60px;
+}
+
+#gamelobby
+{
+	top: 100px;
+}
+
+#levelmanager
+{
+	top: 80px;
+}

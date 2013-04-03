@@ -7,42 +7,70 @@ var server = http.createServer(app);
 var sys = require('sys')
 var exec = require('child_process').exec;
 
+app.configure(function(){
+	  app.use(express.bodyParser());
+});
 
+//var myArgs = process.argv.slice(2);
+//console.log('myArgs: ', myArgs);
+
+
+//server listen @ 8888
 server.listen(8888);
 
-console.log('Server listen @ 8888');
+console.log('Server listen on port: 8888');
 
 
 
 app.get('/', function (req, res) {
-	res.sendfile(__dirname + '/frontpage.html');
+	res.sendfile(__dirname + '/public/gamemenu.html');
 });
 
 
-app.get('/test', function (req, res) {
-	res.sendfile(__dirname + '/secondPage.html');
+app.get('/hostgame', function (req, res) {
+	res.sendfile(__dirname + '/public/hostgame.html');
+});
+
+app.get('/gamelobby', function (req, res) {
+	res.sendfile(__dirname + '/public/gamelobby.html');
+});
+
+app.get('/levelmanager', function (req, res) {
+	res.sendfile(__dirname + '/public/levelmanager.html');
 });
 
 
-app.use(express.static(__dirname + '/'));
+app.use(express.static(__dirname + '/public'));
+
+
 
 // SERVER
-app.use(express.bodyParser());
+
+
 app.post('/startnode', function(req, res) {
-        // Hent ut data fra req.body
-        //var username = req.body.username;
-		
-        startnode();
+		console.log("ajax call inc")
+	
+	// Hent ut data fra req.body
+       
+		console.log(req.body.gamename + ":"
+				+ req.body.gamemodename + ":"
+				+ req.body.gamemodedata + ":"
+				+ req.body.powerupset +  ":"
+				+ req.body.password +  ":"
+				+ req.body.players +  ":"
+				+ req.body.mapsize );
+        
+		//startnode();
         // ...
         // Svar
         res.contentType('json');
-        res.send({response: 'good shit'});     
+        res.send({text: 'good shit'});     
 });
 
 
 
 
-
+//starting a new "game" server 
 function startnode() {
 	console.log("Trying to spawn node js server");
 	child = exec("node ../server/server.js", function (error, stdout, stderr) {
