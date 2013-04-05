@@ -23,40 +23,49 @@
 	<!-- end of leftdiv -->
 	
 	<div class="middlediv">
-	<h1 class="pagetitle">HOST GAME</h1>
-		<div class ="leftcontainer" >
-			<p id="debugtest"> GAMENAME </p> <br>
-			<input type="text" name="GameName" id="gamename"><br>
-			<p> GAME MODE </p> <br>
-		 	<select id="gamemodelist">
-            	<option value = "1">one</option>
-               	<option value = "2">two</option>
-               	<option value = "3">three</option>
-               	<option value = "4">four</option>
-           	</select><br>
-			<p> MODEDATA </p> <br>
-		 	<select id = "modedataList">
-            	<option value = "1">one</option>
-                <option value = "2">two</option>
-                <option value = "3">three</option>
-                <option value = "4">four</option>
-            </select><br>
-			<p> POWERUP SET </p> <br>
-			<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
-			<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
-			 
+	<h1 class="pagetitle">GAME LOBBY</h1>
+		<div id="gamelobby">
+			
+		
 		</div>
-		<!-- end of leftcontainer -->
-		<div class ="rightcontainer" >
-			<p>PASSWORD</p>
-			<input type="text" name="Password" id="password"><br>
-			<p>PLAYERS</p>
-			<div id="slider" > </div><br>
-			<input type="text" name="Players" id="players"><br>
-			<p>MAPSIZE</p><br>
-			<input type="text" name="MapSize" id="mapsize"><br>
+		<!-- end of gamelobby -->
+		
+		<div id="dialog">
+			<div class ="leftcontainer" >
+				<p id="debugtest"> GAMENAME </p> <br>
+				<input type="text" name="GameName" id="gamename"><br>
+				<p> GAME MODE </p> <br>
+			 	<select id="gamemodelist">
+		           	<option value = "1">one</option>
+		              	<option value = "2">two</option>
+		              	<option value = "3">three</option>
+		              	<option value = "4">four</option>
+		          	</select><br>
+				<p> MODEDATA </p> <br>
+			 	<select id = "modedataList">
+		           	<option value = "1">one</option>
+		               <option value = "2">two</option>
+		               <option value = "3">three</option>
+		               <option value = "4">four</option>
+		           </select><br>
+				<p> POWERUP SET </p> <br>
+				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
+				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
+				 
+			</div>
+			<!-- end of leftcontainer -->
+			<div class ="rightcontainer" >
+				<p>PASSWORD</p>
+				<input type="text" name="Password" id="password"><br>
+				<p>PLAYERS</p>
+				<div id="slider" > </div><br>
+				<input type="text" name="Players" id="players"><br>
+				<p>MAPSIZE</p><br>
+				<input type="text" name="MapSize" id="mapsize"><br>
+			</div>
+			<!-- end of rightcontainer -->
 		</div>
-		<!-- end of rightcontainer -->
+		<!-- end of dialog -->
 		<button class="buttonshostgame" id="menu"> MENU</button> 
 		<button class="buttonshostgame" id="createit"> CREATE IT</button> 
 	</div>

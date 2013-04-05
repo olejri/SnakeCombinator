@@ -7,8 +7,11 @@ var server = http.createServer(app);
 var sys = require('sys')
 var exec = require('child_process').exec;
 
+var games = [];
+var defaultport = 30000;
+
 app.configure(function(){
-	  app.use(express.bodyParser());
+	app.use(express.bodyParser());
 });
 
 //var myArgs = process.argv.slice(2);
@@ -21,7 +24,9 @@ server.listen(8888);
 console.log('Server listen on port: 8888');
 
 
-
+/**
+ * Navigation
+ */
 app.get('/', function (req, res) {
 	res.sendfile(__dirname + '/public/gamemenu.html');
 });
@@ -39,48 +44,74 @@ app.get('/levelmanager', function (req, res) {
 	res.sendfile(__dirname + '/public/levelmanager.html');
 });
 
-
 app.use(express.static(__dirname + '/public'));
 
 
 
-// SERVER
+//SERVER
 
-
+//Ajax call from client thats start a child process
 app.post('/startnode', function(req, res) {
-		console.log("ajax call inc")
-	
+	console.log("ajax call inc startnode")
 	// Hent ut data fra req.body
-       
-		console.log(req.body.gamename + ":"
-				+ req.body.gamemodename + ":"
-				+ req.body.gamemodedata + ":"
-				+ req.body.powerupset +  ":"
-				+ req.body.password +  ":"
-				+ req.body.players +  ":"
-				+ req.body.mapsize );
-        
-		//startnode();
-        // ...
-        // Svar
-        res.contentType('json');
-        res.send({text: 'good shit'});     
+	console.log(req.body.gamename + ":"
+			+ req.body.gamemodename + ":"
+			+ req.body.gamemodedata + ":"
+			+ req.body.powerupset +  ":"
+			+ req.body.password +  ":"
+			+ req.body.players +  ":"
+			+ req.body.mapsize );
+
+	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.powerupset, req.body.password, req.body.players, req.body.mapsize);
+	res.contentType('json');
+	res.send({text: 'good shit'});     
+});
+
+
+
+//Ajax from client request available games
+app.post('/getgamelist', function(req, res) {
+	console.log("ajax call inc getgamelist")
+	res.contentType('json');
+	res.send(games);
 });
 
 
 
 
+
 //starting a new "game" server 
-function startnode() {
+function startnode(gamename, gamemodename, gamemodedata, powerupset, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
-	child = exec("node ../server/server.js", function (error, stdout, stderr) {
+	var portnr = getPort();
+	child = exec("node ../server/server.js " + portnr + "", function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {
 			console.log('exec error: ' + error);
-		}
+		} 
 	});
-	
+	addgameserver(gamename, portnr);
 }
 
-	 
+function addgameserver(name, address){
+	console.log("adding server with gamename: " + name + ":" + "port: " +address);
+	var gameserver = {
+			gamename : name,
+			address : "localhost:" + address
+	};
+	games.push(gameserver);
+};
+
+function getPort(){
+	var port = defaultport;
+	defaultport++;
+	return port;
+}
+
+
+function listCreatedGames(){
+
+}
+
+

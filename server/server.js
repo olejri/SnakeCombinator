@@ -8,8 +8,11 @@ var server = http.createServer(app);
 var io = require('socket.io').listen(server, { log: 2 });
 io.set('log level', 1);
 
-//changed from 80 to 34509
-server.listen(34509);
+var myArgs = process.argv.slice(2);
+
+
+console.log('myArgs: ', myArgs);
+server.listen(myArgs[0]);
 
 
 /** SECTION 2: Project specific  instantiation **/
