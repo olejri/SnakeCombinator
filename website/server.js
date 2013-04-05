@@ -1,14 +1,19 @@
+//http server
 var http = require("http");
 var express = require('express');
-
 var app = express();
 var server = http.createServer(app);
 
+//child_process
 var sys = require('sys')
 var exec = require('child_process').exec;
 
+//list of available games
 var games = [];
+
+//port for gameserver
 var defaultport = 30000;
+
 
 app.configure(function(){
 	app.use(express.bodyParser());
@@ -20,8 +25,26 @@ app.configure(function(){
 
 //server listen @ 8888
 server.listen(8888);
-
 console.log('Server listen on port: 8888');
+
+
+//MongoDB
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/test');
+
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback () {
+  console.log("connection to db successful")
+  var spellingmodeSchema = mongoose.Schema({
+    name: String
+})
+  
+  
+  
+  
+});
 
 
 /**
@@ -64,7 +87,7 @@ app.post('/startnode', function(req, res) {
 
 	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.powerupset, req.body.password, req.body.players, req.body.mapsize);
 	res.contentType('json');
-	res.send({text: 'good shit'});     
+	res.send(games);     
 });
 
 
