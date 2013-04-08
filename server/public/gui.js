@@ -109,7 +109,7 @@ function GameGUI(options) {
 	
 }
 
-
+// image elements
 function BoardImageElement(values) {
 	this.x = values.x;
 	this.y = values.y;
@@ -119,7 +119,7 @@ BoardImageElement.prototype.images = false;
 BoardImageElement.prototype.loadImages = function() {
 	var imgDir = "./images/"
 	var sources = {
-			head: 'head.png',
+			head: 'snakehead_v01.png',
 			body: 'body.png',
 			food: 'food.png',
 			a: 'a.png',
@@ -146,12 +146,17 @@ BoardImageElement.prototype.addToLayer = function(layer, GSD) {
 	layer.add(snakePart);
 };
 
+
+//text elements
 function BoardTextElement(values) {
 	this.x = values.x;
 	this.y = values.y;
 	this.text = values.text;
 }
 BoardTextElement.prototype.images = {}; // Kinetic.Text element cache
+
+
+
 BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 	if (this.images.hasOwnProperty(this.text)) {
 		// Load from cache

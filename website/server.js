@@ -30,21 +30,55 @@ console.log('Server listen on port: 8888');
 
 //MongoDB
 
-var mongoose = require('mongoose');
-mongoose.connect('mongodb://localhost/test');
+//var mongoose = require('mongoose');
+//mongoose.connect('mongodb://localhost/test');
+//
+//var db = mongoose.connection;
+//db.on('error', console.error.bind(console, 'connection error:'));
+//db.once('open', function callback () {
+//	console.log("connection to db successful")
+//
+//	var testSchema = new mongoose.Schema();
+//	testSchema.add({
+//		name : String
+//	});
+//
+//	var Human = mongoose.model('Human', testSchema);
+//
+//	Human.create({
+//		name: 'Ole'
+//	}, function (err) {
+//		if (err) return console.log(err);
+//	})
+//
+//	
+//	Human.findOne({ name: /^Ole/ }).exec(function(err, human) {
+//		if (err) return console.log(err);
+//		  console.log(human.name);
+//	})
+//
+//
+//
+//
+//})
 
-var db = mongoose.connection;
-db.on('error', console.error.bind(console, 'connection error:'));
-db.once('open', function callback () {
-  console.log("connection to db successful")
-  var spellingmodeSchema = mongoose.Schema({
-    name: String
-})
-  
-  
-  
-  
-});
+//var spellingmodeSchema = mongoose.Schema({name: String,	modedata: []});
+
+//var Spellingmode = mongoose.model('Spellingmode', spellingmodeSchema);
+
+
+////testdata
+//var animals = new Spellingmode({name: 'animals123'}, {modedata: ["katt", "hund", "hest"]});
+
+//animals.save(function (err, animals) {
+//if (err){
+//console.log(err);
+//} // TODO handle the error
+//})
+
+
+
+
 
 
 /**
@@ -136,5 +170,7 @@ function getPort(){
 function listCreatedGames(){
 
 }
+
+
 
 
