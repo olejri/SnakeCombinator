@@ -39,7 +39,7 @@ Snake.prototype.eatFoodIfOnIt = function(allFood) {
 	for (var i=0; i<allFood.length; i++) {
 		if (utils.samePosition(this.parts[0], allFood[i])) {
 			var food = allFood.splice(i,1)[0];
-			this.partsDetail.push({'type': food.type, 'details': food.details});
+			this.partsDetail.splice(this.partsDetail.length-1, 0, {'type': food.type, 'details': food.details});
 			return food;
 		}
 	}
@@ -121,8 +121,9 @@ Snake.prototype.removeAndAwardParts = function(awardCount) {
 				this.partsDetail[i] = {'type': 'plain'};
 				awardCount--;
 			} else {
-				this.parts.splice(i, this.parts.length-i);
-				this.partsDetail.splice(i, this.partsDetail.length-i);
+				console.log("test "+ i);
+				this.parts.splice(i, this.parts.length-1-i);
+				this.partsDetail.splice(i, this.partsDetail.length-1-i);
 			}
 		}
 		i++;
@@ -137,6 +138,10 @@ Snake.prototype.hasSelfCrash = function() {
 
 Snake.prototype.head = function() {
 	return this.parts[0];
+};
+
+Snake.prototype.tail = function() {
+	return this.parts[this.parts.length-1];
 };
 
 

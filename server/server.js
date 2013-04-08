@@ -117,7 +117,7 @@ $(sgame).on("foodspawn", function(event, food){
  */
 function runGame() {
 	io.sockets.emit('tick', sgame.generateTick());
-	console.log('test');
+	
 }
 
 

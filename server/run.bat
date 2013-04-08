@@ -1,2 +1,2 @@
-node %~dp0server.js
+node %~dp0server.js 8888
 pause

@@ -17,6 +17,11 @@ function Player(id) {
 			parts.push({'x': startX+1+i, 'y': startY});
 			partsDetail.push({'type': 'text', 'details': startBody[i]});
 		}
+		
+		// adding tail
+		parts.push({'x': startX+1+startBody.length, 'y': startY});
+		partsDetail.push({'type': 'image', 'details': 'tail'});
+		
 		this.snake = new Snake(parts, partsDetail, startDirection);
 	}
 }

@@ -123,6 +123,7 @@ BoardImageElement.prototype.loadImages = function() {
 			body: 'body.png',
 			food: 'food.png',
 			a: 'a.png',
+			tail: 'snaketail_v01_right.png',
 	};
 	var images = {};
 	for (var imageName in sources) {
