@@ -1,13 +1,73 @@
 /*********** Page Layout ****************/
 
 #pageWrapper {
-	width: 1000px;
+	width: 1200px;
+	height: 1000px;
 	background-color: #FFF;
 	margin-left: auto;
 	margin-right: auto;
-	border-right: 1px solid black;
+	border: 1px solid black;
 }
 	
+#header {
+	float: left;
+	width: 1200px;
+	height: 200ox;
+	border: 1px solid black;
+}
+
+
+#leftcontainer{
+	float: left;
+	height: 600px;
+	width: 300px;
+	
+}
+
+
+
+
+#middlecontainer{
+	float:left;
+	height: 600px;
+	width: 600px;
+	
+	
+}
+
+
+
+#rightcontainer{
+	float:left;
+	height:600px;
+	width: 300px;
+}
+
+/*********** Game GUI ****************/
+#gamegui {
+	width: 600px;
+	height: 600px;
+	margin: 0px auto;
+	border: 1px solid black;
+	background-color: white;
+}
+#gamegui canvas {
+	clear: both;	
+}
+
+#players {
+	float:left;
+	border: 1px solid black;
+}
+#players ul {
+		
+}
+
+
+
+
+
+
 
 
 
@@ -23,22 +83,5 @@
 	border-right: 1px solid black;	
 }
 
-/*********** Game GUI ****************/
-#gamegui {
-	float:left;
-	border: 1px solid black;
-}
-#gamegui canvas {
-	clear: both;	
-}
-
-#players {
-	float:left;
-	border: 1px solid black;
-	display: none;
-}
-#players ul {
-		
-}
 
 /*********** TEST PLAYER MOVEMENT ARROWS ****************/

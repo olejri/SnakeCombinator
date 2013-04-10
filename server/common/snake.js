@@ -24,15 +24,19 @@ function Snake(parts, partsDetail, startDirection) {
 		// Prepend a new head part 
 		this.parts.unshift({
 			'x': this.head().x + offset.x,
-			'y': this.head().y + offset.y
+			'y': this.head().y + offset.y,
+			'direction': direction
 		});
 		// Check and eat food if head lands on it, if not delete last part.
 		var foodEaten = this.eatFoodIfOnIt(allFood);
 		if (!foodEaten) {
 			this.parts.splice(this.parts.length-1,1); // Delete last part
+			this.setTailDirection();
 			return false;
+		} else {
+			this.setTailDirection();
+			return foodEaten;
 		}
-		else return foodEaten;
 	}
 }
 Snake.prototype.eatFoodIfOnIt = function(allFood) {
@@ -98,7 +102,7 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 		return false;
 	}
 	else return foodEaten;
-	
+
 
 };
 
@@ -121,14 +125,14 @@ Snake.prototype.removeAndAwardParts = function(awardCount) {
 				this.partsDetail[i] = {'type': 'plain'};
 				awardCount--;
 			} else {
-				console.log("test "+ i);
-				this.parts.splice(i, this.parts.length-1-i);
-				this.partsDetail.splice(i, this.partsDetail.length-1-i);
+				this.partsDetail[i] = {'type': 'image', 'details': 'tail'};
+				this.parts.splice(i+1, this.parts.length-i);
+				this.partsDetail.splice(i+1, this.partsDetail.length-i);
 			}
 		}
 		i++;
 	}	
-	
+
 };
 
 Snake.prototype.hasSelfCrash = function() {
@@ -143,6 +147,15 @@ Snake.prototype.head = function() {
 Snake.prototype.tail = function() {
 	return this.parts[this.parts.length-1];
 };
+
+Snake.prototype.setTailDirection = function() {
+	var penultimatePart = this.parts[this.parts.length-2];
+	if (this.tail().x < penultimatePart.x) this.tail().direction = "right";
+	else if (this.tail().x > penultimatePart.x) this.tail().direction = "left";
+	else if (this.tail().y < penultimatePart.y) this.tail().direction = "down";
+	else if (this.tail().y > penultimatePart.y) this.tail().direction = "up";
+}
+
 
 
 if(typeof exports != 'undefined') module.exports = Snake;

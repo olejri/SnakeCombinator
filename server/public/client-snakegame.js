@@ -1,4 +1,4 @@
-// Inherits from SnakeGame
+//Inherits from SnakeGame
 ClientSnakeGame.prototype = new SnakeGame(); 
 ClientSnakeGame.prototype.constructor = ClientSnakeGame;
 function ClientSnakeGame() {
@@ -38,17 +38,17 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 ClientSnakeGame.prototype.getGUIElements = function() {
 	var newTicks = communicator.popTicks();
 	if (newTicks.length > 0) this.applyTicks(newTicks);
-	
+
 	// SNAKE ELEMENTS
 	var snakeElements = [];
-	
+
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
 		if (snake) { 
 			if (snake.parts.length != snake.partsDetail.length) {
 				console.log("Warning, snake parts and partsDetails not equal length");
 			}
-			
+
 			for (var s=0; s<snake.parts.length; s++) {
 				if (snake.partsDetail[s].type == "text") {
 					snakeElements.push(new BoardTextElement({
@@ -62,6 +62,7 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 						image: snake.partsDetail[s].details,
 						x: snake.parts[s].x,
 						y: snake.parts[s].y,
+						direction: snake.parts[s].direction,
 					}));
 				}
 				else if (snake.partsDetail[s].type == "plain") {
@@ -73,13 +74,13 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 				}
 				else console.log("Unkown part type: "+snake.partsDetail[s].type);
 			}
-			
+
 		}
 	}
-	
+
 	// FOOD ELEMENTS
 	var foodElements = [];
-	
+
 	for (var i=0; i<this.food.length; i++) {
 		var food = this.food[i];
 		foodElements.push(new BoardTextElement({
@@ -90,5 +91,5 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 	}
 
 	return {'snakeElements': snakeElements, 'foodElements': foodElements};
-	
+
 };
