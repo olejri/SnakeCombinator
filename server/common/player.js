@@ -2,7 +2,7 @@ if (typeof require != 'undefined') var Snake = require('./snake');
 
 function Player(id) {
 	this.id = id;
-	this.nick = "nonicked"
+	this.nick = id.substring(0, 7);
 	this.lastMoveInput = null; 	// Last keyboard input move, not neccesary actual move
 	this.snake;
 	this.validated = [];

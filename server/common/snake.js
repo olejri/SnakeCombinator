@@ -3,6 +3,7 @@ function Snake(parts, partsDetail, startDirection) {
 	this.partsDetail = partsDetail;
 	this.lastDirection = startDirection;
 	this.powerup = "zero";
+	this.insideValidationZone = false;
 
 	/**
 	 * 

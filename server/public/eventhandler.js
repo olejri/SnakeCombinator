@@ -1,7 +1,7 @@
 var eventhandler = new function() {
 
-	var playerList = $('#players').find('ul');
-	var combatLog = $('#combatlog').find('ul');
+	var playerList = $('#players2');
+	var combatLog = $('#combatlog');
 
 	this.attatchGameTriggers = function(game) {
 		$(document).on('keydown', keydown);
@@ -29,17 +29,22 @@ var eventhandler = new function() {
 	}
 
 	function onValidationSuccess(event, data) {
-		combatLog.append('<li>'+data.player.nick+' validated '+data.word+' for '+ data.score+'!</li>');
-		drawPlayerList();
+	if ($("#combatlog p").length > 4) clearFirst(); 	
+	$('<p class="margin2">'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>')
+	.appendTo('#combatlog')
+	.hide().fadeIn(1000);
+	//combatLog.append('<p>'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>');
+	drawPlayerList();
 	}
 
-	function onValidationFailure(event, player) {
-		console.log(player.nick + " thats not the right word!");
+	function onValidationFailure(event, data) {
+		if ($("#combatlog p").length > 4) clearFirst(); 
+		combatLog.append('<p class="margin2">'+data.player.nick+', '+data.word+' its not a valied word!</p>');
 	}
 
 	function onJoinedGame(event, game) {
 		console.log("Joined game!")
-		$("#title").text(game.mode.title);
+		$('#title').text(game.mode.title);
 	}
 
 	function onPlayerJoined(event, player) {
@@ -82,8 +87,15 @@ var eventhandler = new function() {
 		var scoreList = sortScoreList();
 		console.log(scoreList);
 		for (var i=0; i<scoreList.length; i++) {
-			playerList.append('<li>'+scoreList[i].player+' score ' +scoreList[i].score+ '</li>');
+			playerList.append('<p class="margin2">'+scoreList[i].player+' score ' +scoreList[i].score+ '</p>');
 		}
+	}
+	
+	function clearFirst() {
+		$('#combatlog').find('p:first').fadeOut(1000, function(){
+			$('#combatlog').find('p:first').remove();
+		});
+		
 	}
 
 	function sortScoreList() {

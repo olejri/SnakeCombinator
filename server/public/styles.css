@@ -1,7 +1,12 @@
 /*********** Page Layout ****************/
 
+body {
+	background-color: lightgrey;
+}
+
+
 #pageWrapper {
-	width: 1200px;
+	width: 1202px;
 	height: 703px;
 	background-color: #FFF;
 	margin-left: auto;
@@ -12,16 +17,17 @@
 	
 #header {
 	float: left;
-	width: 1200px;
+	width: 1202px;
 	height: 100px;
-	border: 1px solid black;
+	background-color: lightgreen;
 }
 
 
 #leftcontainer{
 	float: left;
-	height: 600px;
+	height: 603px;
 	width: 300px;
+	background-color: lightgreen;
 	
 }
 
@@ -34,18 +40,28 @@
 	width: 600px;
 	
 	
+	
+}
+
+#title {
+	margin-left: 300px;
 }
 
 
-	
+p.margin2 {
+	margin-left: 8px;
+	font-size: 150%;
+}	
 	
 
 
 
 #rightcontainer{
+	margin-left: 2px;
 	float:left;
-	height:600px;
+	height:603px;
 	width: 300px;
+	background-color: lightgreen;
 }
 
 /*********** Game GUI ****************/
@@ -62,7 +78,6 @@
 
 #players {
 	float:left;
-	border: 1px solid black;
 }
 #players ul {
 		

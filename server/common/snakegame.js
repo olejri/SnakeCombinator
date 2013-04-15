@@ -128,16 +128,22 @@ SnakeGame.prototype.checkForValidation = function() {
 		if (snake){
 			if(snake.isInValidationZone(this.settings.width, this.settings.height, this.settings.validationZoneDim)){
 				var word = this.mode.validateSnake(player, snake);
-				if(word.score > 0){
-					player.addToScore(word.score);
-					$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score, 'word': word.word});
-					snake.removeAndAwardParts(1);				
-										
-				}else {
-					$(this).trigger("validationfailure", this.players[i]);
-					snake.removeAndAwardParts(0);
+				if (!snake.insideValidationZone){
+					if(word.score > 0){
+						player.addToScore(word.score);
+						$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score, 'word': word.word});
+						snake.removeAndAwardParts(1);
+						snake.insideValidationZone = true;
+						
+					}else {
+						$(this).trigger("validationfailure", {'player': this.players[i], 'word': word.word});
+						snake.removeAndAwardParts(0);
+						snake.insideValidationZone = true;
+					}
 				}
 				
+			} else {
+				snake.insideValidationZone = false;
 			}
 		}
 	}

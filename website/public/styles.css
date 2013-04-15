@@ -1,3 +1,9 @@
+body {
+	background-color: lightgrey;
+}
+
+
+
 .pagewrapper
 {
    	margin-left: auto;
@@ -16,6 +22,7 @@
 	border-width: 1px;
 	height: 600px;
 	width: 200px;
+	background-color: lightgreen;
 }
 
 .middlediv
@@ -25,7 +32,7 @@
 	height: 600px;
 	border-style: solid;
 	border-width: 1px;
-	background-color: darkgreen;
+	background-color: green;
 }
 
 .rightdiv
@@ -35,6 +42,7 @@
 	border-width: 1px;
 	height: 600px;
 	width: 200px;
+	background-color: lightgreen;
 }
 
 .pagetitle

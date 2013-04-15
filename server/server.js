@@ -100,7 +100,7 @@ var spellingMode = new SpellingMode({
 var sgame = new ServerSnakeGame({
 	'width': 30,
 	'height': 30,
-	'playersToStart': 1,
+	'playersToStart': 2,
 	'speed': 3,
 	'foodSpawnRate': 3,
 	'selfCrashAllowed': false,
