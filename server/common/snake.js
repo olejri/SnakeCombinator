@@ -2,6 +2,7 @@ function Snake(parts, partsDetail, startDirection) {
 	this.parts = parts; // List of the parts coordinate
 	this.partsDetail = partsDetail;
 	this.lastDirection = startDirection;
+	this.powerup = "zero";
 
 	/**
 	 * 
@@ -33,6 +34,11 @@ function Snake(parts, partsDetail, startDirection) {
 			this.parts.splice(this.parts.length-1,1); // Delete last part
 			this.setTailDirection();
 			return false;
+		} else if (foodEaten.type == "powerup"){
+			this.powerup = foodEaten.details;
+			this.parts.splice(this.parts.length-1,1); // Delete last part
+			this.setTailDirection();
+			return foodEaten;
 		} else {
 			this.setTailDirection();
 			return foodEaten;
@@ -43,8 +49,11 @@ Snake.prototype.eatFoodIfOnIt = function(allFood) {
 	for (var i=0; i<allFood.length; i++) {
 		if (utils.samePosition(this.parts[0], allFood[i])) {
 			var food = allFood.splice(i,1)[0];
-			this.partsDetail.splice(this.partsDetail.length-1, 0, {'type': food.type, 'details': food.details});
-			return food;
+			if (food.type == "powerup") return food;
+			else {
+				this.partsDetail.splice(this.partsDetail.length-1, 0, {'type': food.type, 'details': food.details});
+				return food;
+			}
 		}
 	}
 	return false;
@@ -154,7 +163,9 @@ Snake.prototype.setTailDirection = function() {
 	else if (this.tail().x > penultimatePart.x) this.tail().direction = "left";
 	else if (this.tail().y < penultimatePart.y) this.tail().direction = "down";
 	else if (this.tail().y > penultimatePart.y) this.tail().direction = "up";
-}
+};
+
+
 
 
 

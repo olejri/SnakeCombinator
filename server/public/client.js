@@ -6,7 +6,6 @@ var utils = new Utils();
 //var eventhandler; Singleton created in eventhandler.js
 
 $(document).ready(function() {
-	
 	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
 		sgame = new ClientSnakeGame();
@@ -29,4 +28,6 @@ $(document).ready(function() {
 		}, 1000/MAX_FPS);
 
 	});
+
 });
+

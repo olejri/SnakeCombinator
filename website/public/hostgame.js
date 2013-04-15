@@ -22,7 +22,7 @@ $("document").ready(function() {
 
 	$( "#dialog" ).dialog({
 		autoOpen: false,
-		width: 400,
+		width: 430,
 		buttons: [
 		          {
 		        	  text: "CREATE IT!",
@@ -56,7 +56,7 @@ $("document").ready(function() {
  */
 
 function redirect(url) {
-	window.location = "http://localhost:8888/" + url.data;	
+	window.location = "http://" +location.host +"/" + url.data;		
 };
 
 
@@ -77,7 +77,8 @@ function creategame() {
 			players: $("#players").val(),
 			mapsize: $("#mapsize").val(),
 			wallcrash: $("#wallcrash:checked").val(),
-			helppowerup: $("#helppowerup:checked").val()
+			helppowerup: $("#helppowerup:checked").val(),
+			adress: "http://" +location.host +"/",
 		},
 		dataType: "json",
 		success: function(response) {

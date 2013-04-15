@@ -22,11 +22,11 @@ $("document").ready(function() {
 	var width = $("#levelmanager").width();
 	
 	$("#hostgame").css({
-		width: width
+		width: width-10
 	});
 	
 	$("#gamelobby").css({
-		width: width
+		width: width-10
 	});
 	
 	
@@ -53,10 +53,12 @@ $("document").ready(function() {
  */
 
 function redirect(url) {
-window.location = "http://localhost:8888/" + url.data;	
-	
+window.location = "http://" +location.host +"/" + url.data;	
 }
 
+function getip(json){
+	  alert(json.ip); // alerts the ip address
+	}
 
 //testing hide and show
 

@@ -5,7 +5,8 @@
    	width: 1006px;
    	height: 600px;
    	border-style: solid;
-  	border-width: 1px; 
+  	border-width: 1px;
+  	font-family: 'Special Elite', cursive; 
 }
 
 .leftdiv 
@@ -44,10 +45,23 @@
 }
 
 
+.leftcontainer {
+	float: left;
+	
+}
+
+.rightcontainer {
+	float: left;
+}
+	
+
+
+
 .buttons
 {
 	position: relative;
-	left: 200px;	
+	left: 200px;
+	font-family: 'Special Elite', cursive;	
 }
 
 #hostgame

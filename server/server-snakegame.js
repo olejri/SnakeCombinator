@@ -13,11 +13,13 @@ function ServerSnakeGame(customSettings, mode) {
         'height'			: 30,	// Game squares in height
         'playersToStart'	: 2,	// Players needed for game to start ticking
         'speed'				: 2, 	// Snake moves per second
-        'foodSpawnRate'		: 1,	// Average seconds between each food spawn
+        'foodSpawnRate'		: 1,  // Average seconds between each food spawn
+        'powerUpSpawnRate'  : 2, // Average seconds between each powerUp spawn
         'selfCrashAllowed'	: false,// A snake can crash with it's own body?
         'otherCrashAllowed'	: false,// A snake can crash with other snakes?
         'teleportationAllowed'	: false,// A snake can crash with wall or teleport?
-        'validationZoneDim' : 2, //  
+        'validationZoneDim' : 2, //
+        'score' : 1000, // A player wins if he reaches to score for that level
 	};
 
 	// Overwrite default values with given options
@@ -33,8 +35,9 @@ function ServerSnakeGame(customSettings, mode) {
 	this.runGameInterval;
 	
 	this.savedFoodSpawnChance = 0.0;
+	this.savedPowerUpSpawnChance = 0;
 	
-}
+};
 ServerSnakeGame.prototype.toJsonObject = function() {
 	return {
 		settings: this.settings,
@@ -68,9 +71,27 @@ ServerSnakeGame.prototype.generateTick = function() {
 	
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
-	
 	return tick;
 };
+
+
+ServerSnakeGame.prototype.checkForGameOver = function() {
+	for (var i=0; i<this.players.length; i++){
+		var snake = this.players[i].snake;
+		var player = this.players[i];
+		if (snake){
+			if (player.score >= this.settings.score){
+				console.log("Test");
+				$(this).trigger("gameover", player);
+				return true;
+				
+			}
+		}
+	}
+	return false;
+	
+};
+
 /**
  * Using the speed and spawn rate setting this function will increment the
  * chance to roll for a food every time the function is run. Eventually it
@@ -87,8 +108,16 @@ SnakeGame.prototype.rollForFoodSpawn = function() {
 	//console.log("Increasing chance by "+chanceIncrement+" to "+this.savedFoodSpawnChance+" when average was "+avgChanceIncrement);
 	if (this.savedFoodSpawnChance > Math.random()) {
 		this.savedFoodSpawnChance -= 1.0;
+		this.savedPowerUpSpawnChance += 1;
 		var foodPos = this.getRandomOpenPos();
-		if (foodPos) return this.mode.convertToModeFood(foodPos);
+		if (foodPos) {
+			if (this.settings.powerUpSpawnRate < this.savedPowerUpSpawnChance) {
+				this.savedPowerUpSpawnChance = 0;
+				return this.getRandomPowerUp(foodPos);
+			}
+			else return this.mode.convertToModeFood(foodPos);
+		}
+		
 		else console.log("No space for food");
 	}
 	else return false;
@@ -143,6 +172,15 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 	else return false;
 	
 }
+
+SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
+	powerUp.details = "help";
+	powerUp.type = "powerup";
+	return powerUp;
+	
+};
+
+
 SnakeGame.prototype.resetGame = function() {
 	this.food = [];
 };

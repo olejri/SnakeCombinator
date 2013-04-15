@@ -80,16 +80,25 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 
 	// FOOD ELEMENTS
 	var foodElements = [];
+	var powerUpElements = [];
 
 	for (var i=0; i<this.food.length; i++) {
 		var food = this.food[i];
-		foodElements.push(new BoardTextElement({
-			text: this.food[i].details,
-			x: food.x,
-			y: food.y,
-		}));
+		if (food.type == "powerup") {
+			powerUpElements.push(new BoardImageElement({
+				image: food.details,
+				x: food.x,
+				y: food.y,
+			}));
+		} else {
+			foodElements.push(new BoardTextElement({
+				text: this.food[i].details,
+				x: food.x,
+				y: food.y,
+			}));
+		}
 	}
 
-	return {'snakeElements': snakeElements, 'foodElements': foodElements};
+	return {'snakeElements': snakeElements, 'foodElements': foodElements, 'powerUpElements' : powerUpElements};
 
 };

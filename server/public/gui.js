@@ -22,7 +22,10 @@ function GameGUI(options) {
 
 	var foodLayer = new Kinetic.Layer();
 	stage.add(foodLayer);
-
+	
+	var powerUpLayer = new Kinetic.Layer();
+	stage.add(powerUpLayer);
+	
 	initBackground();
 	stage.draw(); // IS IT NEEDED??? need to test
 
@@ -45,6 +48,11 @@ function GameGUI(options) {
 			return false;
 		}
 		if(!drawFood(allElements.foodElements)) {
+			IsDrawing = false;
+			return false;
+		}
+		
+		if(!drawPowerUps(allElements.powerUpElements)) {
 			IsDrawing = false;
 			return false;
 		}
@@ -87,6 +95,23 @@ function GameGUI(options) {
 			return true;
 		} catch(err) {
 			console.log("Failed at drawing food image: "+err);
+			return false;
+		} 
+
+	};
+	
+	
+	function drawPowerUps(elements) {
+		try {
+			powerUpLayer.removeChildren();
+			for (var i=0; i<elements.length; i++) {
+				elements[i].addToLayer(powerUpLayer, options.GSD);
+			}
+			powerUpLayer.draw();
+
+			return true;
+		} catch(err) {
+			console.log("Failed at drawing powerup image: "+err);
 			return false;
 		} 
 
@@ -137,6 +162,7 @@ BoardImageElement.prototype.loadImages = function() {
 			food: 'food.png',
 			tail: 'snaketail_v01_right.png',
 			snakesprite: 'Snake_sprite_v01.png',
+			help: 'info.png',
 	};
 	var images = {};
 	for (var imageName in sources) {
@@ -166,6 +192,13 @@ BoardImageElement.prototype.addToLayer = function(layer, GSD) {
 			image : this.images[this.direction +"Tail"],
 		});
 		layer.add(snakePart);
+	} else {
+		var powerUp = new Kinetic.Image({
+			x : GSD * this.x,
+			y : GSD * this.y,
+			image : this.images[this.imageName],
+		});
+		layer.add(powerUp);
 	}
 };
 
@@ -268,7 +301,7 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 			height: GSD,
 			padding: 2,
 			fill: '#ddd',
-			stroke: '#555',
+			stroke: 'black',
 			strokeWidth: 1,
 			cornerRadius: 4,
 		});

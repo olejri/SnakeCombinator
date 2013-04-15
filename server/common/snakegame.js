@@ -50,6 +50,7 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
 		this.checkForTeleportation(this.settings.teleportationAllowed);
 		this.checkForValidation();
+		//this.enablePowerUps();
 	}
 };
 /**
@@ -123,11 +124,13 @@ SnakeGame.prototype.checkForTeleportation = function(teleport) {
 SnakeGame.prototype.checkForValidation = function() {
 	for (var i=0; i<this.players.length; i++){
 		var snake = this.players[i].snake;
+		var player = this.players[i];
 		if (snake){
 			if(snake.isInValidationZone(this.settings.width, this.settings.height, this.settings.validationZoneDim)){
-				var score = this.mode.validateSnake(snake);
-				if(score > 0){
-					$(this).trigger("validationsuccess", {'player': this.players[i],'score': score});
+				var word = this.mode.validateSnake(player, snake);
+				if(word.score > 0){
+					player.addToScore(word.score);
+					$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score, 'word': word.word});
 					snake.removeAndAwardParts(1);				
 										
 				}else {
@@ -135,6 +138,39 @@ SnakeGame.prototype.checkForValidation = function() {
 					snake.removeAndAwardParts(0);
 				}
 				
+			}
+		}
+	}
+	
+};
+
+SnakeGame.prototype.enablePowerUps = function() {
+	for (var i=0; i<this.players.length; i++){
+		var snake = this.players[i].snake;
+		if (snake){
+			
+			// powerUp help
+			if (snake.powerup == "help") {
+				var string = "";
+				for (var i=0; i < snake.partsDetail.length; i++) {
+					if (snake.partsDetail[i].type == "text"){
+						string = string + snake.partsDetail[i].details;
+					}
+				}
+				var result = this.mode.getHelp(string);
+				if (result.append) {
+					var x = snake.parts[snake.parts.length-1].x;
+					var y = snake.parts[snake.parts.length-1].y;
+					if (snake.parts[snake.parts.length-1].direction == "left") snake.parts.splice(snake.parts.length-1, 0, {'x': x+1, 'y': y, 'direction': "left"}, {'x': x+2, 'y': y, 'direction': "left"});
+					else if (snake.parts[snake.parts.length-1].direction == "right") snake.parts.splice(snake.parts.length-1, 0, {'x': x-1, 'y': y, 'direction': "right"}, {'x': x-2, 'y': y, 'direction': "right"});
+					else if (snake.parts[snake.parts.length-1].direction == "top") snake.parts.splice(snake.parts.length-1, 0, {'x': x, 'y': y-1, 'direction': "top"}, {'x': x, 'y': y-2, 'direction': "top"});
+					else if (snake.parts[snake.parts.length-1].direction == "down") snake.parts.splice(snake.parts.length-1, 0, {'x': x, 'y': y+1, 'direction': "down"}, {'x': x, 'y': y+1, 'direction': "down"});
+					snake.partsDetail.splice(snake.partsDetail.length-1, 0, {'type': "text", 'details': result.string[0]}, {'type': "text", 'details': result.string[1]});
+				} else {
+					snake.parts.splice(i+1, snake.parts.length-i);
+					snake.partsDetail.splice(1, snake.partsDetail.length-1, {'type': "text", 'details': result.string[0]}, {'type': "text", 'details': result.string[1]});
+				}
+				snake.powerup = "zero";
 			}
 		}
 	}

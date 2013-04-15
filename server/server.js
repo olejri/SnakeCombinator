@@ -30,7 +30,7 @@ $ = require('jquery');
 
 // Manual urls
 app.get('/', function (req, res) {
-	res.sendfile(__dirname + '/public/index.html');
+	res.sendfile(__dirname + '/public/snakegame.html');
 });
 
 // Setting static folders, all files (recursively) in these will be public
@@ -106,6 +106,7 @@ var sgame = new ServerSnakeGame({
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
 	'teleportationAllowed': true,
+	'score' : 40,
 }, spellingMode);
 
 $(sgame).on("foodspawn", function(event, food){
@@ -117,7 +118,12 @@ $(sgame).on("foodspawn", function(event, food){
  */
 function runGame() {
 	io.sockets.emit('tick', sgame.generateTick());
-	
+//	if(sgame.checkForGameOver()) {
+//		sgame.resetGame();
+//		clearInterval(sgame.runGameInterval);
+//		sgame.started = false;
+		
+//	}
 }
 
 
