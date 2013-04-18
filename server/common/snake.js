@@ -36,9 +36,8 @@ function Snake(parts, partsDetail, startDirection) {
 			this.setTailDirection();
 			return false;
 		} else if (foodEaten.type == "powerup"){
+			this.parts.splice(this.parts.length-1,1);
 			this.powerup = foodEaten.details;
-			this.parts.splice(this.parts.length-1,1); // Delete last part
-			this.setTailDirection();
 			return foodEaten;
 		} else {
 			this.setTailDirection();
@@ -144,6 +143,26 @@ Snake.prototype.removeAndAwardParts = function(awardCount) {
 	}	
 
 };
+
+Snake.prototype.addSnakeParts = function(string) {
+	
+	
+	return this;
+	
+}
+
+Snake.prototype.editSnakePart = function(part, index) {
+	this.partsDetail[index] = part;
+}
+
+Snake.prototype.cutFromIndex = function(index) {
+	this.parts.splice(index, this.parts.length);
+	this.partsDetail.splice(index, this.partsDetail.length);
+}
+
+
+
+
 
 Snake.prototype.hasSelfCrash = function() {
 	var head = this.parts[0];

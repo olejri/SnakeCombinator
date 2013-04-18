@@ -36,7 +36,6 @@ SpellingMode.prototype.validateSnake = function(player, snake) {
 
 SpellingMode.prototype.getHelp = function(string) {
 	for (var k=0; k < this.words.length; k++){
-		console.log(string + " --> " + this.words[k]);
 		if (string.toUpperCase() == (this.words[k].substring(0, string.length)).toUpperCase()) {
 			return {'append':true, 'string':this.words[k].substring(string.length, string.length +2).toUpperCase()};
 		} 

@@ -50,7 +50,7 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
 		this.checkForTeleportation(this.settings.teleportationAllowed);
 		this.checkForValidation();
-		//this.enablePowerUps();
+		this.enablePowerUps();
 	}
 };
 /**
@@ -164,18 +164,46 @@ SnakeGame.prototype.enablePowerUps = function() {
 					}
 				}
 				var result = this.mode.getHelp(string);
+				console.log(result.append +"string: " + result.string[0] + result.string[1]);
 				if (result.append) {
-					var x = snake.parts[snake.parts.length-1].x;
-					var y = snake.parts[snake.parts.length-1].y;
-					if (snake.parts[snake.parts.length-1].direction == "left") snake.parts.splice(snake.parts.length-1, 0, {'x': x+1, 'y': y, 'direction': "left"}, {'x': x+2, 'y': y, 'direction': "left"});
-					else if (snake.parts[snake.parts.length-1].direction == "right") snake.parts.splice(snake.parts.length-1, 0, {'x': x-1, 'y': y, 'direction': "right"}, {'x': x-2, 'y': y, 'direction': "right"});
-					else if (snake.parts[snake.parts.length-1].direction == "top") snake.parts.splice(snake.parts.length-1, 0, {'x': x, 'y': y-1, 'direction': "top"}, {'x': x, 'y': y-2, 'direction': "top"});
-					else if (snake.parts[snake.parts.length-1].direction == "down") snake.parts.splice(snake.parts.length-1, 0, {'x': x, 'y': y+1, 'direction': "down"}, {'x': x, 'y': y+1, 'direction': "down"});
-					snake.partsDetail.splice(snake.partsDetail.length-1, 0, {'type': "text", 'details': result.string[0]}, {'type': "text", 'details': result.string[1]});
-				} else {
-					snake.parts.splice(i+1, snake.parts.length-i);
-					snake.partsDetail.splice(1, snake.partsDetail.length-1, {'type': "text", 'details': result.string[0]}, {'type': "text", 'details': result.string[1]});
-				}
+					var index = snake.parts.length-1;
+					var x = snake.parts[index].x;
+					var y = snake.parts[index].y;
+					
+					console.log (snake.parts.length +"=="+ snake.partsDetail.length);
+					
+					for (var i=0; i < result.string.length; i++){
+						if (snake.parts[index].direction == "left") snake.parts.splice(index+1+i, 0, {'x': x+(i+1), 'y': y, 'direction': "left"});
+						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1+i, 0, {'x': x-(i+1), 'y': y, 'direction': "right"});
+						else if (snake.parts[index].direction == "top") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y-(i+1), 'direction': "top"});
+						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y+(i+1), 'direction': "down"});
+						snake.partsDetail.splice(index+i, 0, {'type': "text", 'details': result.string[i]});
+					}
+					console.log (snake.parts.length +"=="+ snake.partsDetail.length);
+					
+					
+					
+					
+//					snake.addSnakeParts(result.string);
+				} 
+//					else {
+//					if (snake.parts.length >= 4) {
+//						snake.editSnakePart({'type': "text", 'details': result.string[0]}, 1);
+//						snake.editSnakePart({'type': "text", 'details': result.string[1]}, 2);
+//						snake.editSnakePart({'type': 'image', 'details': 'tail'}, 3);
+//						snake.setTailDirection();
+//						snake.cutFromIndex(4);
+//					} else if (snake.parts.length == 3) {
+//						snake.editSnakePart({'type': "text", 'details': result.string[0]}, 1);
+//						snake.addSnakePart({'type': "text", 'details': result.string[1]});
+//						snake.setTailDirection();
+//						
+//					} else {
+//						snake.addSnakePart({'type': "text", 'details': result.string[0]});
+//						snake.addSnakePart({'type': "text", 'details': result.string[1]});
+//						snake.setTailDirection();
+//					}
+//				}
 				snake.powerup = "zero";
 			}
 		}

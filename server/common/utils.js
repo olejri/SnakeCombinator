@@ -27,6 +27,7 @@ function Utils() {
 		}
 		return positions;
 	};
+
 }
 
 if(typeof exports != 'undefined') module.exports = Utils;
