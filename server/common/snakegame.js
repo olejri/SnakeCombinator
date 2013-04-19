@@ -153,14 +153,16 @@ SnakeGame.prototype.checkForValidation = function() {
 SnakeGame.prototype.enablePowerUps = function() {
 	for (var i=0; i<this.players.length; i++){
 		var snake = this.players[i].snake;
+		var indexOfLastPlain = 0;
 		if (snake){
-			
 			// powerUp help
 			if (snake.powerup == "help") {
 				var string = "";
 				for (var i=0; i < snake.partsDetail.length; i++) {
 					if (snake.partsDetail[i].type == "text"){
 						string = string + snake.partsDetail[i].details;
+					} else if (snake.partsDetail[i].type == "plain") {
+						indexOfLastPlain = i;
 					}
 				}
 				var result = this.mode.getHelp(string);
@@ -170,8 +172,6 @@ SnakeGame.prototype.enablePowerUps = function() {
 					var x = snake.parts[index].x;
 					var y = snake.parts[index].y;
 					
-					console.log (snake.parts.length +"=="+ snake.partsDetail.length);
-					
 					for (var i=0; i < result.string.length; i++){
 						if (snake.parts[index].direction == "left") snake.parts.splice(index+1+i, 0, {'x': x+(i+1), 'y': y, 'direction': "left"});
 						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1+i, 0, {'x': x-(i+1), 'y': y, 'direction': "right"});
@@ -179,31 +179,39 @@ SnakeGame.prototype.enablePowerUps = function() {
 						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y+(i+1), 'direction': "down"});
 						snake.partsDetail.splice(index+i, 0, {'type': "text", 'details': result.string[i]});
 					}
-					console.log (snake.parts.length +"=="+ snake.partsDetail.length);
-					
-					
-					
-					
-//					snake.addSnakeParts(result.string);
 				} 
-//					else {
-//					if (snake.parts.length >= 4) {
-//						snake.editSnakePart({'type': "text", 'details': result.string[0]}, 1);
-//						snake.editSnakePart({'type': "text", 'details': result.string[1]}, 2);
-//						snake.editSnakePart({'type': 'image', 'details': 'tail'}, 3);
-//						snake.setTailDirection();
-//						snake.cutFromIndex(4);
-//					} else if (snake.parts.length == 3) {
-//						snake.editSnakePart({'type': "text", 'details': result.string[0]}, 1);
-//						snake.addSnakePart({'type': "text", 'details': result.string[1]});
-//						snake.setTailDirection();
-//						
-//					} else {
-//						snake.addSnakePart({'type': "text", 'details': result.string[0]});
-//						snake.addSnakePart({'type': "text", 'details': result.string[1]});
-//						snake.setTailDirection();
-//					}
-//				}
+					else {
+					if (snake.parts.length >= 4) {
+						for (var i=0; i < result.string.length; i++){
+							snake.partsDetail[indexOfLastPlain+i+1] = {'type': "text", 'details': result.string[i]};
+						}
+						snake.partsDetail[indexOfLastPlain+3] = {'type': "image", 'details': 'tail'};
+						snake.cutFromIndex(indexOfLastPlain+4);
+					} else if (snake.parts.length == 3) {
+						var index = snake.parts.length-1;
+						var x = snake.parts[index].x;
+						var y = snake.parts[index].y;
+						
+						if (snake.parts[index].direction == "left") snake.parts.splice(index+1, 0, {'x': x+1, 'y': y, 'direction': "left"});
+						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1, 0, {'x': x-1, 'y': y, 'direction': "right"});
+						else if (snake.parts[index].direction == "top") snake.parts.splice(index+1, 0, {'x': x, 'y': y-1, 'direction': "top"});
+						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1, 0, {'x': x, 'y': y+1, 'direction': "down"});
+						snake.partsDetail[1] = {'type': "text", 'details': result.string[0]};
+						snake.partsDetail.splice(index, 0, {'type': "text", 'details': result.string[1]});
+						
+					} else {
+						var index = snake.parts.length-1;
+						var x = snake.parts[index].x;
+						var y = snake.parts[index].y;
+						for (var i=0; i < result.string.length; i++){
+							if (snake.parts[index].direction == "left") snake.parts.splice(index+1+i, 0, {'x': x+(i+1), 'y': y, 'direction': "left"});
+							else if (snake.parts[index].direction == "right") snake.parts.splice(index+1+i, 0, {'x': x-(i+1), 'y': y, 'direction': "right"});
+							else if (snake.parts[index].direction == "top") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y-(i+1), 'direction': "top"});
+							else if (snake.parts[index].direction == "down") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y+(i+1), 'direction': "down"});
+							snake.partsDetail.splice(index+i, 0, {'type': "text", 'details': result.string[i]});
+						}
+					}
+				}
 				snake.powerup = "zero";
 			}
 		}
