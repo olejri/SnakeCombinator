@@ -11,6 +11,7 @@ $(document).ready(function() {
 		sgame = new ClientSnakeGame();
 		eventhandler.attatchGameTriggers(sgame);
 		sgame.initFromJsonObject(serverGameObj);
+		sgame.socketId = communicator.getID();
 
 		gui = new GameGUI({
 			GSD: 20, // Game Square Dimension, width/height of each game square

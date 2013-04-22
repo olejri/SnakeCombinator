@@ -7,6 +7,7 @@ function Player(id) {
 	this.snake;
 	this.validated = [];
 	this.score = 0;
+	this.respawnTimer = 0;
 	
 	
 	
@@ -29,6 +30,12 @@ function Player(id) {
 		parts.push({'x': startX+1+startBody.length, 'y': startY});
 		partsDetail.push({'type': 'image', 'details': 'tail'});
 		
+		this.snake = new Snake(parts, partsDetail, startDirection);
+	}
+	
+	this.respawnSnake = function(startX, startY, startDirection) {
+		var parts = [{'x': startX, 'y': startY}, {'x': startX+1, 'y': startY}];
+		var partsDetail = [{'type': 'image', 'details': 'head'}, {'type': 'image', 'details': 'tail'}];
 		this.snake = new Snake(parts, partsDetail, startDirection);
 	}
 	

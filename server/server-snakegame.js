@@ -68,29 +68,12 @@ ServerSnakeGame.prototype.generateTick = function() {
 	}
 	
 	this.applyTicks([tick]);
-	
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
 	return tick;
 };
 
 
-ServerSnakeGame.prototype.checkForGameOver = function() {
-	for (var i=0; i<this.players.length; i++){
-		var snake = this.players[i].snake;
-		var player = this.players[i];
-		if (snake){
-			if (player.score >= this.settings.score){
-				console.log("Test");
-				$(this).trigger("gameover", player);
-				return true;
-				
-			}
-		}
-	}
-	return false;
-	
-};
 
 /**
  * Using the speed and spawn rate setting this function will increment the
@@ -128,50 +111,7 @@ SnakeGame.prototype.rollForFoodSpawn = function() {
  * 
  * @returns {x: positionX, y: positionY}
  */
-SnakeGame.prototype.getRandomOpenPos = function() {
-	// Create empty two dimensional array of positions
-	var positions = new Array(this.settings.width);
-	for (var x=0; x<this.settings.width; x++) {
-		positions[x] = new Array(this.settings.height);
-	}
-	// Iterate over all snake parts and set the positions as taken
-	for (var i=0; i<this.players.length; i++) {
-		if (this.players[i].snake) {
-			for (var p=0; p<this.players[i].snake.parts.length; p++) {
-				var part = this.players[i].snake.parts[p];
-				if ((positions.length > part.x)&&(part.x >= 0)) {
-					if ((positions[part.x].length > part.y)&&(part.y >= 0)) {
-						positions[part.x][part.y] = true 
-					}
-				}
-			}
-		}
-	}
-	// Iterate over all food and set positions as taken
-	for (var i=0; i<this.food.length; i++) {
-		positions[this.food[i].x][this.food[i].y] = true;
-	}
-	// Set validation zone as taken
-	var vZones = utils.vZonePositions(this.settings.width, this.settings.height, this.settings.validationZoneDim);
-	for (var i=0; i<vZones.length; i++) {
-		positions[vZones[i].x][vZones[i].y] = true;
-	}
-	
-	// Create one dimensional array of FREE positions
-	var freePositions = [];
-	for (var x=0; x<positions.length; x++) {
-		for (var y=0; y<positions[x].length; y++) {
-			if (positions[x][y] != true) freePositions.push({'x': x, 'y': y});
-		}
-	}
-	
-	if (freePositions.length != 0) {
-		var randomPosition = freePositions[utils.rand(0,freePositions.length-1)];
-		return randomPosition;
-	}
-	else return false;
-	
-}
+
 
 SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
 	powerUp.details = "help";
