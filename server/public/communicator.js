@@ -86,6 +86,10 @@ var communicator = new function() {
 			sgame.addFood(food);
 		});
 		
+		socket.on("sendPos", function(pos) {
+			sgame.pos = pos;
+		});
+		
 	}
 }
 var log = new function() {

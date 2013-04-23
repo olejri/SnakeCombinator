@@ -113,6 +113,11 @@ $(sgame).on("foodspawn", function(event, food){
 	io.sockets.emit('foodspawn', food);
 });
 
+$(sgame).on("sendPos", function(event, pos){
+	io.sockets.emit('sendPos', pos);
+});
+
+
 /**
  * Run one game tick.
  */

@@ -14,7 +14,7 @@ function SnakeGame() {
 	this.settings;
 	this.players = [];
 	this.food = [];	// Each food contains x, y and a type.
-	this.socketId;
+	this.socketID;
 }
 SnakeGame.prototype.addFood = function(food) {
 	this.food.push(food);
@@ -53,8 +53,9 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		this.checkForValidation();
 		this.enablePowerUps();
 		this.checkForRespawn();
-		this.checkForGameOver();
-		this.testForId();
+		//this.checkForGameOver();
+		//	this.testForId();
+		
 	}
 };
 /**
@@ -161,7 +162,7 @@ SnakeGame.prototype.testForId = function() {
 			console.log(this.players[i].id + "==" + this.socketId);
 		}
 	}
-	
+
 }
 
 SnakeGame.prototype.checkForGameOver = function() {
@@ -172,12 +173,12 @@ SnakeGame.prototype.checkForGameOver = function() {
 			if (player.score >= this.settings.score){
 				$(this).trigger("gameover", player);
 				return true;
-				
+
 			}
 		}
 	}
 	return false;
-	
+
 };
 
 SnakeGame.prototype.enablePowerUps = function() {
@@ -226,8 +227,8 @@ SnakeGame.prototype.enablePowerUps = function() {
 						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1, 0, {'x': x-1, 'y': y, 'direction': "right"});
 						else if (snake.parts[index].direction == "top") snake.parts.splice(index+1, 0, {'x': x, 'y': y-1, 'direction': "top"});
 						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1, 0, {'x': x, 'y': y+1, 'direction': "down"});
-						snake.partsDetail[1] = {'type': "text", 'details': result.string[0]};
-						snake.partsDetail.splice(index, 0, {'type': "text", 'details': result.string[1]});
+						snake.partsDetail[indexOfLastPlain+1] = {'type': "text", 'details': result.string[0]};
+						snake.partsDetail.splice(index+indexOfLastPlain, 0, {'type': "text", 'details': result.string[1]});
 
 					} else {
 						var index = snake.parts.length-1;
@@ -260,12 +261,9 @@ SnakeGame.prototype.checkForRespawn = function() {
 		else {
 			console.log("Snake dead" + player.respawnTimer);
 			if (player.respawnTimer == 3){
-				var randPos = this.getRandomOpenPos();
-				if (randPos) {
-					var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
-					console.log("Respawning snake @ " + randPos.x + " and " + randPos.y);
-					player.respawnSnake(randPos.x, randPos.y, randDirection);
-				}
+				var pos = this.pos;
+				console.log(pos.x, pos.y, pos.direction);
+				player.respawnSnake(pos.x, pos.y, pos.direction);
 				player.respawnTimer = 0;
 			} else {
 				console.log("Respawn timer" + player.respawnTimer);
@@ -275,50 +273,9 @@ SnakeGame.prototype.checkForRespawn = function() {
 	}
 }
 
-SnakeGame.prototype.getRandomOpenPos = function() {
-	// Create empty two dimensional array of positions
-	var positions = new Array(this.settings.width);
-	for (var x=0; x<this.settings.width; x++) {
-		positions[x] = new Array(this.settings.height);
-	}
-	// Iterate over all snake parts and set the positions as taken
-	for (var i=0; i<this.players.length; i++) {
-		if (this.players[i].snake) {
-			for (var p=0; p<this.players[i].snake.parts.length; p++) {
-				var part = this.players[i].snake.parts[p];
-				if ((positions.length > part.x)&&(part.x >= 0)) {
-					if ((positions[part.x].length > part.y)&&(part.y >= 0)) {
-						positions[part.x][part.y] = true 
-					}
-				}
-			}
-		}
-	}
-	// Iterate over all food and set positions as taken
-	for (var i=0; i<this.food.length; i++) {
-		positions[this.food[i].x][this.food[i].y] = true;
-	}
-	// Set validation zone as taken
-	var vZones = utils.vZonePositions(this.settings.width, this.settings.height, this.settings.validationZoneDim);
-	for (var i=0; i<vZones.length; i++) {
-		positions[vZones[i].x][vZones[i].y] = true;
-	}
-	
-	// Create one dimensional array of FREE positions
-	var freePositions = [];
-	for (var x=0; x<positions.length; x++) {
-		for (var y=0; y<positions[x].length; y++) {
-			if (positions[x][y] != true) freePositions.push({'x': x, 'y': y});
-		}
-	}
-	
-	if (freePositions.length != 0) {
-		var randomPosition = freePositions[utils.rand(0,freePositions.length-1)];
-		return randomPosition;
-	}
-	else return false;
-	
-}
+
+
+
 
 
 
