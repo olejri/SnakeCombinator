@@ -51,8 +51,8 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
 		if (!this.settings.otherCrashAllowed) this.checkForCrash();
 		this.checkForTeleportation(this.settings.teleportationAllowed);
 		this.checkForValidation();
-		this.enablePowerUps();
-		this.checkForRespawn();
+		//this.enablePowerUps();
+		//this.checkForRespawn();
 		//this.checkForGameOver();
 		//	this.testForId();
 		
@@ -230,7 +230,7 @@ SnakeGame.prototype.enablePowerUps = function() {
 						snake.partsDetail[indexOfLastPlain+1] = {'type': "text", 'details': result.string[0]};
 						snake.partsDetail.splice(index+indexOfLastPlain, 0, {'type': "text", 'details': result.string[1]});
 
-					} else {
+					} else if (snake.parts.length == 2){
 						var index = snake.parts.length-1;
 						var x = snake.parts[index].x;
 						var y = snake.parts[index].y;
@@ -250,25 +250,33 @@ SnakeGame.prototype.enablePowerUps = function() {
 
 }
 
-SnakeGame.prototype.checkForRespawn = function() {
+//SnakeGame.prototype.checkForRespawn = function() {
+//	for (var i=0; i<this.players.length; i++){
+//		var snake = this.players[i].snake;
+//		var player = this.players[i];
+//
+//		if(snake) {
+//		}
+//		else {
+//			if (player.respawnTimer == 3){
+//				var pos = this.pos;
+//				player.respawnSnake(pos.x, pos.y, pos.direction);
+//				player.respawnTimer = 0;
+//			} else {
+//				player.respawnTimer++;
+//			}
+//		}
+//	}
+//}
+
+
+SnakeGame.prototype.respawn = function(pos) {
+	console.log("respawn Triggered" + pos.id);
 	for (var i=0; i<this.players.length; i++){
-		var snake = this.players[i].snake;
 		var player = this.players[i];
-
-		if(snake) {
-
-		}
-		else {
-			console.log("Snake dead" + player.respawnTimer);
-			if (player.respawnTimer == 3){
-				var pos = this.pos;
-				console.log(pos.x, pos.y, pos.direction);
-				player.respawnSnake(pos.x, pos.y, pos.direction);
-				player.respawnTimer = 0;
-			} else {
-				console.log("Respawn timer" + player.respawnTimer);
-				player.respawnTimer++;
-			}
+		if (player.id == pos.id) {
+			console.log("respawn inc");
+			player.respawnSnake(pos.x, pos.y, pos.direction);
 		}
 	}
 }

@@ -36,6 +36,7 @@ function ServerSnakeGame(customSettings, mode) {
 
 	this.savedFoodSpawnChance = 0.0;
 	this.savedPowerUpSpawnChance = 0;
+	this.pos;
 
 };
 ServerSnakeGame.prototype.toJsonObject = function() {
@@ -70,7 +71,7 @@ ServerSnakeGame.prototype.generateTick = function() {
 	this.applyTicks([tick]);
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
-	this.checkForRespawn();
+	this.checkForRespawnServer();
 	return tick;
 };
 
@@ -165,21 +166,18 @@ SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
 };
 
 
-SnakeGame.prototype.checkForRespawn = function() {
+SnakeGame.prototype.checkForRespawnServer = function() {
 	for (var i=0; i<this.players.length; i++){
 		var snake = this.players[i].snake;
 		var player = this.players[i];
 
-		if(snake) {
-
-		}
-		else {
+		if(!snake) {
 			var randPos = this.getRandomOpenPos();
 			if (randPos) {
 				var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
-				var pos = {'x': randPos.x, 'y': randPos.y, 'direction': randDirection};
-				this.pos = pos;
+				var pos = {'x': randPos.x, 'y': randPos.y, 'direction': randDirection, 'id': player.id};
 				$(this).trigger("sendPos", pos);
+				player.respawnSnake(pos.x, pos.y, pos.direction);
 			}
 		}
 	}

@@ -87,7 +87,7 @@ var communicator = new function() {
 		});
 		
 		socket.on("sendPos", function(pos) {
-			sgame.pos = pos;
+			sgame.respawn(pos);
 		});
 		
 	}

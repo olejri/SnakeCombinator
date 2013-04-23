@@ -36,8 +36,8 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	$(this).trigger("playerjoined", player);
 };
 ClientSnakeGame.prototype.getGUIElements = function() {
-	
-	
+
+
 	var newTicks = communicator.popTicks();
 	if (newTicks.length > 0) this.applyTicks(newTicks);
 
@@ -51,33 +51,63 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 				console.log("Warning, snake parts and partsDetails not equal length");
 			}
 
-			for (var s=0; s<snake.parts.length; s++) {
-				if (snake.partsDetail[s].type == "text") {
-					snakeElements.push(new BoardTextElement({
-						text: snake.partsDetail[s].details,
-						x: snake.parts[s].x,
-						y: snake.parts[s].y,
-					}));
+			if (this.socketID == this.players[i].id){
+				for (var s=0; s<snake.parts.length; s++) {
+					if (snake.partsDetail[s].type == "text") {
+						snakeElements.push(new BoardTextElement({
+							text: snake.partsDetail[s].details,
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+						}));
+					}
+					else if (snake.partsDetail[s].type == "image") {
+						snakeElements.push(new BoardImageElement({
+							image: snake.partsDetail[s].details,
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+							direction: snake.parts[s].direction,
+						}));
+					}
+					else if (snake.partsDetail[s].type == "plain") {
+						snakeElements.push(new BoardTextElement({
+							text: " ",
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+						}));
+					}
+					else console.log("Unkown part type: "+snake.partsDetail[s].type);
 				}
-				else if (snake.partsDetail[s].type == "image") {
-					snakeElements.push(new BoardImageElement({
-						image: snake.partsDetail[s].details,
-						x: snake.parts[s].x,
-						y: snake.parts[s].y,
-						direction: snake.parts[s].direction,
-					}));
+			} else {
+				for (var s=0; s<snake.parts.length; s++) {
+					if (snake.partsDetail[s].type == "text") {
+						snakeElements.push(new BoardTextElement({
+							text: snake.partsDetail[s].details,
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+						}));
+					}
+					else if (snake.partsDetail[s].type == "image") {
+						snakeElements.push(new BoardImageElement({
+							image: "tail",
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+							direction: snake.parts[s].direction,
+						}));
+					}
+					else if (snake.partsDetail[s].type == "plain") {
+						snakeElements.push(new BoardTextElement({
+							text: " ",
+							x: snake.parts[s].x,
+							y: snake.parts[s].y,
+						}));
+					}
+					else console.log("Unkown part type: "+snake.partsDetail[s].type);
+
 				}
-				else if (snake.partsDetail[s].type == "plain") {
-					snakeElements.push(new BoardTextElement({
-						text: " ",
-						x: snake.parts[s].x,
-						y: snake.parts[s].y,
-					}));
-				}
-				else console.log("Unkown part type: "+snake.partsDetail[s].type);
 			}
 
 		}
+
 	}
 
 	// FOOD ELEMENTS

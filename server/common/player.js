@@ -8,6 +8,8 @@ function Player(id) {
 	this.validated = [];
 	this.score = 0;
 	this.respawnTimer = 0;
+	this.respawnTimer2 = 0;
+	this.posForRespawn;
 	
 	
 	
