@@ -20,6 +20,7 @@ function ServerSnakeGame(customSettings, mode) {
 			'teleportationAllowed'	: false,// A snake can crash with wall or teleport?
 			'validationZoneDim' : 2, //
 			'score' : 1000, // A player wins if he reaches to score for that level
+			'respawnTimer' : 3000 //milliseconds
 	};
 
 	// Overwrite default values with given options
@@ -30,7 +31,7 @@ function ServerSnakeGame(customSettings, mode) {
 	}
 
 	this.mode = mode;
-
+ 
 	this.started = false;
 	this.runGameInterval;
 
@@ -38,6 +39,37 @@ function ServerSnakeGame(customSettings, mode) {
 	this.savedPowerUpSpawnChance = 0;
 	this.pos;
 
+};
+
+ServerSnakeGame.prototype.checkForCrash = function(){
+	var self = this;
+	SnakeGame.prototype.checkForCrash.call(this,  function(player) {
+		self.timedSnakeRespawn(player);
+	});
+}
+
+ServerSnakeGame.prototype.checkForSelfCrash = function(){
+	var self = this;
+	SnakeGame.prototype.checkForSelfCrash.call(this,  function(player) {
+		self.timedSnakeRespawn(player);
+	});
+}
+
+ServerSnakeGame.prototype.checkForTeleportation = function(){
+	var self = this;
+	SnakeGame.prototype.checkForTeleportation.call(this, function(player) {
+		self.timedSnakeRespawn(player);
+	});
+}
+
+
+
+ServerSnakeGame.prototype.timedSnakeRespawn = function(player){
+	var self = this;
+	setTimeout(function(){
+		console.log(self);
+		self.respawnSnakeServer(player);
+	}, 3000);
 };
 ServerSnakeGame.prototype.toJsonObject = function() {
 	return {
@@ -71,7 +103,6 @@ ServerSnakeGame.prototype.generateTick = function() {
 	this.applyTicks([tick]);
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
-	this.checkForRespawnServer();
 	return tick;
 };
 
@@ -166,23 +197,15 @@ SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
 };
 
 
-SnakeGame.prototype.checkForRespawnServer = function() {
-	for (var i=0; i<this.players.length; i++){
-		var snake = this.players[i].snake;
-		var player = this.players[i];
-
-		if(!snake) {
-			var randPos = this.getRandomOpenPos();
-			if (randPos) {
-				var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
-				var pos = {'x': randPos.x, 'y': randPos.y, 'direction': randDirection, 'id': player.id};
-				$(this).trigger("sendPos", pos);
-				player.respawnSnake(pos.x, pos.y, pos.direction);
-			}
-		}
+SnakeGame.prototype.respawnSnakeServer = function(player) {
+	var randPos = this.getRandomOpenPos();
+	if (randPos) {
+		var randDirection = ['left', 'up', 'down'][utils.rand(0,2)];
+		var pos = {'x': randPos.x, 'y': randPos.y, 'direction': randDirection, 'id': player.id};
+		$(this).trigger("sendPos", pos);
+		player.respawnSnake(pos.x, pos.y, pos.direction);
 	}
 };
-
 
 
 

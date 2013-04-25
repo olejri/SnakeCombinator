@@ -45,3 +45,4 @@ DirectionArray.prototype.get = function(index) {
 DirectionArray.prototype.getRandom = function(index) {
 	return this.directions[utils.rand(0, this.directions.length-1)];
 }
+

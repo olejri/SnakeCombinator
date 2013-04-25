@@ -62,17 +62,20 @@ SnakeGame.prototype.applyTicks = function(newTicks) {
  * Check if any players snakehead crashed with it's own body. If so it runs 
  * the crashedCallback function with the player object as parameter
  */
-SnakeGame.prototype.checkForSelfCrash = function(crashedCallback) {
+SnakeGame.prototype.checkForSelfCrash = function(callback) {
 	for (var i=0; i<this.players.length; i++) {
 		if (this.players[i].snake) {
 			if (this.players[i].snake.hasSelfCrash()) {
 				this.players[i].killSnake();
+				if(callback){
+					callback(this.players[i]);
+				}
 				$(this).trigger("snakedied", this.players[i]);
 			}
 		}
 	}
 };
-SnakeGame.prototype.checkForCrash = function() {
+SnakeGame.prototype.checkForCrash = function(callback) {
 	var crashedPlayers = [];
 	var counter = 0;
 	// Detect crashes
@@ -86,6 +89,9 @@ SnakeGame.prototype.checkForCrash = function() {
 				else if (snake.hasPartAtPosition(head.x, head.y)) {
 					this.players[i].killSnake();
 					$(this).trigger("snakedied", this.players[i]);
+					if(callback){
+						callback(this.players[i]);
+					}
 					break; // No need to check if crashed with other more players
 				}
 			}
@@ -93,7 +99,6 @@ SnakeGame.prototype.checkForCrash = function() {
 	}
 	// Delete snakes of players who crashed
 	for (var c=0; c<crashedPlayers.length; c++) {
-		crashedCallback(crashedPlayers[c]);
 		crashedPlayers[c].snake = null;
 	}
 };
@@ -101,18 +106,21 @@ SnakeGame.prototype.checkForCrash = function() {
 /**Check if any snakes crashed with the wall 
  * 
  */
-SnakeGame.prototype.checkForTeleportation = function(teleport) {
+SnakeGame.prototype.checkForTeleportation = function(callback) {
 	var crashedPlayers = [];
 	for (var i=0; i<this.players.length; i++) {
 		var snake = this.players[i].snake;
 		if (snake) {
 			if(snake.hasCrashedIntoWall(this.settings.width, this.settings.height)){
-				if(teleport){
+				if(this.settings.teleportationAllowed){
 					var foodEaten = snake.teleportHead(this.settings.width, this.settings.height, this.food);
 					if (foodEaten) $(this).trigger("foodeaten", foodEaten);
 				}
 				else{
 					this.players[i].killSnake();
+					if(callback){
+						callback(this.players[i]);
+					}
 					$(this).trigger("snakedied", this.players[i]);
 				}
 			}
@@ -120,7 +128,6 @@ SnakeGame.prototype.checkForTeleportation = function(teleport) {
 	}
 	// Delete snakes of players who crashed
 	for (var c=0; c<crashedPlayers.length; c++) {
-		crashedCallback(crashedPlayers[c]);
 		crashedPlayers[c].snake = null;
 	}
 };
