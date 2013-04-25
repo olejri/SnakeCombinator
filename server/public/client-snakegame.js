@@ -36,8 +36,6 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	$(this).trigger("playerjoined", player);
 };
 ClientSnakeGame.prototype.getGUIElements = function() {
-
-
 	var newTicks = communicator.popTicks();
 	if (newTicks.length > 0) this.applyTicks(newTicks);
 

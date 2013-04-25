@@ -14,6 +14,7 @@ var eventhandler = new function() {
 		$(game).on("validationsuccess", onValidationSuccess);
 		$(game).on("validationfailure", onValidationFailure);
 		$(game).on("gameover", onGameOver);
+		
 	};
 
 	function onSnakeDied(event, player) {

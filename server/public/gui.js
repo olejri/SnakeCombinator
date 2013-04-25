@@ -59,6 +59,9 @@ function GameGUI(options) {
 
 		IsDrawing = false;
 		log.addDraw();
+		
+		
+		
 		return true;
 
 	}
@@ -203,73 +206,12 @@ BoardImageElement.prototype.addToLayer = function(layer, GSD) {
 };
 
 
-//Tried animation
-//BoardImageElement.prototype.makeTailAninmation = function(x, y, direction) {
-//	var imageObj = this.images["snakesprite"];
-//
-//	var animations = {
-//			left: [{
-//				x: 41,
-//				y: 21,
-//				width: 20,
-//				height: 20
-//			}, {
-//				x: 41,
-//				y: 41,
-//				width: 20,
-//				height: 20
-//			}],
-//			up: [{
-//				x: 0,
-//				y: 21,
-//				width: 20,
-//				height: 20
-//			}, {
-//				x: 0,
-//				y: 41,
-//				width: 20,
-//				height: 20
-//			}],
-//			right: [{
-//				x: 21,
-//				y: 21,
-//				width: 20,
-//				height: 20
-//			}, {
-//				x: 21,
-//				y: 41,
-//				width: 20,
-//				height: 20
-//			}],
-//			down: [{
-//				x: 61,
-//				y: 21,
-//				width: 20,
-//				height: 20
-//			}, {
-//				x: 61,
-//				y: 41,
-//				width: 20,
-//				height: 20
-//			}]
-//	};
-//	
-//	return new Kinetic.Sprite({
-//		x: x,
-//		x: y,
-//		image: imageObj,
-//		animation: direction,
-//		animations: animations,
-//		frameRate: 7,
-//		index: 0
-//	});
-//
-//
-//
-//};
+BoardImageElement.prototype.makeTailAninmation = function(x, y, direction) {
+	
+
+};
 
 
-//text elements
 function BoardTextElement(values) {
 	this.x = values.x;
 	this.y = values.y;
