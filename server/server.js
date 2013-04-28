@@ -101,11 +101,11 @@ var sgame = new ServerSnakeGame({
 	'width': 30,
 	'height': 30,
 	'playersToStart': 1,
-	'speed': 5,
+	'speed': 4,
 	'foodSpawnRate': 1,
 	'selfCrashAllowed': false,
 	'otherCrashAllowed': false,
-	'teleportationAllowed': false,
+	'teleportationAllowed': true,
 	'score' : 40,
 }, spellingMode);
 
@@ -114,7 +114,6 @@ $(sgame).on("foodspawn", function(event, food){
 });
 
 $(sgame).on("sendPos", function(event, pos){
-	console.log("sending Pos");
 	io.sockets.emit('sendPos', pos);
 });
 

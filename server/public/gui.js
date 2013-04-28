@@ -1,10 +1,9 @@
+var arrayOfSnakes = [];
 function GameGUI(options) {
 
 	// Options
 	var options = options;
 
-	// Avoids that the drawing methods runs twice at the same time
-	var IsDrawing = false;
 
 	// Set up game canvas
 	var stage = new Kinetic.Stage({
@@ -28,36 +27,41 @@ function GameGUI(options) {
 	
 	initBackground();
 	stage.draw(); // IS IT NEEDED??? need to test
-
+	
+	
+	self = this;
 	
 	//Sprites
 	
 	var tailSprite = null;
 	
+	
+	
+	
+	function transform() {
+		
+	}
+	
+	this.stageDraw = function() {
+		stage.draw();
+	}
+	
+	
 	/**
 	 * By supplying elements to be drawn, this method will refresh the game.
 	 */
 	this.draw = function(allElements) {
+		console.log(allElements);
+		allElementsArray = allElements
 
-		// Stop drawing if a previously run draw() hasn't completed		
-		if (IsDrawing) return false;
-
-		IsDrawing = true;
 		if(!drawSnakes(allElements.snakeElements)) {
-			IsDrawing = false;
-			return false;
 		}
 		if(!drawFood(allElements.foodElements)) {
-			IsDrawing = false;
-			return false;
 		}
 		
 		if(!drawPowerUps(allElements.powerUpElements)) {
-			IsDrawing = false;
-			return false;
 		}
 
-		IsDrawing = false;
 		log.addDraw();
 		
 		
@@ -65,6 +69,29 @@ function GameGUI(options) {
 		return true;
 
 	}
+	
+	
+	
+	
+	this.testTransition = function() {
+		var snakeparts = stage.get('.snakepart');
+		console.log(snakeparts);
+
+        // apply transition to all nodes in the array
+		snakeparts.each(function(index, snakepart) {
+			var oldX = snakepart.getX();
+			var oldY = snakepart.getY();
+			
+			snakepart.transitionTo({
+			x: oldX,
+			y: oldY-20,
+            duration: 0.25,
+          });
+        });
+	}
+	
+	
+
 
 
 	/*************** PRIVATE METHODS ***************/
@@ -150,6 +177,28 @@ function BoardImageElement(values) {
 	this.direction = values.direction;
 }
 BoardImageElement.prototype.images = false;
+
+//just for testing
+BoardImageElement.prototype.transition = function(kineticImage) {
+	var oldX = kineticImage.getX();
+	var oldY = kineticImage.getY();
+	
+	kineticImage.transitionTo({
+        x: oldX,
+        y: oldY-20,
+        opacity: 1,
+        scale: {
+          x: 1,
+          y: 1
+        },
+        duration: 1,
+      });
+}
+
+
+
+
+
 BoardImageElement.prototype.loadImages = function() {
 	var imgDir = "./images/"
 		var sources = {
@@ -168,31 +217,51 @@ BoardImageElement.prototype.loadImages = function() {
 			help: 'info.png',
 	};
 	var images = {};
+	var loadedImages = 0;
 	for (var imageName in sources) {
 		images[imageName] = new Image();
 		images[imageName].onload = function() {
 			console.log("Preloading image: "+this.src);
+			loadedImages++;
+			console.log(loadedImages);
+			if (loadedImages == 13) {
+				
+			}
 		}
 		images[imageName].src = imgDir + sources[imageName];
 	}
+	gui.draw(sgame.getGUIElements());
 	BoardImageElement.prototype.images = images;
 };
 
 BoardImageElement.prototype.addToLayer = function(layer, GSD) {
-	if (!this.images) this.loadImages();
+	console.log("VI ER HER");
+	if (!this.images) {
+		this.loadImages();
+	}
 	
 	if (this.imageName == "head") {
-		var snakePart = new Kinetic.Image({
+		console.log("Tegner hode yo");
+		arrayOfSnakes.push()
+		
+		var head = new Kinetic.Image({
 			x : GSD * this.x,
 			y : GSD * this.y,
 			image : this.images[this.direction],
+			name : "snakepart"
 		});
-		layer.add(snakePart);
+		head.direction = this.direction;
+		layer.add(head);
+		
+		
+		
+		
 	} else if (this.imageName == "tail") {
 		var snakePart = new Kinetic.Image({
 			x : GSD * this.x,
 			y : GSD * this.y,
 			image : this.images[this.direction +"Tail"],
+			name : "snakepart"
 		});
 		layer.add(snakePart);
 	} else {
@@ -224,6 +293,7 @@ BoardTextElement.prototype.images = {}; // Kinetic.Text element cache
 BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 	if (this.images.hasOwnProperty(this.text)) {
 		// Load from cache
+		
 		layer.add(new Kinetic.Image({
 			image: this.images[this.text],
 			x : GSD * this.x,
@@ -250,6 +320,7 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 
 		// Cache image
 		var self = this;
+		console.log("X: " + self.x + " Y: " + self.y);
 		textEle.toImage({
 			width: GSD,
 			height: GSD,
@@ -262,7 +333,7 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 				});
 				BoardTextElement.prototype.images[self.text] = img;
 			},
-		});
+		})
 
 	}
 

@@ -67,7 +67,6 @@ ServerSnakeGame.prototype.checkForTeleportation = function(){
 ServerSnakeGame.prototype.timedSnakeRespawn = function(player){
 	var self = this;
 	setTimeout(function(){
-		console.log(self);
 		self.respawnSnakeServer(player);
 	}, 3000);
 };
@@ -100,7 +99,7 @@ ServerSnakeGame.prototype.generateTick = function() {
 		}
 	}
 
-	this.applyTicks([tick]);
+	this.applyTick(tick);
 	var foodRoll = this.rollForFoodSpawn();
 	if(foodRoll) this.addFood(foodRoll);
 	return tick;

@@ -14,7 +14,7 @@ SpellingMode.prototype.convertToModeFood = function(food) {
 };
 SpellingMode.prototype.getStartBody = function() {
 	var randWord = this.words[utils.rand(0,this.words.length-1)].toUpperCase();
-	return [randWord[0], randWord[1], randWord[2], randWord[3]];
+	return [];
 };
 
 SpellingMode.prototype.validateSnake = function(player, snake) {

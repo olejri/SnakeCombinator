@@ -36,27 +36,24 @@ SnakeGame.prototype.getPlayerById = function(id) {
 /**
  * Apply new ticks that the communicator has received.
  */
-SnakeGame.prototype.applyTicks = function(newTicks) {
-	for (var i=0; i<newTicks.length; i++) {
-		var tick = newTicks[i];
-		for (var p=0; p<this.players.length; p++) {
-			var player = this.players[p];
-			if (player.snake) {
-				var foodEaten = player.snake.move(tick[player.id], this.food);
-				if (foodEaten) $(this).trigger("foodeaten", foodEaten);
-			}
+SnakeGame.prototype.applyTick = function(newTick) {
+	for (var p=0; p<this.players.length; p++) {
+		var player = this.players[p];
+		if (player.snake) {
+			var foodEaten = player.snake.move(newTick[player.id], this.food);
+			if (foodEaten) $(this).trigger("foodeaten", foodEaten);
 		}
-		// Event detections for current tick
-		if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
-		if (!this.settings.otherCrashAllowed) this.checkForCrash();
-		this.checkForTeleportation(this.settings.teleportationAllowed);
-		this.checkForValidation();
-		//this.enablePowerUps();
-		//this.checkForRespawn();
-		//this.checkForGameOver();
-		//	this.testForId();
-		
 	}
+	// Event detections for current tick
+	if (!this.settings.selfCrashAllowed) this.checkForSelfCrash();
+	if (!this.settings.otherCrashAllowed) this.checkForCrash();
+	this.checkForTeleportation(this.settings.teleportationAllowed);
+	this.checkForValidation();
+	//this.enablePowerUps();
+	//this.checkForRespawn();
+	//this.checkForGameOver();
+	//	this.testForId();
+
 };
 /**
  * Check if any players snakehead crashed with it's own body. If so it runs 
@@ -258,31 +255,29 @@ SnakeGame.prototype.enablePowerUps = function() {
 }
 
 //SnakeGame.prototype.checkForRespawn = function() {
-//	for (var i=0; i<this.players.length; i++){
-//		var snake = this.players[i].snake;
-//		var player = this.players[i];
-//
-//		if(snake) {
-//		}
-//		else {
-//			if (player.respawnTimer == 3){
-//				var pos = this.pos;
-//				player.respawnSnake(pos.x, pos.y, pos.direction);
-//				player.respawnTimer = 0;
-//			} else {
-//				player.respawnTimer++;
-//			}
-//		}
-//	}
+//for (var i=0; i<this.players.length; i++){
+//var snake = this.players[i].snake;
+//var player = this.players[i];
+
+//if(snake) {
+//}
+//else {
+//if (player.respawnTimer == 3){
+//var pos = this.pos;
+//player.respawnSnake(pos.x, pos.y, pos.direction);
+//player.respawnTimer = 0;
+//} else {
+//player.respawnTimer++;
+//}
+//}
+//}
 //}
 
 
 SnakeGame.prototype.respawn = function(pos) {
-	console.log("respawn Triggered" + pos.id);
 	for (var i=0; i<this.players.length; i++){
 		var player = this.players[i];
 		if (player.id == pos.id) {
-			console.log("respawn inc");
 			player.respawnSnake(pos.x, pos.y, pos.direction);
 		}
 	}

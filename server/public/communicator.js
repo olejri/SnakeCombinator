@@ -1,6 +1,5 @@
 var communicator = new function() {
 	var socket;
-	var newTicks = [];
 	var lastEmitDirection = null;
 	
 	this.emitMovement = function(direction) {
@@ -14,13 +13,6 @@ var communicator = new function() {
 		else console.log("EMIT ERROR: Not connected to server");
 	}
 
-	/**
-	 * Fetch all new ticks, and remove them from object
-	 */
-	this.popTicks = function() {
-		return newTicks.splice(0, newTicks.length);
-	}
-	
 	this.getID = function() {
 		return socket.socket.sessionid;
 	}
@@ -37,14 +29,17 @@ var communicator = new function() {
 		// Received game object from server
 		socket.on('game', function(gameObj) {
 			gameReceivedCallback(gameObj);
+			console.log("socket.on(game)");
 		});
 
 		socket.on('user connected', function(playerObj) {
 			sgame.addPlayerFromJsonObject(playerObj)
+			console.log("socket.on('user connected");
 		});
 
 		socket.on('user disconnected', function(id) {
 			sgame.deletePlayerById(id);
+			console.log("socket.on('user disconnected'");
 		});
 
 
@@ -60,9 +55,7 @@ var communicator = new function() {
 		 */
 		socket.on('tick', function(tick) {
 			log.addUpdate();
-			
-			newTicks.push(tick);
-			
+			sgame.applyTick(tick);
 			// Update Movement Output (debug only)
 			for (var i=0; i<sgame.players.length; i++) {
 				var player = sgame.players[i];

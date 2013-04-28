@@ -8,6 +8,7 @@ function ClientSnakeGame() {
  * @param serverGameObj	Game data object from server
  */
 ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
+	console.log("init");
 	this.settings = serverGameObj.settings;
 	// Create the correct Game Mode object with the mode data from server
 	this.mode = eval("new "+serverGameObj.modeType+"(serverGameObj.mode)");
@@ -35,14 +36,38 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	this.players.push(player);
 	$(this).trigger("playerjoined", player);
 };
+
+
+ClientSnakeGame.prototype.getSnakeParts = function() {
+	var snakeParts = [];
+	for (var i=0; i<this.players.length; i++) {
+		var snake = this.players[i].snake;
+		if (snake) {
+			for (var s=0; s<snake.parts.length; s++) {
+				snakeParts.push(snake.parts[s]);
+			}
+		}
+	}
+	return snakeParts;
+
+}
+
+ClientSnakeGame.prototype.applyTick = function(newTick) {
+	$(this).trigger("tick", this.getSnakeParts());
+	SnakeGame.prototype.applyTick.call(this, newTick);
+}
+
+
 ClientSnakeGame.prototype.getGUIElements = function() {
-	var newTicks = communicator.popTicks();
-	if (newTicks.length > 0) this.applyTicks(newTicks);
+	console.log("getGUIEements");
+//	var newTicks = communicator.popTicks();
+//	if (newTicks.length > 0) this.applyTicks(newTicks);
 
 	// SNAKE ELEMENTS
 	var snakeElements = [];
 
 	for (var i=0; i<this.players.length; i++) {
+		console.log(this.players);
 		var snake = this.players[i].snake;
 		if (snake) { 
 			if (snake.parts.length != snake.partsDetail.length) {

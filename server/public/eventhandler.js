@@ -14,11 +14,22 @@ var eventhandler = new function() {
 		$(game).on("validationsuccess", onValidationSuccess);
 		$(game).on("validationfailure", onValidationFailure);
 		$(game).on("gameover", onGameOver);
+		$(game).on("tick", onTick);
 		
 	};
 
+
+	function onTick(event, snakes) {
+		//gui.draw(sgame.getGUIElements());
+		
+		
+		
+		//gui.testTransition();
+				
+	}
+
 	function onSnakeDied(event, player) {
-		console.log("Players snake died: "+player.nick);
+		//console.log("Players snake died: "+player.nick);
 	}
 
 	function onFoodSpawn(event, food) {
@@ -50,6 +61,7 @@ var eventhandler = new function() {
 
 	function onPlayerJoined(event, player) {
 		console.log("Player "+player.nick+" joined");
+		gui.draw(sgame.getGUIElements());
 		drawPlayerList();
 	}
 

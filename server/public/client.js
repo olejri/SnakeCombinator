@@ -22,13 +22,18 @@ $(document).ready(function() {
 		});
 		
 		// INITIATE GUI
-		var MAX_FPS = 100;
-		setInterval(function(){
-			var didDraw = gui.draw(sgame.getGUIElements());
-			if (!didDraw) console.log("Did not draw!!");
-		}, 1000/MAX_FPS);
-
+		BoardImageElement.prototype.loadImages();
+		gui.draw(sgame.getGUIElements());	
+	//	drawGui(gui, sgame);
+		
 	});
-
 });
 
+
+function drawGui(gui, sgame) {
+	var sgame2 = sgame;
+	var gui2 = gui;
+	setTimeout(function() {
+		gui2.draw(sgame2.getGUIElements());	
+	}, 1000);
+}
