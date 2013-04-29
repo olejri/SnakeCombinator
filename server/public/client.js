@@ -7,6 +7,8 @@ var utils = new Utils();
 
 $(document).ready(function() {
 	communicator.connect(function(serverGameObj){
+		console.log("connect");
+		
 		// This callback is run when the game data has been received
 		sgame = new ClientSnakeGame();
 		eventhandler.attatchGameTriggers(sgame);
@@ -21,6 +23,7 @@ $(document).ready(function() {
 			validationZoneDim: sgame.settings.validationZoneDim,
 		});
 		
+		console.log("mekker gui");
 		// INITIATE GUI
 		BoardImageElement.prototype.loadImages();
 		gui.draw(sgame.getGUIElements());	

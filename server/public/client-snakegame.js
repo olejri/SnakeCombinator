@@ -20,7 +20,7 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	for (var i=0; i<serverGameObj.food.length; i++) {
 		this.addFood(serverGameObj.food[i]);
 	}
-
+	console.log(this);
 	$(this).trigger("joinedgame", this);
 };
 /**
@@ -53,13 +53,12 @@ ClientSnakeGame.prototype.getSnakeParts = function() {
 }
 
 ClientSnakeGame.prototype.applyTick = function(newTick) {
-	$(this).trigger("tick", this.getSnakeParts());
+	$(this).trigger("tick", {'data' : this.getSnakeParts()});
 	SnakeGame.prototype.applyTick.call(this, newTick);
 }
 
 
 ClientSnakeGame.prototype.getGUIElements = function() {
-	console.log("getGUIEements");
 //	var newTicks = communicator.popTicks();
 //	if (newTicks.length > 0) this.applyTicks(newTicks);
 
@@ -67,7 +66,6 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 	var snakeElements = [];
 
 	for (var i=0; i<this.players.length; i++) {
-		console.log(this.players);
 		var snake = this.players[i].snake;
 		if (snake) { 
 			if (snake.parts.length != snake.partsDetail.length) {

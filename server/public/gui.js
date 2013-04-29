@@ -51,21 +51,12 @@ function GameGUI(options) {
 	 * By supplying elements to be drawn, this method will refresh the game.
 	 */
 	this.draw = function(allElements) {
-		console.log(allElements);
-		allElementsArray = allElements
-
-		if(!drawSnakes(allElements.snakeElements)) {
-		}
-		if(!drawFood(allElements.foodElements)) {
-		}
+		drawSnakes(allElements.snakeElements);
+		drawFood(allElements.foodElements);
+		drawPowerUps(allElements.powerUpElements);
 		
-		if(!drawPowerUps(allElements.powerUpElements)) {
-		}
 
 		log.addDraw();
-		
-		
-		
 		return true;
 
 	}
@@ -91,10 +82,57 @@ function GameGUI(options) {
 	}
 	
 	
+	this.moveSnakes = function(snakePartsFromGameLogic) {
+		var snakePartsFromLayer = snakeLayer.getChildren();
+		
+		for ( var i = 0; i < snakePartsFromGameLogic.length; i++) {
+			for ( var s = 0; s < snakePartsFromLayer.length; s++) {
+				if(sameSnakePart(snakePartsFromGameLogic[i], snakePartsFromLayer[s])){
+					transitionSnakePart(snakePartsFromLayer[s], snakePartsFromGameLogic[i].direction);
+				}
+			}
+		}
+		
+		
+		
+	}
+	
+	this.getLayer = function() {
+		return snakeLayer;
+		
+	}
+	
+	
 
 
 
 	/*************** PRIVATE METHODS ***************/
+	function transitionSnakePart(part, direction) {
+		var newX = part.getX();
+		var newY = part.getY();
+		if (direction == "left") newX = newX - options.GSD;			
+		else if (direction == "right") newX = newX + options.GSD;
+		else if (direction == "up") newY = newY - options.GSD;
+		else if (direction == "down") newY = newY + options.GSD;
+		part.transitionTo({
+			x: newX,
+			y: newY,
+            duration: 0.25,
+          });
+		
+	}
+	
+	
+	
+	
+	
+	function sameSnakePart(partOne, partTwo) {
+		if (((partOne.x * options.GSD)  == partTwo.getX()) && ((partOne.y * options.GSD) == partTwo.getY())) {
+			return true;
+		}
+		return false;
+	}
+	
 
 	function drawSnakes(elements) {
 
@@ -230,18 +268,15 @@ BoardImageElement.prototype.loadImages = function() {
 		}
 		images[imageName].src = imgDir + sources[imageName];
 	}
-	gui.draw(sgame.getGUIElements());
 	BoardImageElement.prototype.images = images;
 };
 
 BoardImageElement.prototype.addToLayer = function(layer, GSD) {
-	console.log("VI ER HER");
 	if (!this.images) {
 		this.loadImages();
 	}
 	
 	if (this.imageName == "head") {
-		console.log("Tegner hode yo");
 		arrayOfSnakes.push()
 		
 		var head = new Kinetic.Image({
@@ -320,7 +355,6 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 
 		// Cache image
 		var self = this;
-		console.log("X: " + self.x + " Y: " + self.y);
 		textEle.toImage({
 			width: GSD,
 			height: GSD,

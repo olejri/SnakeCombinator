@@ -19,8 +19,11 @@ var eventhandler = new function() {
 	};
 
 
-	function onTick(event, snakes) {
-		//gui.draw(sgame.getGUIElements());
+	function onTick(event, snakeParts) {
+		if(gui){
+			gui.draw(sgame.getGUIElements());
+			gui.moveSnakes(snakeParts.data);
+		}
 		
 		
 		
@@ -61,7 +64,9 @@ var eventhandler = new function() {
 
 	function onPlayerJoined(event, player) {
 		console.log("Player "+player.nick+" joined");
-		gui.draw(sgame.getGUIElements());
+		if (gui){
+			gui.draw(sgame.getGUIElements());
+		}
 		drawPlayerList();
 	}
 
