@@ -31,7 +31,12 @@ body {
 	
 }
 
-
+#gameInfo {
+	position:relative;
+	top: -380px;
+	left: 90px;
+	visibility: visible;
+}
 
 
 #middlecontainer{

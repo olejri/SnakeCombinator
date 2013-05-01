@@ -62,6 +62,20 @@ ServerSnakeGame.prototype.checkForTeleportation = function(){
 	});
 }
 
+ServerSnakeGame.prototype.enablePowerUps = function() {
+	var self = this;
+	SnakeGame.prototype.enablePowerUps.call(this, function(player) {
+		self.getWordForHelpPowerUp(player);
+		
+	});
+}
+ServerSnakeGame.prototype.getWordForHelpPowerUp = function(object) {
+	var result = this.mode.getHelp(object.string);
+	result.playerID = object.player.id;
+	result.indexOfLastPlain = object.indexOfLastPlain;
+	object.player.setHelpPowerUp(result);
+	$(this).trigger("getHelp", result);
+}
 
 
 ServerSnakeGame.prototype.timedSnakeRespawn = function(player){

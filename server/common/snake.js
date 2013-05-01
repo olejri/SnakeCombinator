@@ -116,6 +116,47 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 };
 
 
+Snake.prototype.addBodyPart = function(direction, textElement) {
+	var indexPart = this.parts.length;
+	var indexDetails = this.partsDetail.length;
+	var x = this.parts[indexPart-1].x;
+	var y = this.parts[indexPart-1].y;
+	if (indexPart == indexDetails){
+		if(direction == "left") {
+			this.parts.splice(indexPart, 0, {'x': x+1, 'y': y, 'direction': "left"});
+			this.partsDetail.splice(indexDetails-1, 0, {'type': "text", 'details': textElement});
+		} else if (direction == "right"){
+			this.parts.splice(indexPart, 0, {'x': x-1, 'y': y, 'direction': "right"});
+			this.partsDetail.splice(indexDetails-1, 0, {'type': "text", 'details': textElement});
+		} else if (direction == "up"){
+			this.parts.splice(indexPart, 0, {'x': x, 'y': y-1, 'direction': "up"});
+			this.partsDetail.splice(indexDetails-1, 0, {'type': "text", 'details': textElement});
+		} else if (direction == "down"){
+			this.parts.splice(indexPart, 0, {'x': x, 'y': y+1, 'direction': "down"});
+			this.partsDetail.splice(indexDetails-1, 0, {'type': "text", 'details': textElement});
+		}
+	}
+}
+
+
+Snake.prototype.editSnakeBody = function(text, textCount, plainCount) {
+	var indexPart = this.parts.length;
+	var indexDetails = this.partsDetail.length;
+	if (indexPart == indexDetails){
+		if (textCount > 1) {
+			this.partsDetail[plainCount+1].details = text[0];
+			this.partsDetail[plainCount+2].details = text[1];
+			this.partsDetail[plainCount+3] = {'type': "image", 'details': 'tail'};
+			this.cutFromIndex(plainCount+4);
+		} else if (textCount = 1){
+			this.partsDetail[plainCount+1].details = text[0];
+			this.addBodyPart(this.parts[this.parts.length-1].direction, text[1]);
+		}
+	}
+}
+
+
+
 Snake.prototype.isInValidationZone = function(width, height, validationZoneDim) {
 	var vZones = utils.vZonePositions(width, height, validationZoneDim);
 	for (var i=0; i<vZones.length; i++) {

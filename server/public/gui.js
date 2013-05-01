@@ -92,9 +92,6 @@ function GameGUI(options) {
 				}
 			}
 		}
-		
-		
-		
 	}
 	
 	this.getLayer = function() {
@@ -259,12 +256,7 @@ BoardImageElement.prototype.loadImages = function() {
 	for (var imageName in sources) {
 		images[imageName] = new Image();
 		images[imageName].onload = function() {
-			console.log("Preloading image: "+this.src);
-			loadedImages++;
-			console.log(loadedImages);
-			if (loadedImages == 13) {
-				
-			}
+			//console.log("Loading image: "+this.src);
 		}
 		images[imageName].src = imgDir + sources[imageName];
 	}
@@ -359,7 +351,7 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 			width: GSD,
 			height: GSD,
 			callback: function(img) {
-				console.log("Cached img from Kinetic.Text");
+				//console.log("Cached img from Kinetic.Text");
 				var textImage = new Kinetic.Image({
 					image: img,
 					x : GSD * self.x,

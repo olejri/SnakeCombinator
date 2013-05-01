@@ -42,6 +42,44 @@ function Player(id) {
 	}
 	
 	
+	this.setHelpPowerUp = function(result) {
+		if (result.append) {
+			for (var i=0; i < result.string.length; i++){
+				this.snake.addBodyPart(this.snake.parts[this.snake.parts.length-1].direction, result.string[i]);
+			}
+		} 
+		else {
+			if (this.snake.parts.length >= 4) {
+				if (this.snake.partsDetail.length-(2+result.indexOfLastPlain) == 0){
+					for (var i=0; i < result.string.length; i++){
+						this.snake.addBodyPart(this.snake.parts[this.snake.parts.length-1].direction, result.string[i]);
+					}
+				} else {
+					if (result.string.length != 0){
+						this.snake.editSnakeBody(result.string, (this.snake.partsDetail.length-(2+result.indexOfLastPlain)), result.indexOfLastPlain);
+					}
+				}
+			} else if (this.snake.parts.length == 3) {
+				if (this.snake.partsDetail.length-(2+result.indexOfLastPlain) == 0){
+					for (var i=0; i < result.string.length; i++){
+						this.snake.addBodyPart(this.snake.parts[this.snake.parts.length-1].direction, result.string[i]);
+					}
+				} else {
+					if (result.string.length != 0){
+						this.snake.editSnakeBody(result.string, (this.snake.partsDetail.length-(2+result.indexOfLastPlain)), result.indexOfLastPlain);
+					}
+				}
+
+			} else if (this.snake.parts.length == 2){
+				for (var i=0; i < result.string.length; i++){
+					this.snake.addBodyPart(this.snake.parts[this.snake.parts.length-1].direction, result.string[i]);
+				}
+			}
+		}
+		
+	};
+	
+	
 	this.addToValidated = function(word) {
 		this.validated.push(word);
 		var count = 0;

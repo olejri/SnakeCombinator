@@ -1,7 +1,7 @@
 var communicator = new function() {
 	var socket;
 	var lastEmitDirection = null;
-	
+
 	this.emitMovement = function(direction) {
 		if (socket) {
 			if (lastEmitDirection != direction) {
@@ -16,30 +16,28 @@ var communicator = new function() {
 	this.getID = function() {
 		return socket.socket.sessionid;
 	}
-	
+
 	/**
 	 * Connects to a node.js WebSocket server to given IP, an essential part
 	 * of connecting to a server is receiving the game object afterwards. The
 	 * callback is run when this happen.
 	 */
-	this.connect = function(gameReceivedCallback) {
-		
+	this.connect = function(gameReceivedCallback, nick) {
 		socket = io.connect();
+		var nickObject = {'nick' : nick};
+		socket.emit('nick', nickObject);
 		
 		// Received game object from server
 		socket.on('game', function(gameObj) {
 			gameReceivedCallback(gameObj);
-			console.log("socket.on(game)");
 		});
 
 		socket.on('user connected', function(playerObj) {
 			sgame.addPlayerFromJsonObject(playerObj)
-			console.log("socket.on('user connected");
 		});
 
 		socket.on('user disconnected', function(id) {
 			sgame.deletePlayerById(id);
-			console.log("socket.on('user disconnected'");
 		});
 
 
@@ -59,7 +57,7 @@ var communicator = new function() {
 			// Update Movement Output (debug only)
 			for (var i=0; i<sgame.players.length; i++) {
 				var player = sgame.players[i];
-				
+
 				var imgEle = $("#player"+player.id).find('.movement').children();
 				imgEle.removeClass();
 
@@ -72,34 +70,45 @@ var communicator = new function() {
 					imgEle.text("undefined")
 				}
 			}
-			
+
 		});
-		
+
 		socket.on("foodspawn", function(food) {
 			sgame.addFood(food);
 		});
-		
+
 		socket.on("sendPos", function(pos) {
 			sgame.respawn(pos);
 		});
 		
+		
+		socket.on("getHelp", function(result) {
+			sgame.enableHelp(result);
+		});
+
 	}
+	
+	this.pause = function(command) {
+		var pauseObject = {'command' : command};
+		socket.emit("pause", pauseObject);
+	}
+	
 }
 var log = new function() {
 	var smoothFactor = 0.75; // Higher makes the PerSecond change slower and smoother
-	
+
 	this.emits = 0;
 	this.lastEPS = 1;
 	this.lastEmit = new Date();
-	
+
 	this.updates = 0;
 	this.lastUPS = 1;
 	this.lastUpdate = new Date();
-	
+
 	this.draws = 0;
 	this.lastFPS = 1;
 	this.lastDraw = new Date();
-	
+
 	this.smoothCalculator = function(lastDate, lastPS) {
 		// Calculate seconds since last calculation
 		var now = new Date();
@@ -110,7 +119,7 @@ var log = new function() {
 		var smoothPS = newPS*(1-smoothFactor) + lastPS*smoothFactor;
 		return smoothPS.toFixed(2);
 	};
-		
+
 	this.emitsPerSec = function() {
 		this.lastEPS = this.smoothCalculator(this.lastEmit, this.lastEPS);
 		this.lastEmit = new Date();
@@ -122,28 +131,28 @@ var log = new function() {
 		this.lastUpdate = new Date();
 		return this.lastUPS;
 	}
-	
+
 	this.FPS = function() {
 		this.lastFPS = this.smoothCalculator(this.lastDraw, this.lastFPS);
 		this.lastDraw = new Date();
 		return this.lastFPS;
 	}
-	
+
 	this.addUpdate = function() {
 		this.updates++;
 		$('#updates_counter').text(this.updates);
 		$('#updates_ps').text(this.updatesPerSec());
 	}
-	
+
 	this.addEmit = function() {
 		this.emits++;
 		$('#emits_counter').text(this.emits);
 		$('#emits_ps').text(this.emitsPerSec());
 	}
-	
+
 	this.addDraw = function() {
 		this.draws++;
 		$('#fps').text(this.FPS());
 	}
-	
+
 }

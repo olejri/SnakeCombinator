@@ -8,7 +8,6 @@ function ClientSnakeGame() {
  * @param serverGameObj	Game data object from server
  */
 ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
-	console.log("init");
 	this.settings = serverGameObj.settings;
 	// Create the correct Game Mode object with the mode data from server
 	this.mode = eval("new "+serverGameObj.modeType+"(serverGameObj.mode)");
@@ -20,7 +19,6 @@ ClientSnakeGame.prototype.initFromJsonObject = function(serverGameObj) {
 	for (var i=0; i<serverGameObj.food.length; i++) {
 		this.addFood(serverGameObj.food[i]);
 	}
-	console.log(this);
 	$(this).trigger("joinedgame", this);
 };
 /**
@@ -36,6 +34,27 @@ ClientSnakeGame.prototype.addPlayerFromJsonObject = function(objP) {
 	this.players.push(player);
 	$(this).trigger("playerjoined", player);
 };
+
+ClientSnakeGame.prototype.getInfo = function() {
+	for (var i=0; i<this.players.length; i++) {
+		var snake = this.players[i].snake;
+		if (snake) {
+			console.log("Player: " +this.players[i].nick + "\n" +
+					"SnakeParts " + snake.parts.length + "\n" +
+					"SnakePartsDetail " + snake.partsDetail.length +"\n");
+			console.log(snake.parts);
+			console.log(snake.partsDetail);
+		} else {
+			console.log("Player: " +this.players[i].nick + "has no snake!");
+		}
+	}
+}
+
+
+ClientSnakeGame.prototype.pause = function(command) {
+	communicator.pause(command);
+};
+
 
 
 ClientSnakeGame.prototype.getSnakeParts = function() {

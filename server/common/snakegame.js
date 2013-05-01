@@ -49,7 +49,8 @@ SnakeGame.prototype.applyTick = function(newTick) {
 	if (!this.settings.otherCrashAllowed) this.checkForCrash();
 	this.checkForTeleportation(this.settings.teleportationAllowed);
 	this.checkForValidation();
-	//this.enablePowerUps();
+	this.enablePowerUps();
+	
 	//this.checkForRespawn();
 	//this.checkForGameOver();
 	//	this.testForId();
@@ -160,14 +161,6 @@ SnakeGame.prototype.checkForValidation = function() {
 };
 
 
-SnakeGame.prototype.testForId = function() {
-	for (var i=0; i<this.players.length; i++){
-		if (this.players[i].id == this.socketId) {
-			console.log(this.players[i].id + "==" + this.socketId);
-		}
-	}
-
-}
 
 SnakeGame.prototype.checkForGameOver = function() {
 	for (var i=0; i<this.players.length; i++){
@@ -185,93 +178,35 @@ SnakeGame.prototype.checkForGameOver = function() {
 
 };
 
-SnakeGame.prototype.enablePowerUps = function() {
-	for (var i=0; i<this.players.length; i++){
-		var snake = this.players[i].snake;
+SnakeGame.prototype.enablePowerUps = function(callback) {
+	for (var s=0; s<this.players.length; s++){
+		var snake = this.players[s].snake;
 		var indexOfLastPlain = 0;
+		var snakeText = "";
 		if (snake){
 			// powerUp help
 			if (snake.powerup == "help") {
-				var string = "";
 				for (var i=0; i < snake.partsDetail.length; i++) {
 					if (snake.partsDetail[i].type == "text"){
-						string = string + snake.partsDetail[i].details;
+						snakeText = snakeText + snake.partsDetail[i].details;
 					} else if (snake.partsDetail[i].type == "plain") {
 						indexOfLastPlain = i;
 					}
 				}
-				var result = this.mode.getHelp(string);
-				console.log(result.append +"string: " + result.string[0] + result.string[1]);
-				if (result.append) {
-					var index = snake.parts.length-1;
-					var x = snake.parts[index].x;
-					var y = snake.parts[index].y;
-
-					for (var i=0; i < result.string.length; i++){
-						if (snake.parts[index].direction == "left") snake.parts.splice(index+1+i, 0, {'x': x+(i+1), 'y': y, 'direction': "left"});
-						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1+i, 0, {'x': x-(i+1), 'y': y, 'direction': "right"});
-						else if (snake.parts[index].direction == "top") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y-(i+1), 'direction': "top"});
-						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y+(i+1), 'direction': "down"});
-						snake.partsDetail.splice(index+i, 0, {'type': "text", 'details': result.string[i]});
-					}
-				} 
-				else {
-					if (snake.parts.length >= 4) {
-						for (var i=0; i < result.string.length; i++){
-							snake.partsDetail[indexOfLastPlain+i+1] = {'type': "text", 'details': result.string[i]};
-						}
-						snake.partsDetail[indexOfLastPlain+3] = {'type': "image", 'details': 'tail'};
-						snake.cutFromIndex(indexOfLastPlain+4);
-					} else if (snake.parts.length == 3) {
-						var index = snake.parts.length-1;
-						var x = snake.parts[index].x;
-						var y = snake.parts[index].y;
-
-						if (snake.parts[index].direction == "left") snake.parts.splice(index+1, 0, {'x': x+1, 'y': y, 'direction': "left"});
-						else if (snake.parts[index].direction == "right") snake.parts.splice(index+1, 0, {'x': x-1, 'y': y, 'direction': "right"});
-						else if (snake.parts[index].direction == "top") snake.parts.splice(index+1, 0, {'x': x, 'y': y-1, 'direction': "top"});
-						else if (snake.parts[index].direction == "down") snake.parts.splice(index+1, 0, {'x': x, 'y': y+1, 'direction': "down"});
-						snake.partsDetail[indexOfLastPlain+1] = {'type': "text", 'details': result.string[0]};
-						snake.partsDetail.splice(index+indexOfLastPlain, 0, {'type': "text", 'details': result.string[1]});
-
-					} else if (snake.parts.length == 2){
-						var index = snake.parts.length-1;
-						var x = snake.parts[index].x;
-						var y = snake.parts[index].y;
-						for (var i=0; i < result.string.length; i++){
-							if (snake.parts[index].direction == "left") snake.parts.splice(index+1+i, 0, {'x': x+(i+1), 'y': y, 'direction': "left"});
-							else if (snake.parts[index].direction == "right") snake.parts.splice(index+1+i, 0, {'x': x-(i+1), 'y': y, 'direction': "right"});
-							else if (snake.parts[index].direction == "top") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y-(i+1), 'direction': "top"});
-							else if (snake.parts[index].direction == "down") snake.parts.splice(index+1+i, 0, {'x': x, 'y': y+(i+1), 'direction': "down"});
-							snake.partsDetail.splice(index+i, 0, {'type': "text", 'details': result.string[i]});
-						}
-					}
+				if(callback){
+					var player = {'player' : this.players[s], 'string' : snakeText, 'indexOfLastPlain' : indexOfLastPlain};
+					callback(player);
 				}
+				
+				
+				
+
 				snake.powerup = "zero";
 			}
 		}
 	}
 
 }
-
-//SnakeGame.prototype.checkForRespawn = function() {
-//for (var i=0; i<this.players.length; i++){
-//var snake = this.players[i].snake;
-//var player = this.players[i];
-
-//if(snake) {
-//}
-//else {
-//if (player.respawnTimer == 3){
-//var pos = this.pos;
-//player.respawnSnake(pos.x, pos.y, pos.direction);
-//player.respawnTimer = 0;
-//} else {
-//player.respawnTimer++;
-//}
-//}
-//}
-//}
 
 
 SnakeGame.prototype.respawn = function(pos) {
@@ -283,6 +218,51 @@ SnakeGame.prototype.respawn = function(pos) {
 	}
 }
 
+SnakeGame.prototype.enableHelp = function(result) {
+	
+	for (var i=0; i<this.players.length; i++){
+		if (this.players[i].id == result.playerID){
+			this.players[i].setHelpPowerUp(result);
+		}
+	}
+	
+}
+/**
+ * All methods below are for debugging and testing
+ */
+SnakeGame.prototype.showText = function() {
+	console.log("showText");
+	$("#gameInfo").addClass("show");
+}
+
+
+
+SnakeGame.prototype.writeSnake = function() {
+	for (var i=0; i<this.players.length; i++){
+		var snake = this.players[i].snake;
+		if(snake) {
+			var string = "";
+			for (var s=0; s<snake.partsDetail.length; s++) {
+				if (snake.partsDetail[s].type == "text"){
+					string += snake.partsDetail[s].details;
+				}
+			}
+			console.log(string);
+		}
+	}
+}
+
+
+
+
+SnakeGame.prototype.testForId = function() {
+	for (var i=0; i<this.players.length; i++){
+		if (this.players[i].id == this.socketId) {
+			console.log(this.players[i].id + "==" + this.socketId);
+		}
+	}
+	
+}
 
 
 

@@ -2,6 +2,8 @@ var eventhandler = new function() {
 
 	var playerList = $('#players2');
 	var combatLog = $('#combatlog');
+	var eatSound = $('#eatSound');
+	
 
 	this.attatchGameTriggers = function(game) {
 		$(document).on('keydown', keydown);
@@ -22,7 +24,7 @@ var eventhandler = new function() {
 	function onTick(event, snakeParts) {
 		if(gui){
 			gui.draw(sgame.getGUIElements());
-			gui.moveSnakes(snakeParts.data);
+			//gui.moveSnakes(snakeParts.data);
 		}
 		
 		
@@ -40,6 +42,8 @@ var eventhandler = new function() {
 	}
 
 	function onFoodEaten(event, food) {
+		//eatSound.prop('loop', true);
+		eatSound.get(0).play();
 		//console.log(food);
 	}
 
@@ -68,11 +72,13 @@ var eventhandler = new function() {
 			gui.draw(sgame.getGUIElements());
 		}
 		drawPlayerList();
+		updateGameInfo();
 	}
 
 	function onPlayerLeft(event, player) {
 		console.log("Player "+player.nick+" left");
 		drawPlayerList();
+		updateGameInfo(); 
 	}
 	
 	function onGameOver(event, player) {
@@ -113,6 +119,19 @@ var eventhandler = new function() {
 		$('#combatlog').find('p:first').fadeOut(1000, function(){
 			$('#combatlog').find('p:first').remove();
 		});
+		
+	}
+	
+	function updateGameInfo() {
+		$('#gameInfo').empty();
+		var playersToStart = sgame.settings.playersToStart - sgame.players.length;
+		if (playersToStart == 1){
+			$('#gameInfo').append("<b>TRENGER BARE "+playersToStart+" SPILLER FØR SPILLET STARTER</b>");
+		} else if (playersToStart > 1){
+			$('#gameInfo').append("<b>TRENGER "+playersToStart+" SPILLERE FØR SPILLET STARTER</b>");
+		} else if (playersToStart == 0) {
+			$('#gameInfo').css('visibility', 'hidden');
+		}
 		
 	}
 

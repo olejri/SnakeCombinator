@@ -2,6 +2,7 @@
 <html>
 <head>
 	<link rel="stylesheet" href="/styles.css" />
+	<link href="jqueryui/css/le-frog/jquery-ui-1.10.2.custom.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -20,6 +21,14 @@
 		
 		<div id="middlecontainer">
 			<div id="gamegui"></div>
+			<div id="dialog">
+			<p id="nicklable"> DITT NAVN </p> <br>
+				<input type="text" name="nick" id="nickname"><br>
+			</div>
+			<span id="gameInfo"></span>
+			<audio id="eatSound" src="sounds/eat.mp3"></audio>
+			
+			
 		
 		</div> <!--  End of middlecontainer --> 
 		
@@ -30,6 +39,10 @@
 				<div id="players2"></div> 
 			</div>
 		</div> <!--  End of rightcontainer -->
+		
+		
+		
+		
 		
 		
 	</div> <!--  End of pageWrapper -->
@@ -58,10 +71,11 @@
 	
 	
 	
-
+    <script src="jqueryui/jquery-1.9.1.js"></script>
+	<script src="jqueryui/jquery-ui-1.10.2.custom.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
-	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
-	<script src="http://kineticjs.com/download/v4.0.5/kinetic-v4.0.5.min.js"></script>
+<!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>  -->
+	<script src="kinetic-v4.0.4.min.js"></script>
 	<script src="/utils.js"></script>
 	<script src="/eventhandler.js"></script>
 	<script src="/snakegame.js"></script>
@@ -73,6 +87,7 @@
 	<script src="/communicator.js"></script>
 	<script src="/gui.js"></script>
 	<script src="/client.js"></script>
+	<script src="snakegame.js"></script>
 	
 
 </body>

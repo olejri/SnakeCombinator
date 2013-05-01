@@ -44,48 +44,72 @@ app.use(express.static(__dirname + '/common'));
 /*************************************************************/
 
 io.sockets.on('connection', function (socket) {
-
-	// Send game data to new client
-	socket.emit('game', sgame.toJsonObject());
+		var nick = "";
+		socket.on('nick', function(nickObject) {
+			console.log("recieved nick from client");
+			nick = nickObject.nick;
+			
+			// Send game data to new client
+			console.log("sending game data")
+			socket.emit('game', sgame.toJsonObject());
+			
+			// Add new player to game logic
+			console.log("adding player");
+			var newPlayer = new Player(socket.id);
+			newPlayer.nick = nick;
+			sgame.addPlayer(newPlayer);
+			console.log("It is now "+sgame.players.length+" players");
+			
+			
+			// Announce new player to current players
+			io.sockets.emit('user connected', newPlayer);
+			
+			// If enough players: start game
+			if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart)) {
+				sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
+				sgame.started = true;
+			}
+			
+			
+			
+			// The internal disconnect trigger
+			socket.on('disconnect', function () {
+				// Remove from game logic
+				sgame.deletePlayerById(socket.id);
+				
+				// Stop game if not enough players
+				if (sgame.players.length < sgame.settings.playersToStart) {
+					clearInterval(sgame.runGameInterval);
+					sgame.started = false;
+				}
+				if (sgame.players.length == 0) sgame.resetGame();
+				
+				io.sockets.emit('user disconnected', socket.id);
+				
+				console.log("It is now "+sgame.players.length+" players left");
+			});
+			
+			// Custom triggers
+			socket.on("move input", function(direction) {
+				//console.log("** move input ** "+socket.id+" : "+direction);
+				sgame.getPlayerById(socket.id).lastMoveInput = direction;
+			});
+			
+			socket.on('pause', function(command) {
+				if (command.command == "stopp") {
+					clearInterval(sgame.runGameInterval);
+					sgame.started = false;
+				} else if (command.command == "start"){
+					sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
+					sgame.started = true;
+				}
+			});
+			
+			
+		});
 	
-	// Add new player to game logic
-	var newPlayer = new Player(socket.id);
-	sgame.addPlayer(newPlayer);
-	console.log("It is now "+sgame.players.length+" players");
-	
-	// Announce new player to current players
-	io.sockets.emit('user connected', newPlayer);
-	
-	// If enough players: start game
-	if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart)) {
-		sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
-		sgame.started = true;
-	}
-	
-	
-	
-	// The internal disconnect trigger
-	socket.on('disconnect', function () {
-		// Remove from game logic
-		sgame.deletePlayerById(socket.id);
 		
-		// Stop game if not enough players
-		if (sgame.players.length < sgame.settings.playersToStart) {
-			clearInterval(sgame.runGameInterval);
-			sgame.started = false;
-		}
-		if (sgame.players.length == 0) sgame.resetGame();
-		
-		io.sockets.emit('user disconnected', socket.id);
-		
-		console.log("It is now "+sgame.players.length+" players left");
-	});
 	
-	// Custom triggers
-	socket.on("move input", function(direction) {
-		//console.log("** move input ** "+socket.id+" : "+direction);
-		sgame.getPlayerById(socket.id).lastMoveInput = direction;
-	});
 });
 
 
@@ -117,6 +141,9 @@ $(sgame).on("sendPos", function(event, pos){
 	io.sockets.emit('sendPos', pos);
 });
 
+$(sgame).on("getHelp", function(event, result) {
+	io.sockets.emit('getHelp', result);
+});
 
 /**
  * Run one game tick.
