@@ -38,8 +38,7 @@ $(document).ready(function() {
 	});
 	
 	
-	//$( "#dialog" ).dialog( "open" );
-	 connect();
+	$( "#dialog" ).dialog( "open" );
 	
 	
 });

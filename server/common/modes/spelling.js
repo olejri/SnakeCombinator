@@ -13,6 +13,7 @@ SpellingMode.prototype.convertToModeFood = function(food) {
 	return food;
 };
 SpellingMode.prototype.getStartBody = function() {
+	console.log(this.words);
 	var randWord = this.words[utils.rand(0,this.words.length-1)].toUpperCase();
 	return [];
 };

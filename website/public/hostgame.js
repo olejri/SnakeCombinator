@@ -110,6 +110,28 @@ function getlistofgames(){
 
 
 
+// polls from server
+function fillModeDataList(){
+	$.ajax({
+		type: "POST",
+		url: "./fillModeDataList",
+		data: {
+			modetype : $("#gamemodelist").val()
+		},
+		dataType: "json",
+		success: function(response) {
+			console.log(response.response);
+			$('#modedataList').empty();
+			for (var i = 0; i < response.names.length; i++){
+				$('#modedataList').append('<option value = "'+response.names[i]+'">'+response.names[i]+'</option>');
+			}
+		}
+	});
+	
+};
+
+
+
 
 
 //testing hide and show

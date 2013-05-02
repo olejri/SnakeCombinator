@@ -1,8 +1,14 @@
+//imports
+
+var SpellingText = require("./public/models").SpellingText;
+
+
 //http server
 var http = require("http");
 var express = require('express');
 var app = express();
 var server = http.createServer(app);
+
 
 //child_process
 var sys = require('sys')
@@ -26,58 +32,6 @@ app.configure(function(){
 //server listen @ 8888
 server.listen(8888);
 console.log('Server listen on port: 8888');
-
-
-//MongoDB
-
-//var mongoose = require('mongoose');
-//mongoose.connect('mongodb://localhost/test');
-//
-//var db = mongoose.connection;
-//db.on('error', console.error.bind(console, 'connection error:'));
-//db.once('open', function callback () {
-//	console.log("connection to db successful")
-//
-//	var testSchema = new mongoose.Schema();
-//	testSchema.add({
-//		name : String
-//	});
-//
-//	var Human = mongoose.model('Human', testSchema);
-//
-//	Human.create({
-//		name: 'Ole'
-//	}, function (err) {
-//		if (err) return console.log(err);
-//	})
-//
-//	
-//	Human.findOne({ name: /^Ole/ }).exec(function(err, human) {
-//		if (err) return console.log(err);
-//		  console.log(human.name);
-//	})
-//
-//
-//
-//
-//})
-
-//var spellingmodeSchema = mongoose.Schema({name: String,	modedata: []});
-
-//var Spellingmode = mongoose.model('Spellingmode', spellingmodeSchema);
-
-
-////testdata
-//var animals = new Spellingmode({name: 'animals123'}, {modedata: ["katt", "hund", "hest"]});
-
-//animals.save(function (err, animals) {
-//if (err){
-//console.log(err);
-//} // TODO handle the error
-//})
-
-
-
 
 
 
@@ -136,12 +90,87 @@ app.post('/getgamelist', function(req, res) {
 
 
 
+/**
+ * Database methods
+ */
+
+var mongoose = require('mongoose');
+mongoose.connect('mongodb://localhost/snakecombinator');
+var db = mongoose.connection;
+db.on('error', console.error.bind(console, 'connection error:'));
+db.once('open', function callback() {
+	console.log("DB Connection open");
+});
+
+app.post('/addSpellingText', function(req, res) {
+	res.contentType('json');
+	var contentIn = [{text: 'NORGE'}, {text: 'DANMARK'},{text: 'SVERGIE'},{text: 'FINLAND'},{text: 'ISLAND'}];
+	var sText = new SpellingText({name: req.body.name, content: contentIn});
+	sText.save(function(err, product) {
+		if(err) {
+			res.send({response: 'fail', error: err});
+		} else {
+			console.log("Added " + product.name + "to database");
+			res.send({response: 'success', spellingText : product});
+		}
+
+	});
+});
+
+
+app.post('/editSpellingText', function(req, res) {
+});
+
+
+app.post('/findSpellingText', function(req, res) {
+	res.contentType('json');
+	var query = {'name': req.body.name};
+
+	SpellingText.find(query , function(err, items) {
+		if (items.length == 1) {
+			var sText = items[0];
+			console.log("found "+ sText.name + "in database");
+			res.send({response: 'success', spellingText: sText});
+
+		} else {
+			res.send({response: 'fail', 'error': "Cant find in database"});
+		}
+	});
+});
+
+
+app.post('/fillModeDataList', function(req, res) {
+	var modeType = req.body.modetype;
+	console.log("MODE?" + modeType);
+	res.contentType('json');
+
+	if (modeType == "SPELLINGMODE"){
+		var query = {};
+		SpellingText.find(query , function(err, items) {
+			if (items.length > 0) {
+				var names = [];
+				console.log("found "+ items.length + " SpellingText in database");
+				for (var i = 0; i < items.length; i++) {
+					names.push(items[i].name);
+				}
+				res.send({respones: 'success', names: names});
+
+			} else {
+				res.send({response: 'fail', 'error': "Cant find in database"});
+			}
+		});
+	}
+});
+
+
+
+
 
 //starting a new "game" server 
 function startnode(gamename, gamemodename, gamemodedata, powerupset, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
 	var portnr = getPort();
-	child = exec("node ../server/server.js " + portnr + "", function (error, stdout, stderr) {
+	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ "", function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {

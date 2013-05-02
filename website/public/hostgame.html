@@ -35,19 +35,15 @@
 				<p id="debugtest"> GAMENAME </p> <br>
 				<input type="text" name="GameName" id="gamename"><br>
 				<p> GAME MODE </p> <br>
-			 	<select id="gamemodelist">
-		           	<option value = "1">one</option>
-		              	<option value = "2">two</option>
-		              	<option value = "3">three</option>
-		              	<option value = "4">four</option>
-		          	</select><br>
+			 	<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
+	           		<option value = "TEST">testmode</option>
+	              	<option value = "SPELLINGMODE">Spellingmode</option>
+	              	<option value = "MATH">Mathmode</option>
+	          	</select><br>
 				<p> MODEDATA </p> <br>
 			 	<select id = "modedataList">
-		           	<option value = "1">one</option>
-		               <option value = "2">two</option>
-		               <option value = "3">three</option>
-		               <option value = "4">four</option>
-		           </select><br>
+				 	<option value = "default">----------------</option>
+		        </select><br>
 				<p> POWERUP SET </p> <br>
 				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
 				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
