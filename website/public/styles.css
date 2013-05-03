@@ -72,11 +72,6 @@ body {
 	font-family: 'Special Elite', cursive;	
 }
 
-#hostgame
-{
-	top: 60px;
-}
-
 #gamelobby
 {
 	top: 70px;
@@ -85,4 +80,33 @@ body {
 #levelmanager
 {
 	top: 80px;
+}
+
+
+.buttongamelobby {
+	position: relative;
+	top: 10px;
+	font-family: 'Special Elite', cursive;
+	width : 145px;
+}
+
+#menu {
+	left: 160px;
+}
+
+#createit {
+	left: 220px;
+}
+
+#refresh {
+	position: relative;
+	top: 10px;
+	left: 500px;
+}
+
+#gamelobbyframe {
+	width: 500px;
+	height: 415px;
+	margin-left: auto;
+	margin-right: auto;
 }

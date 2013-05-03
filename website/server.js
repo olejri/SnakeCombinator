@@ -163,6 +163,17 @@ app.post('/fillModeDataList', function(req, res) {
 });
 
 
+app.post('/joinGame', function(req, res) {
+	res.contentType('json');
+	var succsess = updateListOfGames(req.body.gamemode, req.body.themeName);
+	if(succsess) {
+			res.send({response: 'sucees'});
+		} else {
+			res.send({response: 'error'});
+		}
+	});
+});
+
 
 
 
@@ -180,14 +191,31 @@ function startnode(gamename, gamemodename, gamemodedata, powerupset, password, p
 	addgameserver(gamename, portnr);
 }
 
-function addgameserver(name, address){
-	console.log("adding server with gamename: " + name + ":" + "port: " +address);
+function addgameserver(name, address, playersToStart, gamemodename, gamemodedata){
+	console.log("adding server with gamename: " + name + "on port: " +address);
 	var gameserver = {
 			gamename : name,
-			address : "localhost:" + address
+			players : 0,
+			playersBeforeStart : playersToStart,
+			gamemode : gamemodename,
+			themeName : gamemodedata,
+			address : "http://gribb.dyndns.org:" + address
 	};
 	games.push(gameserver);
 };
+
+
+function updateListOfGames(gamemode, themeName) {
+	for (var i = 0; i < games.length; i++){
+		if(gamemode == games[i].gamemode && (themeName == games[i].themeName){
+			games[i].players++;
+			return true;
+		}
+	}
+	return false;
+}
+
+
 
 function getPort(){
 	var port = defaultport;

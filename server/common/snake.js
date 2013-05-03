@@ -106,13 +106,17 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 		'y': newY
 	});
 	var foodEaten = this.eatFoodIfOnIt(allFood);
-	if (!foodEaten) {
+	
+	if(foodEaten.type == "powerup") {
+		this.parts.splice(this.parts.length-1,1); // Delete last part
+		this.powerup = foodEaten.details;
+		return foodEaten;
+	} else if(!foodEaten) {
 		this.parts.splice(this.parts.length-1,1); // Delete last part
 		return false;
+	} else {
+		return foodEaten;
 	}
-	else return foodEaten;
-
-
 };
 
 

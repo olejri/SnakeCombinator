@@ -3,28 +3,18 @@ $("document").ready(function() {
 	/**
 	 * Binding buttons
 	 */
-	$('#hostgame').button()
-	              .bind('click', "hostgame", redirect);
-				  
-	
 	$('#gamelobby').button()
 				   .bind('click', "gamelobby", redirect);
 	
 	$('#levelmanager').button()
 					  .bind('click', "levelmanager", redirect);
 	
-
-	
 	/**
 	 * testing
 	 */
 	
 	var width = $("#levelmanager").width();
-	
-	$("#hostgame").css({
-		width: width-10
-	});
-	
+			
 	$("#gamelobby").css({
 		width: width-10
 	});
@@ -36,17 +26,7 @@ $("document").ready(function() {
 		//do stuff for mobile device
 	};
 	
-	
-	
-	
-	
-	
-	
-	
 });
-
-
-
 
 /**
  * Navigation functions
@@ -73,12 +53,6 @@ function getip(json){
 //	$('#test1').show();
 //	$('#test2').hide("blind");
 //}
-
-
-
-
-
-
 
 function startnode() {
 	// CLIENT

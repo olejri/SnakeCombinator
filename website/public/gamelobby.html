@@ -14,6 +14,8 @@
 
 <script src="jqueryui/jquery-1.9.1.js"></script>
 <script src="jqueryui/jquery-ui-1.10.2.custom.js"></script>
+<script src="jqueryui/jquery.dataTables.js"></script>
+
 </head>
 <body>
 <div class="pagewrapper">
@@ -23,10 +25,69 @@
 	<!-- end of leftdiv -->
 	
 	<div class="middlediv">
-	<h1 class="pagetitle">GAME LOBBY</h1>
+	<h1 class="pagetitle">SPILL LOBBY</h1>
+		<div id="gamelobbyframe">
+			<table id="gamelobbytable">
+				<thead>
+					<tr>
+						<th>Navn</th>
+						<th>Antall spillere</th>
+						<th>Spillmodus</th>
+						<th>Status</th>
+						<th>Bli med</th>
+					</tr>
+				</thead>
+				<tbody id="gamelobbytablebody">
+					<tr>
+						<td>gamename</td>
+						<td>20/30</td>
+						<td>Staving</td>
+						<td>waiting for players...</td>
+						<td><button class="tablebutton">SPILL</button></td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
+		<!-- end of gamelobbyframe -->
+		
+		<div id="dialog">
+			<div class ="leftcontainer" >
+				<p id="debugtest"> GAMENAME </p> <br>
+				<input type="text" name="GameName" id="gamename"><br>
+				<p> GAME MODE </p> <br>
+			 	<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
+	           		<option value = "TEST">testmode</option>
+	              	<option value = "SPELLINGMODE">Spellingmode</option>
+	              	<option value = "MATH">Mathmode</option>
+	          	</select><br>
+				<p> MODEDATA </p> <br>
+			 	<select id = "modedataList">
+				 	<option value = "default">----------------</option>
+		        </select><br>
+				<p> POWERUP SET </p> <br>
+				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
+				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
+				 
+			</div>
+			<!-- end of leftcontainer -->
+			<div class ="rightcontainer" >
+				<p>PASSWORD</p>
+				<input type="text" name="Password" id="password"><br>
+				<p>PLAYERS</p>
+				<div id="slider" > </div><br>
+				<input type="text" name="Players" id="players"><br>
+				<p>MAPSIZE</p><br>
+				<input type="text" name="MapSize" id="mapsize"><br>
+			</div>
+			<!-- end of rightcontainer -->
+		</div>
+		<!-- end of dialog -->
+		
+		<button class="buttongamelobby" id="menu">MENY</button> 
+		<button class="buttongamelobby" id="createit">LAG SPILL</button>
+		<button id="refresh">REFRESH</button>
 	</div>
 	<!-- end of middlediv -->
-	
 	<div class ="rightdiv">
 	<p>Test</p>
 	</div>
@@ -34,7 +95,7 @@
 
 </div> <!-- end of pagewrapper -->
 
-
 <script src="gamelobby.js"></script>
+
 </body>
 </html>
