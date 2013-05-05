@@ -167,11 +167,10 @@ app.post('/joinGame', function(req, res) {
 	res.contentType('json');
 	var succsess = updateListOfGames(req.body.gamemode, req.body.themeName);
 	if(succsess) {
-			res.send({response: 'sucees'});
-		} else {
-			res.send({response: 'error'});
-		}
-	});
+		res.send({response: 'success'});
+	} else {
+		res.send({response: 'error'});
+	}
 });
 
 
@@ -188,7 +187,7 @@ function startnode(gamename, gamemodename, gamemodedata, powerupset, password, p
 			console.log('exec error: ' + error);
 		} 
 	});
-	addgameserver(gamename, portnr);
+	addgameserver(gamename, portnr, players, gamemodename, gamemodedata);
 }
 
 function addgameserver(name, address, playersToStart, gamemodename, gamemodedata){
@@ -199,16 +198,18 @@ function addgameserver(name, address, playersToStart, gamemodename, gamemodedata
 			playersBeforeStart : playersToStart,
 			gamemode : gamemodename,
 			themeName : gamemodedata,
-			address : "http://gribb.dyndns.org:" + address
+			address : "http://gribb.dyndns.org:" + address,
 	};
 	games.push(gameserver);
 };
 
 
 function updateListOfGames(gamemode, themeName) {
+	console.log("inside update");
 	for (var i = 0; i < games.length; i++){
-		if(gamemode == games[i].gamemode && (themeName == games[i].themeName){
-			games[i].players++;
+		if((gamemode == games[i].gamemode) && (themeName == games[i].themeName)){
+			console.log("YOYOY " + games[i].players);
+			games[i].players = games[i].players + 1;
 			return true;
 		}
 	}

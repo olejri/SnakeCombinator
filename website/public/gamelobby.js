@@ -1,4 +1,6 @@
 var gameLobbyTable;
+var arrayAddress = [];
+var goTo = "";
 
 
 $("document").ready(function() {
@@ -24,7 +26,7 @@ $("document").ready(function() {
 		"bInfo": true,
 		"bAutoWidth": true,
 		"sScrollY": "300px",
-		"bScrollCollapse": true
+		"bScrollCollapse": false
 	
     });
 	$(".tablebutton").button();
@@ -71,11 +73,16 @@ $("document").ready(function() {
 		$( "#dialog" ).dialog( "open" );
 		event.preventDefault();
 	});
+	
+	$("#slider").slider({
+		min: 2,
+		max: 20,
+		slide: function( event, ui ) {
+			$("#players").val(ui.value);
+		},
+	});
+	
 	getlistofgames();
-	
-	
-	
-	
 	
 });
 
@@ -92,22 +99,45 @@ function redirect(url) {
 
 
 
-function addToTable(gameList) {
+function addToTable(games) {
 	emptyTable();
-	for (var i = 0; i < gameList.length; i++) {
+	arrayAddress = [];
+	for (var i = 0; i < games.length; i++) {
+		var id = "button"+i;
 		gameLobbyTable.fnAddData([
-		                          "gamename",
-		                          "10/30",
-		                          "Staving",
-		                          "Playing",
-		                          '<button class="tablebutton" onClick="joinGame('+gameList[i].address+')">SPILL</button>'
+		                          games[i].gamename,
+		                          games[i].players+"/"+games[i].playersBeforeStart,
+		                          games[i].gamemode,
+		                          "STATUS",
+		                          '<button class="tablebutton" id="'+id+'" >SPILL</button>',
 		                          ]);
-		
+		arrayAddress.push({'address' : games[i].address, 'buttonid' : id, 'gamemode' : games[i].gamemode, 'themename' : games[i].themeName});
 	}
 	
-	
+//	for (var s = 0; s < games.length; s++) {
+//		console.log(s);
+//		$("#button"+s).bind('click', function() {
+//			games[s].address;
+//		});
+//	}
 	
 	$(".tablebutton").button();
+	$("#gamelobbytable").on( 'click', 'button.tablebutton', function(e) {
+		e.preventDefault();
+		for (var s = 0; s <arrayAddress.length; s++) {
+			if (arrayAddress[s].buttonid == $(this).attr('id')){
+				updateServer(arrayAddress[s].gamemode, arrayAddress[s].themename);
+				goTo = arrayAddress[s].address;
+				break;
+			} else {
+			}
+		}
+		
+	});
+	
+	
+	
+	
 }
 
 
@@ -117,10 +147,16 @@ function emptyTable() {
 
 
 
-function joinGame(address) {
-	
+function joinGame(data) {
+	data.preventDefault();
+	console.log("YO");
+	console.log(data);
 };
 
+function goTO() {
+	window.location = "http://gribb.dyndns.org:30000";
+	
+}
 
 /**
  * Starting a new node server and creating a game
@@ -145,7 +181,7 @@ function creategame() {
 		success: function(response) {
 			console.log(response);
 			if (response.length > 0){
-				appendList(response);
+				addToTable(response);
 			};
 		}
 	});
@@ -163,7 +199,7 @@ function getlistofgames(){
 		success: function(response) {
 			console.log(response);
 			if (response.length > 0){
-				appendList(response);
+				addToTable(response);
 			};
 		}
 	});
@@ -171,7 +207,7 @@ function getlistofgames(){
 
 
 
-// polls from server
+// polls from server database
 function fillModeDataList(){
 	$.ajax({
 		type: "POST",
@@ -192,7 +228,20 @@ function fillModeDataList(){
 };
 
 
-
+function updateServer(gamemode, themeName) {
+	$.ajax({
+		type: "POST",
+		url: "./joinGame",
+		data: {
+			gamemode : gamemode, 
+			themeName : themeName,
+		},
+		dataType: "json",
+		success: function(response) {
+			window.location = goTo;
+		}
+	});
+}
 
 
 //testing hide and show
@@ -209,26 +258,3 @@ function fillModeDataList(){
 //$('#test2').hide("blind");
 //}
 
-function appendList(gameList){
-	$("#gamelobby").children().remove();
-	for (var i = 0; i < gameList.length; i++) {
-		$("#gamelobby").append('<div> <a href="' +gameList[i].address + '">' +gameList[i].gamename+ '</a> </div>');
-	}
-};
-
-function startnode() {
-	// CLIENT
-	$.ajax({
-		type: "POST",
-		url: "./startnode",
-		data: {
-
-		},
-		dataType: "json",
-		success: function(response) {
-			console.log(response);
-		}
-	});
-
-	window.location = "http://localhost:34509"	
-};

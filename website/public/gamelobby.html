@@ -38,13 +38,7 @@
 					</tr>
 				</thead>
 				<tbody id="gamelobbytablebody">
-					<tr>
-						<td>gamename</td>
-						<td>20/30</td>
-						<td>Staving</td>
-						<td>waiting for players...</td>
-						<td><button class="tablebutton">SPILL</button></td>
-					</tr>
+					
 				</tbody>
 			</table>
 		</div>
@@ -52,32 +46,38 @@
 		
 		<div id="dialog">
 			<div class ="leftcontainer" >
-				<p id="debugtest"> GAMENAME </p> <br>
+				<p id="debugtest"> NAVN PÅ SPILLET </p>
 				<input type="text" name="GameName" id="gamename"><br>
-				<p> GAME MODE </p> <br>
+				<p> SPILLEMODUS </p>
 			 	<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
-	           		<option value = "TEST">testmode</option>
-	              	<option value = "SPELLINGMODE">Spellingmode</option>
-	              	<option value = "MATH">Mathmode</option>
+	           		<option value = "default">----------------</option>
+	           		<option value = "TEST">Matte</option>
+	              	<option value = "SPELLINGMODE">Staving</option>
 	          	</select><br>
-				<p> MODEDATA </p> <br>
+				<p> TEMA </p>
 			 	<select id = "modedataList">
 				 	<option value = "default">----------------</option>
 		        </select><br>
-				<p> POWERUP SET </p> <br>
+				<p>  </p> <br>
 				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
 				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
 				 
 			</div>
 			<!-- end of leftcontainer -->
 			<div class ="rightcontainer" >
-				<p>PASSWORD</p>
+				<p>PASSORD</p>
 				<input type="text" name="Password" id="password"><br>
-				<p>PLAYERS</p>
-				<div id="slider" > </div><br>
-				<input type="text" name="Players" id="players"><br>
-				<p>MAPSIZE</p><br>
-				<input type="text" name="MapSize" id="mapsize"><br>
+				<p>SPILLERE</p>
+				<div> 
+					<div id="slider" ></div>
+					<input type="text" name="Players" id="players" value=2>
+				</div>
+				<p>KART STØRRELSE</p>
+				<select id = "mapsize">
+				 	<option value = "SMALL">Lite</option>
+				 	<option value = "MEDIUM">Medium</option>
+				 	<option value = "BIG">Stor</option>
+		        </select><br>
 			</div>
 			<!-- end of rightcontainer -->
 		</div>
