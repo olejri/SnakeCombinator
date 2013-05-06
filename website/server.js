@@ -55,6 +55,14 @@ app.get('/levelmanager', function (req, res) {
 	res.sendfile(__dirname + '/public/levelmanager.html');
 });
 
+app.get('/spelling', function (req, res) {
+	res.sendfile(__dirname + '/public/spelling.html');
+});
+
+app.get('/math', function (req, res) {
+	res.sendfile(__dirname + '/public/math.html');
+});
+
 app.use(express.static(__dirname + '/public'));
 
 
@@ -104,16 +112,36 @@ db.once('open', function callback() {
 
 app.post('/addSpellingText', function(req, res) {
 	res.contentType('json');
-	var contentIn = [{text: 'NORGE'}, {text: 'DANMARK'},{text: 'SVERGIE'},{text: 'FINLAND'},{text: 'ISLAND'}];
-	var sText = new SpellingText({name: req.body.name, content: contentIn});
-	sText.save(function(err, product) {
-		if(err) {
-			res.send({response: 'fail', error: err});
-		} else {
-			console.log("Added " + product.name + "to database");
-			res.send({response: 'success', spellingText : product});
-		}
+	var contentIn = [];
+	for (var i = 0; i < req.body.content.length; i++) {
+		var text = {text : req.body.content[i]}
+		contentIn.push(text);
+	}
 
+	var query = {'name': req.body.name};
+	SpellingText.findOne(query , function(err, item) {
+		if (item) {
+			item.content = contentIn;
+			item.save(function(err) {
+				if(err){
+					res.send({response: 'fail', error: err});
+				}else {
+					console.log("Updated " + item.name + " to database");
+					res.send({response: 'success', spellingText : item});
+				}
+			});
+		} else {
+			var sText = new SpellingText({name: req.body.name, content: contentIn});
+			sText.save(function(err, product) {
+				if(err) {
+					res.send({response: 'fail', error: err});
+				} else {
+					console.log("Added " + product.name + " to database");
+					res.send({response: 'success', spellingText : product});
+				}
+
+			});
+		}
 	});
 });
 
@@ -160,6 +188,18 @@ app.post('/fillModeDataList', function(req, res) {
 			}
 		});
 	}
+});
+
+
+app.post('/fillArray', function(req, res) {
+	var query = {name : req.body.name};
+	SpellingText.find(query , function(err, items) {
+		if (items.length > 0) {
+			res.send({respones: 'success', content: items[0].content});	
+		}else {
+			res.send({response: 'fail', 'error': "Cant find in database"});
+		}
+	});
 });
 
 

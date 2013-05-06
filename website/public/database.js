@@ -2,12 +2,14 @@ $("document").ready(function() {
 });
 
 
-function addSpellingText(name) {
+function addSpellingText(name, content) {
+	var contentIn = content.split(',');
 	$.ajax({
 		type: "POST",
 		url: "./addSpellingText",
 		data: {
-			name: name
+			name: name,
+			content: contentIn
 		},
 		dataType: "json",
 		success: function(response) {
@@ -18,6 +20,7 @@ function addSpellingText(name) {
 
 
 function findSpellingText(name){
+	
 	$.ajax({
 		type: "POST",
 		url: "./findSpellingText",
@@ -27,8 +30,8 @@ function findSpellingText(name){
 		dataType: "json",
 		success: function(response) {
 			console.log(response.response);
-			var l = response.spellingText.content.length;
-			console.log("Length = " + l);
+			var l = response.spellingText.content[0];
+			console.log(l);
 			
 			
 //			for (var i = 0; i < response.spellingText.content; i++) {

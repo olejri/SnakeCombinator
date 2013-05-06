@@ -3,15 +3,17 @@ $("document").ready(function() {
 	/**
 	 * Binding buttons
 	 */
+	$('#hostgame').button()
+	              .bind('click', "hostgame", redirect);
+				  
+	
 	$('#gamelobby').button()
 				   .bind('click', "gamelobby", redirect);
 	
 	$('#levelmanager').button()
 					  .bind('click', "levelmanager", redirect);
 	
-	/**
-	 * testing
-	 */
+
 	
 	
 	//checking for mobile device
@@ -20,19 +22,27 @@ $("document").ready(function() {
 		//do stuff for mobile device
 	};
 	
+	
+	
+	
+	
+	
+	
+	
 });
+
+
+
 
 /**
  * Navigation functions
  */
 
 function redirect(url) {
-window.location = "http://" +location.host +"/" + url.data;	
+	window.location = "http://" +location.host +"/" + url.data;
+	
 }
 
-function getip(json){
-	  alert(json.ip); // alerts the ip address
-	}
 
 //testing hide and show
 
@@ -47,6 +57,12 @@ function getip(json){
 //	$('#test1').show();
 //	$('#test2').hide("blind");
 //}
+
+
+
+
+
+
 
 function startnode() {
 	// CLIENT

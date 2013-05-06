@@ -67,6 +67,7 @@ body {
 
 .buttons
 {
+	width : 200px;
 	position: relative;
 	left: 200px;
 	font-family: 'Special Elite', cursive;	
@@ -80,6 +81,18 @@ body {
 #levelmanager
 {
 	top: 80px;
+}
+
+#spellingbutton {
+	top :70px;
+}
+
+#mathbutton {
+	top :80px;
+}
+
+#levelmanaagerback {
+	top :90px;
 }
 
 
@@ -110,3 +123,13 @@ body {
 	margin-left: auto;
 	margin-right: auto;
 }
+
+
+#temaP {
+	float: left;
+	position: relative;
+	top: -10px;
+}
+
+
+

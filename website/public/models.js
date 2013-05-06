@@ -3,7 +3,7 @@ var mongoose = require('mongoose');
 // **************  Spelling model *****************
 
 var spellingSchema = mongoose.Schema({
-	name : {type: String, unique: true},
+	name : {type: String},
 	content: [{
 		text: String
 	}]
