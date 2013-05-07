@@ -92,6 +92,7 @@ function connect() {
 		//	drawGui(gui, sgame);
 		
 	}, nick);
+	
 }
 
 
@@ -108,6 +109,10 @@ function test() {
 	console.log("test");
 	communicator.test("test");
 }
+
+
+
+
 
 
 

@@ -73,6 +73,7 @@ var eventhandler = new function() {
 	function onJoinedGame(event, game) {
 		console.log("Joined game!")
 		$('#title').text(game.mode.title);
+		
 	}
 
 	function onPlayerJoined(event, player) {
@@ -82,6 +83,7 @@ var eventhandler = new function() {
 		}
 		drawPlayerList();
 		updateGameInfo();
+		setRightSize();
 	}
 
 	function onPlayerLeft(event, player) {
@@ -129,6 +131,18 @@ var eventhandler = new function() {
 			$('#combatlog').find('p:first').remove();
 		});
 
+	}
+	
+	function setRightSize() {
+		var middleContainer = $("#middlecontainer").width();
+		var containerWrapper = $("#containerWrapper").width();
+		var newWidth = (containerWrapper-middleContainer)/2;
+		console.log(middleContainer+":" + containerWrapper +":"+ newWidth );
+		
+		
+		$("#leftcontainer").width(newWidth);
+		$("#rightcontainer").width(newWidth);
+		
 	}
 
 	function updateGameInfo() {

@@ -203,11 +203,11 @@ function createGame(words) {
 	});
 
 	sgame = new ServerSnakeGame({
-		'width': 30,
-		'height': 30,
+		'width': 40,
+		'height': 40,
 		'playersToStart': playersToStart,
 		'speed': 5,
-		'foodSpawnRate': 1,
+		'foodSpawnRate': 100,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
 		'teleportationAllowed': true,

@@ -76,12 +76,13 @@ app.post('/startnode', function(req, res) {
 	console.log(req.body.gamename + ":"
 			+ req.body.gamemodename + ":"
 			+ req.body.gamemodedata + ":"
-			+ req.body.powerupset +  ":"
+			+ req.body.wallcrash +  ":"
+			+ req.body.helppowerup ":"
 			+ req.body.password +  ":"
 			+ req.body.players +  ":"
 			+ req.body.mapsize );
 
-	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.powerupset, req.body.password, req.body.players, req.body.mapsize);
+	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.wallcrash, req.body.helppowerup , req.body.password, req.body.players, req.body.mapsize);
 	res.contentType('json');
 	res.send(games);     
 });
@@ -216,11 +217,12 @@ app.post('/joinGame', function(req, res) {
 
 
 
-//starting a new "game" server 
-function startnode(gamename, gamemodename, gamemodedata, powerupset, password, players, mapsize) {
+//starting a new "game" server
+
+function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
 	var portnr = getPort();
-	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ "", function (error, stdout, stderr) {
+	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+"", function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {
