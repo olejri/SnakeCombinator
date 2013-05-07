@@ -120,6 +120,11 @@ Snake.prototype.teleportHead = function(width, height, allFood) {
 };
 
 
+Snake.prototype.reset = function() {
+	
+}
+
+
 Snake.prototype.addBodyPart = function(direction, textElement) {
 	var indexPart = this.parts.length;
 	var indexDetails = this.partsDetail.length;
@@ -190,8 +195,6 @@ Snake.prototype.removeAndAwardParts = function(awardCount) {
 };
 
 Snake.prototype.addSnakeParts = function(string) {
-	
-	
 	return this;
 	
 }

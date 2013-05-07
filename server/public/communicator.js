@@ -85,12 +85,27 @@ var communicator = new function() {
 		socket.on("getHelp", function(result) {
 			sgame.enableHelp(result);
 		});
+		
+		socket.on("sendResult", function(result) {
+			sgame.showResult(result);
+		});
 
 	}
 	
 	this.pause = function(command) {
 		var pauseObject = {'command' : command};
 		socket.emit("pause", pauseObject);
+	}
+	
+	
+	this.test = function(command) {
+		var commandObject = {'command' : command};
+		socket.emit("exit", commandObject);
+	}
+	
+	
+	this.restartGame = function() {
+		socket.emit("restartGame", {'id' : this.getID()});
 	}
 	
 }

@@ -36,9 +36,34 @@ $(document).ready(function() {
 		$( this ).dialog( "close" );
 		}
 	});
-	
-	
 	$( "#dialog" ).dialog( "open" );
+	
+	
+	
+	
+	
+	$("#dialogShowResult").dialog({
+		autoOpen: false,
+		width: 430,
+		buttons: [
+		          {
+		        	  text: $("#badcms").html(),
+		        	  click: function() {
+		        		  $( this ).dialog( "close" );
+		        		  sgame.resetGame();
+		        		  sgame.restartGame();
+		        		  
+		        	  }
+		          },
+		          {
+		        	  text: "MENY",
+		        	  click: function() {
+		        		  window.location = "http://gribb.dyndns.org:8888";
+		        		  $( this ).dialog( "close" );
+		        	  }
+		          }
+		          ]
+	});
 	
 	
 });
@@ -77,3 +102,22 @@ function drawGui(gui, sgame) {
 		gui2.draw(sgame2.getGUIElements());	
 	}, 1000);
 }
+
+
+function test() {
+	console.log("test");
+	communicator.test("test");
+}
+
+
+
+
+
+
+
+
+
+
+
+
+

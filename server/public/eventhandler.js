@@ -3,7 +3,7 @@ var eventhandler = new function() {
 	var playerList = $('#players2');
 	var combatLog = $('#combatlog');
 	var eatSound = $('#eatSound');
-	
+
 
 	this.attatchGameTriggers = function(game) {
 		$(document).on('keydown', keydown);
@@ -17,7 +17,8 @@ var eventhandler = new function() {
 		$(game).on("validationfailure", onValidationFailure);
 		$(game).on("gameover", onGameOver);
 		$(game).on("tick", onTick);
-		
+		$(game).on("showresults", onShowResults);
+
 	};
 
 
@@ -26,12 +27,20 @@ var eventhandler = new function() {
 			gui.draw(sgame.getGUIElements());
 			//gui.moveSnakes(snakeParts.data);
 		}
-		
-		
-		
 		//gui.testTransition();
-				
+
 	}
+
+	function onShowResults(event, results) {
+		$("#resultTable").empty();
+		var players = results.players;
+		var winner = results.winner;
+		var scoreList = sortScoreList(players);
+		for (var i=0; i<scoreList.length; i++) {
+			$("#resultTable").append('<tr><td>'+scoreList[i].player+'</td><td>'+scoreList[i].score+'</td></tr>');
+		}
+		$("#dialogShowResult").dialog("open");
+	};
 
 	function onSnakeDied(event, player) {
 		//console.log("Players snake died: "+player.nick);
@@ -48,12 +57,12 @@ var eventhandler = new function() {
 	}
 
 	function onValidationSuccess(event, data) {
-	if ($("#combatlog p").length > 4) clearFirst(); 	
-	$('<p class="margin2">'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>')
-	.appendTo('#combatlog')
-	.hide().fadeIn(1000);
-	//combatLog.append('<p>'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>');
-	drawPlayerList();
+		if ($("#combatlog p").length > 4) clearFirst(); 	
+		$('<p class="margin2">'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>')
+		.appendTo('#combatlog')
+		.hide().fadeIn(1000);
+		//combatLog.append('<p>'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>');
+		drawPlayerList();
 	}
 
 	function onValidationFailure(event, data) {
@@ -80,7 +89,7 @@ var eventhandler = new function() {
 		drawPlayerList();
 		updateGameInfo(); 
 	}
-	
+
 	function onGameOver(event, player) {
 		combatLog.append('<li>Game is over!' + player.nick + ' won!</li>');
 	}
@@ -114,14 +123,14 @@ var eventhandler = new function() {
 			playerList.append('<p class="margin2">'+scoreList[i].player+' score ' +scoreList[i].score+ '</p>');
 		}
 	}
-	
+
 	function clearFirst() {
 		$('#combatlog').find('p:first').fadeOut(1000, function(){
 			$('#combatlog').find('p:first').remove();
 		});
-		
+
 	}
-	
+
 	function updateGameInfo() {
 		$('#gameInfo').empty();
 		var playersToStart = sgame.settings.playersToStart - sgame.players.length;
@@ -132,16 +141,33 @@ var eventhandler = new function() {
 		} else if (playersToStart == 0) {
 			$('#gameInfo').css('visibility', 'hidden');
 		}
-		
+
 	}
 
-	function sortScoreList() {
-		var scoreArray = [];
-		for (var i=0; i<sgame.players.length; i++) {
-			var player = sgame.players[i];
-			scoreArray.push({'player': player.nick, 'score': player.score});
+	function sortScoreList(players) {
+		if(players){
+			var scoreArray = [];
+			for (var i=0; i<players.length; i++) {
+				var player = players[i];
+				scoreArray.push({'player': player.nick, 'score': player.score});
 			}
-			
+
+			function compare(a,b) {
+				if (a.score < b.score)
+					return 1;
+				if (a.score > b.score)
+					return -1;
+				return 0;
+			}
+			return scoreArray.sort(compare);
+
+		} else {
+			var scoreArray = [];
+			for (var i=0; i<sgame.players.length; i++) {
+				var player = sgame.players[i];
+				scoreArray.push({'player': player.nick, 'score': player.score});
+			}
+
 			function compare(a,b) {
 				if (a.score < b.score)
 					return 1;
@@ -153,3 +179,5 @@ var eventhandler = new function() {
 		}
 
 	}
+
+}

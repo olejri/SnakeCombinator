@@ -4,6 +4,7 @@
 	<link rel="stylesheet" href="/styles.css" />
 	<link href="jqueryui/css/le-frog/jquery-ui-1.10.2.custom.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+	<meta charset="utf-8" />
 </head>
 <body>
 	<div id ="pageWrapper">
@@ -22,13 +23,24 @@
 		<div id="middlecontainer">
 			<div id="gamegui"></div>
 			<div id="dialog">
-			<p id="nicklable"> DITT NAVN </p> <br>
+			<p id="nicklable">DITT NAVN</p> <br>
 				<input type="text" name="nick" id="nickname"><br>
 			</div>
 			<span id="gameInfo"></span>
 			<audio id="eatSound" src="sounds/eat.mp3"></audio>
+			<div id="dialogShowResult">
+				<b id="winningPlayers"> </b>
+				<table>
+					<thead></thead>
+					<tbody id ="resultTable">
+									
+					</tbody>
+				</table>
+			</div>
 			
-			
+		<div id="badcms" style="display:none">SPILL PÅ NYTT</div>
+		
+		
 		
 		</div> <!--  End of middlecontainer --> 
 		

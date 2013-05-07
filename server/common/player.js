@@ -10,7 +10,7 @@ function Player(id) {
 	this.respawnTimer = 0;
 	this.respawnTimer2 = 0;
 	this.posForRespawn;
-	
+	this.playingAgain = false;
 	
 	
 	

@@ -131,7 +131,7 @@ SnakeGame.prototype.checkForTeleportation = function(callback) {
 };
 
 
-SnakeGame.prototype.checkForValidation = function() {
+SnakeGame.prototype.checkForValidation = function(callback) {
 	for (var i=0; i<this.players.length; i++){
 		var snake = this.players[i].snake;
 		var player = this.players[i];
@@ -144,7 +144,11 @@ SnakeGame.prototype.checkForValidation = function() {
 						$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score, 'word': word.word});
 						snake.removeAndAwardParts(1);
 						snake.insideValidationZone = true;
-
+						if(callback) {
+							console.log("insidecallback");
+							callback(player);
+						}
+						
 					}else {
 						$(this).trigger("validationfailure", {'player': this.players[i], 'word': word.word});
 						snake.removeAndAwardParts(0);
@@ -161,22 +165,6 @@ SnakeGame.prototype.checkForValidation = function() {
 };
 
 
-
-SnakeGame.prototype.checkForGameOver = function() {
-	for (var i=0; i<this.players.length; i++){
-		var snake = this.players[i].snake;
-		var player = this.players[i];
-		if (snake){
-			if (player.score >= this.settings.score){
-				$(this).trigger("gameover", player);
-				return true;
-
-			}
-		}
-	}
-	return false;
-
-};
 
 SnakeGame.prototype.enablePowerUps = function(callback) {
 	for (var s=0; s<this.players.length; s++){

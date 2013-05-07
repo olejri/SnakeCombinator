@@ -109,7 +109,39 @@ io.sockets.on('connection', function (socket) {
 				sgame.started = true;
 			}
 		});
-
+		
+		
+		socket.on('exit', function(command) {
+			console.log(command.command);
+			console.log(process.abort());		
+		});
+		
+		socket.on('restartGame', function(object) {
+			var restart = true;
+			
+			console.log("id " + object.id);
+			for(var i = 0; i < sgame.players.length; i++){
+				if (sgame.players[i].id == object.id){
+					sgame.players[i].playingAgain = true;
+					console.log("playingAgain = true");
+				}
+				
+				if (sgame.players[i].playingAgain == false){
+					restart = false;
+					console.log("restart = false");
+				}
+			}
+			
+			
+			if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart) && restart) {
+				sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
+				sgame.started = true;
+				for(var i = 0; i < sgame.players.length; i++){
+					sgame.timedSnakeRespawn(sgame.players[i]);
+					sgame.players[i].playingAgain = false;
+				}
+			}
+		});
 
 	});
 
@@ -173,12 +205,12 @@ function createGame(words) {
 		'width': 30,
 		'height': 30,
 		'playersToStart': 1,
-		'speed': 4,
+		'speed': 8,
 		'foodSpawnRate': 1,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
 		'teleportationAllowed': true,
-		'score' : 40,
+		'score' : 1,
 	}, spellingMode);
 	
 	
@@ -193,6 +225,17 @@ function createGame(words) {
 	$(sgame).on("getHelp", function(event, result) {
 		io.sockets.emit('getHelp', result);
 	});
+	
+	$(sgame).on("gameOver", function(event, result) {
+		console.log("gameover");
+		io.sockets.emit('sendResult', result);
+		clearInterval(sgame.runGameInterval);
+		sgame.started = false;
+		sgame.resetGame();
+	});
+	
+	
+	
 };
 
 /**
@@ -200,12 +243,6 @@ function createGame(words) {
  */
 function runGame() {
 	io.sockets.emit('tick', sgame.generateTick());
-//	if(sgame.checkForGameOver()) {
-//	sgame.resetGame();
-//	clearInterval(sgame.runGameInterval);
-//	sgame.started = false;
-
-//	}
 }
 
 

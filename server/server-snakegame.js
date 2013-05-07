@@ -31,7 +31,7 @@ function ServerSnakeGame(customSettings, mode) {
 	}
 
 	this.mode = mode;
- 
+
 	this.started = false;
 	this.runGameInterval;
 
@@ -66,9 +66,20 @@ ServerSnakeGame.prototype.enablePowerUps = function() {
 	var self = this;
 	SnakeGame.prototype.enablePowerUps.call(this, function(player) {
 		self.getWordForHelpPowerUp(player);
-		
+
 	});
 }
+
+ServerSnakeGame.prototype.checkForValidation = function() {
+	var self = this;
+	SnakeGame.prototype.checkForValidation.call(this, function(player) {
+		self.checkForPlayerWon(player);
+	});
+}
+
+
+
+
 ServerSnakeGame.prototype.getWordForHelpPowerUp = function(object) {
 	var result = this.mode.getHelp(object.string);
 	result.playerID = object.player.id;
@@ -118,6 +129,19 @@ ServerSnakeGame.prototype.generateTick = function() {
 	if(foodRoll) this.addFood(foodRoll);
 	return tick;
 };
+
+
+
+ServerSnakeGame.prototype.checkForPlayerWon = function(player) {
+	console.log("checkForPlayerWon: " + player.nick +"--"+ player.score)
+	console.log(this.settings.score);
+	if (player.score >= this.settings.score){
+		$(this).trigger("gameOver", {'winner' : player, 'players' : this.players});
+	}
+};
+
+
+
 
 
 
@@ -230,6 +254,12 @@ SnakeGame.prototype.testGameRandom = function() {
 }
 
 SnakeGame.prototype.resetGame = function() {
+	for (var i = 0; i < this.players.length; i++) {
+		if (this.players[i].snake) {
+			this.players[i].killSnake();
+			this.players[i].score = 0;
+		}
+	}
 	this.food = [];
 };
 
