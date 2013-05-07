@@ -220,7 +220,7 @@ app.post('/joinGame', function(req, res) {
 function startnode(gamename, gamemodename, gamemodedata, powerupset, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
 	var portnr = getPort();
-	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ "", function (error, stdout, stderr) {
+	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ "", function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {

@@ -196,6 +196,7 @@ var sgame;
 function createGame(words) {
 	var wordArray = words;
 	var themeName = myArgs[2];
+	var playersToStart = myArgs[3];
 	var spellingMode = new SpellingMode({
 		title: themeName,
 		words: wordArray,
@@ -204,13 +205,13 @@ function createGame(words) {
 	sgame = new ServerSnakeGame({
 		'width': 30,
 		'height': 30,
-		'playersToStart': 1,
-		'speed': 8,
+		'playersToStart': playersToStart,
+		'speed': 5,
 		'foodSpawnRate': 1,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
 		'teleportationAllowed': true,
-		'score' : 1,
+		'score' : 100,
 	}, spellingMode);
 	
 	
