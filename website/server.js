@@ -266,7 +266,7 @@ app.post('/addMathText', function(req, res) {
 function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
 	var portnr = getPort();
-	child = exec("node ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+"", function (error, stdout, stderr) {
+	child = exec("forever start ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+"", function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {
