@@ -251,7 +251,7 @@ function createGame(content) {
 		contentFromDB = content;
 		gameMode = new SpellingMode({
 			title: themeName,
-			words: wordArray,
+			words: contentFromDB,
 		});
 		
 	} else if(gameModeName == "MATHMODE"){
