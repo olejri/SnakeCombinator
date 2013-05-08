@@ -1,2 +1,2 @@
-node %~dp0server.js 8888 spellingmode Dyr 1 SMALL FALSE TRUE
+node %~dp0server.js 8888 SPELLINGMODE Dyr 1 SMALL undfiend helppowerup TEST
 pause

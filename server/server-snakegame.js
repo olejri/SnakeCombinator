@@ -20,7 +20,8 @@ function ServerSnakeGame(customSettings, mode) {
 			'teleportationAllowed'	: false,// A snake can crash with wall or teleport?
 			'validationZoneDim' : 2, //
 			'score' : 1000, // A player wins if he reaches to score for that level
-			'respawnTimer' : 3000 //milliseconds
+			'respawnTimer' : 3000, //milliseconds
+			'helpPowerUp' : true
 	};
 
 	// Overwrite default values with given options
@@ -164,11 +165,13 @@ SnakeGame.prototype.rollForFoodSpawn = function() {
 		this.savedPowerUpSpawnChance += 1;
 		var foodPos = this.getRandomOpenPos();
 		if (foodPos) {
-			if (this.settings.powerUpSpawnRate < this.savedPowerUpSpawnChance) {
-				this.savedPowerUpSpawnChance = 0;
-				return this.getRandomPowerUp(foodPos);
+			if(this.settings.helpPowerUp){
+				if (this.settings.powerUpSpawnRate < this.savedPowerUpSpawnChance) {
+					this.savedPowerUpSpawnChance = 0;
+					return this.getRandomPowerUp(foodPos);
+				}
 			}
-			else return this.mode.convertToModeFood(foodPos);
+			return this.mode.convertToModeFood(foodPos);
 		}
 
 		else console.log("No space for food");
@@ -227,8 +230,8 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 }
 
 SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
-	powerUp.details = "help";
-	powerUp.type = "powerup";
+		powerUp.details = "help";
+		powerUp.type = "powerup";
 	return powerUp;
 
 };

@@ -77,10 +77,10 @@ app.post('/startnode', function(req, res) {
 			+ req.body.gamemodename + ":"
 			+ req.body.gamemodedata + ":"
 			+ req.body.wallcrash +  ":"
-			+ req.body.helppowerup ":"
+			+ req.body.helppowerup + ":"
 			+ req.body.password +  ":"
 			+ req.body.players +  ":"
-			+ req.body.mapsize );
+			+ req.body.mapsize);
 
 	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.wallcrash, req.body.helppowerup , req.body.password, req.body.players, req.body.mapsize);
 	res.contentType('json');
@@ -230,6 +230,7 @@ function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup,
 		} 
 	});
 	addgameserver(gamename, portnr, players, gamemodename, gamemodedata);
+	console.log(+ portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password);
 }
 
 function addgameserver(name, address, playersToStart, gamemodename, gamemodedata){

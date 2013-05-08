@@ -1,5 +1,8 @@
 /*********** Page Layout ****************/
 
+@charset "UTF-8";
+
+
 body, html {
 	background-color: lightgrey;
 	height: 100%;
@@ -21,7 +24,7 @@ body, html {
 #header {
 	float: left;
 	width: 100%;
-	height: 10%;
+	height: 77px;
 	background-color: lightgreen;
 }
 
@@ -42,9 +45,6 @@ body, html {
 }
 
 #gameInfo {
-	position:relative;
-	top: -380px;
-	left: 90px;
 	visibility: visible;
 }
 
@@ -73,7 +73,6 @@ p.margin2 {
 
 
 #rightcontainer{
-	margin-left: 2px;
 	float:right;
 	height:100%;
 	width: 20%;
@@ -97,6 +96,21 @@ p.margin2 {
 }
 #players ul {
 		
+}
+
+
+.center_outer {
+margin-top: 235px;
+position: absolute;
+float: left;
+left: 50%;
+} /* USE TOGETHER */
+
+
+
+.center_inner {
+    position: relative;
+    left: -50%;
 }
 
 

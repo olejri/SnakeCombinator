@@ -173,24 +173,28 @@ SnakeGame.prototype.enablePowerUps = function(callback) {
 		var snakeText = "";
 		if (snake){
 			// powerUp help
-			if (snake.powerup == "help") {
-				for (var i=0; i < snake.partsDetail.length; i++) {
-					if (snake.partsDetail[i].type == "text"){
-						snakeText = snakeText + snake.partsDetail[i].details;
-					} else if (snake.partsDetail[i].type == "plain") {
-						indexOfLastPlain = i;
+			if(this.settings.helpPowerUp){
+				if (snake.powerup == "help") {
+					for (var i=0; i < snake.partsDetail.length; i++) {
+						if (snake.partsDetail[i].type == "text"){
+							snakeText = snakeText + snake.partsDetail[i].details;
+						} else if (snake.partsDetail[i].type == "plain") {
+							indexOfLastPlain = i;
+						}
 					}
+					if(callback){
+						var player = {'player' : this.players[s], 'string' : snakeText, 'indexOfLastPlain' : indexOfLastPlain};
+						callback(player);
+					}
+					
+					
+					
+					
+					snake.powerup = "zero";
 				}
-				if(callback){
-					var player = {'player' : this.players[s], 'string' : snakeText, 'indexOfLastPlain' : indexOfLastPlain};
-					callback(player);
-				}
 				
-				
-				
-
-				snake.powerup = "zero";
 			}
+			
 		}
 	}
 

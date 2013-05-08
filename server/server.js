@@ -191,28 +191,74 @@ function getWords() {
 
 
 /** SECTION 6: Game logic **/
-/*************************************************************/
+/************************************************************
+ * 
+ * 
+ * Getting all args from main server
+ * 
+ * */
 var sgame;
 function createGame(words) {
 	var wordArray = words;
+	
+	
+	
+	//Input from node args
+	var gameModeName = myArgs[1];
 	var themeName = myArgs[2];
 	var playersToStart = myArgs[3];
-	var spellingMode = new SpellingMode({
-		title: themeName,
-		words: wordArray,
-	});
+	var size = myArgs[4];
+	var wallcrashInput = myArgs[5];
+	var helppowerupInput = myArgs[6];
+	var password = myArgs[7];
+	
+	
+	
+	
+	
+	var width;
+	var height;
+	if (size == "SMALL") width = 30, height = 30; 
+	else if (size == "MEDIUM") width = 40, height = 40; 
+	else if (size == "BIG") width = 50, height = 50;
+	var gameMode;
+	var wallcrash = true;
+	var helpPowerUp = false;
+	
+	if (gameModeName == "SPELLINGMODE"){
+		gameMode = new SpellingMode({
+			title: themeName,
+			words: wordArray,
+		});
+		
+	} else if(gameModeName == "MATH"){
+//		gameMode = new MathgMode({
+//			title: themeName,
+//			words: wordArray,
+//		});
+	}
+	
+	if (wallcrashInput == "wallcrash"){
+		wallcrash = false;
+	}
+	
+	if (helppowerupInput == "helppowerup"){
+		helpPowerUp = true;
+	}
+	
 
 	sgame = new ServerSnakeGame({
-		'width': 40,
-		'height': 40,
+		'width': width,
+		'height': height,
 		'playersToStart': playersToStart,
 		'speed': 5,
-		'foodSpawnRate': 100,
+		'foodSpawnRate': 1,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
-		'teleportationAllowed': true,
+		'teleportationAllowed': wallcrash,
 		'score' : 100,
-	}, spellingMode);
+		'helpPowerUp' : helpPowerUp,
+	}, gameMode);
 	
 	
 	$(sgame).on("foodspawn", function(event, food){

@@ -135,23 +135,26 @@ var eventhandler = new function() {
 	
 	function setRightSize() {
 		var middleContainer = $("#middlecontainer").width();
-		var containerWrapper = $("#containerWrapper").width();
-		var newWidth = (containerWrapper-middleContainer)/2;
-		console.log(middleContainer+":" + containerWrapper +":"+ newWidth );
-		
-		
-		$("#leftcontainer").width(newWidth);
-		$("#rightcontainer").width(newWidth);
-		
+		var containerWrapperW = $("#containerWrapper").width();
+		var newWidth = (containerWrapperW-middleContainer)/2;
+		var gameGui = $("#gamegui").height();
+		$("#leftcontainer").width(newWidth-1);
+		$("#rightcontainer").width(newWidth+0.5);
+		var header = $("#header").height();
+		$("#containerWrapper").height(gameGui+header);
+		var containerWrapperH = $("#containerWrapper").height();
+		$("#pageWrapper").height(containerWrapperH);
+		$("#containerWrapper").height(gameGui);
+
 	}
 
 	function updateGameInfo() {
 		$('#gameInfo').empty();
 		var playersToStart = sgame.settings.playersToStart - sgame.players.length;
 		if (playersToStart == 1){
-			$('#gameInfo').append("<b>TRENGER BARE "+playersToStart+" SPILLER FØR SPILLET STARTER</b>");
+			$('#gameInfo').append("<b>TRENGER BARE "+playersToStart+" SPILLER FÃ˜R SPILLET STARTER</b>");
 		} else if (playersToStart > 1){
-			$('#gameInfo').append("<b>TRENGER "+playersToStart+" SPILLERE FØR SPILLET STARTER</b>");
+			$('#gameInfo').append("<b>TRENGER "+playersToStart+" SPILLERE FÃ˜R SPILLET STARTER</b>");
 		} else if (playersToStart == 0) {
 			$('#gameInfo').css('visibility', 'hidden');
 		}
