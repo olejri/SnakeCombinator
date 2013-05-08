@@ -25,6 +25,7 @@ server.listen(myArgs[0]);
 
 var Utils = require('./common/utils');
 var SpellingMode = require('./common/modes/spelling');
+var MathMode = require('./common/modes/math');
 utils = new Utils();
 var ServerSnakeGame = require('./server-snakegame');
 var Player = require('./common/player');
@@ -158,7 +159,7 @@ var db = mongoose.connection;
 db.on('error', console.error.bind(console, 'connection error:'));
 db.once('open', function callback() {
 	console.log("DB Connection open");
-	getWords();
+	getContentFromDB();
 
 });
 
@@ -166,26 +167,46 @@ db.once('open', function callback() {
 
 
 //polls words from given spelling theme
-function getWords() {
+function getContentFromDB() {
 	var themeName = myArgs[2];
 	var query = {'name': themeName};
-	var words = [];
-	SpellingText.find(query , function(err, items) {
-		if (items.length == 1) {
-			var sText = items[0];
-			console.log("found "+ sText.name + " in database");
-
-			for (var i = 0; i < sText.content.length; i++) {
-				console.log("TEST");
-
-				words.push(sText.content[i].text);
+	var content = [];
+	if (myArgs[1] == "SPELLINGMODE") {
+		SpellingText.find(query , function(err, items) {
+			if (items.length == 1) {
+				var sText = items[0];
+				console.log("found "+ sText.name + " in database");
+				
+				for (var i = 0; i < sText.content.length; i++) {
+					console.log("TEST");
+					
+					content.push(sText.content[i].text);
+				}
+			} else {
+				console.log("Cant find " + query.name);
 			}
-		} else {
-			console.log("Cant find " + query.name);
-		}
-		console.log(words);
-		createGame(words);
-	});
+			console.log(content);
+			createGame(content);
+		});
+		
+	} else if (myArgs[1] == "MATHMODE") {
+		SpellingText.find(query , function(err, items) {
+			if (items.length == 1) {
+				var sText = items[0];
+				console.log("found "+ sText.name + " in database");
+				
+				for (var i = 0; i < sText.content.length; i++) {
+					console.log("TEST");
+					
+					content.push(sText.content[i].text);
+				}
+			} else {
+				console.log("Cant find " + query.name);
+			}
+			console.log(content);
+			createGame(content);
+		});
+	}
 };
 
 
@@ -198,44 +219,47 @@ function getWords() {
  * 
  * */
 var sgame;
-function createGame(words) {
-	var wordArray = words;
-	
-	
+function createGame(content) {
+	var contentFromDB;
 	
 	//Input from node args
 	var gameModeName = myArgs[1];
-	var themeName = myArgs[2];
+    var themeName = myArgs[2];
 	var playersToStart = myArgs[3];
 	var size = myArgs[4];
 	var wallcrashInput = myArgs[5];
-	var helppowerupInput = myArgs[6];
+    var helppowerupInput = myArgs[6];
 	var password = myArgs[7];
 	
 	
 	
-	
-	
+	//setting gameGUI size
 	var width;
 	var height;
 	if (size == "SMALL") width = 30, height = 30; 
 	else if (size == "MEDIUM") width = 40, height = 40; 
 	else if (size == "BIG") width = 50, height = 50;
+	
+	
+	
+	//setting gamemode and powerups
 	var gameMode;
 	var wallcrash = true;
 	var helpPowerUp = false;
 	
 	if (gameModeName == "SPELLINGMODE"){
+		contentFromDB = content;
 		gameMode = new SpellingMode({
 			title: themeName,
 			words: wordArray,
 		});
 		
-	} else if(gameModeName == "MATH"){
-//		gameMode = new MathgMode({
-//			title: themeName,
-//			words: wordArray,
-//		});
+	} else if(gameModeName == "MATHMODE"){
+		contentFromDB = content;
+		gameMode = new MathMode({
+			title: themeName,
+			range: {'minRange': contentFromDB.minRange, 'maxRange' : contentFromDB.maxRange},
+		});
 	}
 	
 	if (wallcrashInput == "wallcrash"){
@@ -247,6 +271,7 @@ function createGame(words) {
 	}
 	
 
+	//creating game object
 	sgame = new ServerSnakeGame({
 		'width': width,
 		'height': height,
@@ -261,6 +286,9 @@ function createGame(words) {
 	}, gameMode);
 	
 	
+	
+	
+	//setting server triggers
 	$(sgame).on("foodspawn", function(event, food){
 		io.sockets.emit('foodspawn', food);
 	});
@@ -280,8 +308,6 @@ function createGame(words) {
 		sgame.started = false;
 		sgame.resetGame();
 	});
-	
-	
 	
 };
 

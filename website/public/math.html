@@ -14,6 +14,7 @@
 
 <script src="jqueryui/jquery-1.9.1.js"></script>
 <script src="jqueryui/jquery-ui-1.10.2.custom.js"></script>
+<script src="jqueryui/jquery.dataTables.js"></script>
 <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 </head>
 <body>
@@ -24,7 +25,49 @@
 	<!-- end of leftdiv -->
 	
 	<div class="middlediv">
-	<h1 class="pagetitle">STAVING</h1>
+	<h1 class="pagetitle">MATTE</h1>
+	
+		<div id="topdiv" >
+			<p id="temaP">TEMA</p>
+		 	<select id = "modedataList" onchange="fillArraySpelling(this);">
+			 	
+	        </select>
+	       <button id="addtheme">NYTT TEMA</button>
+	       <div id="dialog">
+	       <label>NAVN</label>
+	       <input type="text" name="themename" id="addthemeinput"></br>
+	       <label>minRage</label><input type="text" name="minRage" id="minrange"></br>
+	       <label>maxRage</label><input type="text" name="maxRage" id="maxrange">
+	       </div>
+	        
+		
+		</div>
+		<!-- end of topdiv -->
+		
+		<div id="bottomdiv">
+			<table id="spellingTable">
+				<thead>
+					<tr>
+						<th>Ordlisten</th>
+						<th></th>
+						
+					</tr>
+				</thead>
+				<tbody id="spellingtablebody">
+					
+				</tbody>
+			</table>
+		
+		</div>
+		<!-- end of bottomdiv -->
+		<div id ="inputDiv">
+			<label>Legg til ord</label>
+			<input type="text" name="Addword" id="addwordinput">
+			<button id="addButton">Legg til</button> </br>
+			<button id="saveButton">Lagre</button>
+			<button id="back">Tilbake</button>
+		</div>
+		<!-- end of inputDiv -->
 	
 	
 	</div>
@@ -38,7 +81,7 @@
 </div> <!-- end of pagewrapper -->
 
 
-<script src="spelling.js"></script>
+<script src="math.js"></script>
 
 </body>
 </html>

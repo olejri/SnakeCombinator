@@ -19,7 +19,7 @@ function ServerSnakeGame(customSettings, mode) {
 			'otherCrashAllowed'	: false,// A snake can crash with other snakes?
 			'teleportationAllowed'	: false,// A snake can crash with wall or teleport?
 			'validationZoneDim' : 2, //
-			'score' : 1000, // A player wins if he reaches to score for that level
+			'score' : 1000, // A player wins if he reaches the score set for that level
 			'respawnTimer' : 3000, //milliseconds
 			'helpPowerUp' : true
 	};

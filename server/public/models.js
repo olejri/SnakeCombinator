@@ -9,13 +9,28 @@ var spellingSchema = mongoose.Schema({
 	}]
 });
 
-
 var SpellingText = mongoose.model('SpellingText', spellingSchema);
+
+
+
+//**************  Math model *****************
+
+var mathSchema = mongoose.Schema({
+	name : {type: String, unique: true},
+	range: {
+		maxRange: Number,
+		minRange: Number
+	}
+});
+
+var MathText = mongoose.model('MathText', mathSchema);
+
 
 
 
 //******** Node.js Export ******** 
 
 module.exports = {
-		SpellingText : SpellingText
+		SpellingText : SpellingText,
+		MathText : MathText,
 }

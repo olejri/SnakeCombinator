@@ -1,6 +1,7 @@
 //imports
 
 var SpellingText = require("./public/models").SpellingText;
+var MathText = require("./public/models").MathText;
 
 
 //http server
@@ -188,6 +189,21 @@ app.post('/fillModeDataList', function(req, res) {
 				res.send({response: 'fail', 'error': "Cant find in database"});
 			}
 		});
+	} else if (modeType == "MATHMODE"){
+		MathText.find(query , function(err, items) {
+			if (items.length > 0) {
+				var names = [];
+				console.log("found "+ items.length + " MathText in database");
+				for (var i = 0; i < items.length; i++) {
+					names.push(items[i].name);
+				}
+				res.send({respones: 'success', names: names});
+
+			} else {
+				res.send({response: 'fail', 'error': "Cant find in database"});
+			}
+		});
+		
 	}
 });
 
@@ -214,7 +230,35 @@ app.post('/joinGame', function(req, res) {
 	}
 });
 
+app.post('/addMathText', function(req, res) {
+	res.contentType('json');
+	var query = {'name': req.body.name};
+	var range = req.body.range;
+	MathText.findOne(query , function(err, item) {
+		if (item) {
+			item.range = range;
+			item.save(function(err) {
+				if(err){
+					res.send({response: 'fail', error: err});
+				}else {
+					console.log("Updated " + item.name + " to database");
+					res.send({response: 'success', MathText : item});
+				}
+			});
+		} else {
+			var mText = new MathText({name: req.body.name, range: range});
+			mText.save(function(err, product) {
+				if(err) {
+					res.send({response: 'fail', error: err});
+				} else {
+					console.log("Added " + product.name + " to database");
+					res.send({response: 'success', MathText : product});
+				}
 
+			});
+		}
+	});
+});
 
 
 //starting a new "game" server

@@ -50,7 +50,15 @@ Snake.prototype.eatFoodIfOnIt = function(allFood) {
 		if (utils.samePosition(this.parts[0], allFood[i])) {
 			var food = allFood.splice(i,1)[0];
 			if (food.type == "powerup") return food;
-			else {
+			else if (food.details == '+'|| food.details == '*' || food.details == '/' || food.details == '-'){
+				if (this.partsDetail[this.partsDetail.length-2].details == '+'|| this.partsDetail[this.partsDetail.length-2].details == '*' || this.partsDetail[this.partsDetail.length-2].details == '/' || this.partsDetail[this.partsDetail.length-2].details == '-'){
+					this.partsDetail.splice(this.partsDetail.length-2, 1, {'type': food.type, 'details': food.details});
+					this.parts.splice(this.parts.length-1,1);
+				} else {
+					this.partsDetail.splice(this.partsDetail.length-1, 0, {'type': food.type, 'details': food.details});
+				}
+				return food;
+			}else {
 				this.partsDetail.splice(this.partsDetail.length-1, 0, {'type': food.type, 'details': food.details});
 				return food;
 			}

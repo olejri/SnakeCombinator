@@ -245,6 +245,14 @@ BoardImageElement.prototype.loadImages = function() {
 			rightTail: 'snaketail_v01_right.png',
 			downTail: 'snaketail_v01_down.png',
 			leftTail: 'snaketail_v01_left.png',
+			upRed: 'snakehead_v01_up_red.png',
+			rightRed: 'snakehead_v01_right_red.png',
+			downRed: 'snakehead_v01_down_red.png',
+			leftRed: 'snakehead_v01_left_red.png',
+			upTailRed: 'snaketail_v01_up_red.png',
+			rightTailRed: 'snaketail_v01_right_red.png',
+			downTailRed: 'snaketail_v01_down_red.png',
+			leftTailRed: 'snaketail_v01_left_red.png',
 			body: 'body.png',
 			food: 'food.png',
 			tail: 'snaketail_v01_right.png',
@@ -279,15 +287,27 @@ BoardImageElement.prototype.addToLayer = function(layer, GSD) {
 		});
 		head.direction = this.direction;
 		layer.add(head);
-		
-		
-		
-		
 	} else if (this.imageName == "tail") {
 		var snakePart = new Kinetic.Image({
 			x : GSD * this.x,
 			y : GSD * this.y,
 			image : this.images[this.direction +"Tail"],
+			name : "snakepart"
+		});
+		layer.add(snakePart);
+	} else if (this.imageName == "headRed") {
+		var snakePart = new Kinetic.Image({
+			x : GSD * this.x,
+			y : GSD * this.y,
+			image : this.images[this.direction +"Red"],
+			name : "snakepart"
+		});
+		layer.add(snakePart);
+	} else if (this.imageName == "tailRed") {
+		var snakePart = new Kinetic.Image({
+			x : GSD * this.x,
+			y : GSD * this.y,
+			image : this.images[this.direction +"TailRed"],
 			name : "snakepart"
 		});
 		layer.add(snakePart);

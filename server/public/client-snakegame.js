@@ -152,7 +152,7 @@ ClientSnakeGame.prototype.getGUIElements = function() {
 					}
 					else if (snake.partsDetail[s].type == "image") {
 						snakeElements.push(new BoardImageElement({
-							image: "tail",
+							image: snake.partsDetail[s].details+"Red",
 							x: snake.parts[s].x,
 							y: snake.parts[s].y,
 							direction: snake.parts[s].direction,
