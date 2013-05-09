@@ -28,9 +28,31 @@ var MathText = mongoose.model('MathText', mathSchema);
 
 
 
+//**************  Game model *****************
+var gameServerSchema = mongoose.Schema({
+	name : String,
+	players : {
+		inGamePlayers : Number,
+		playersNeededToStart : Number
+	},
+	gameMode : String,
+	status : String,
+	address : String
+});
+
+
+var GameServer = mongoose.model('GameSever', gameServerSchema);
+
+
+
+
+
+
+
 //******** Node.js Export ******** 
 
 module.exports = {
 		SpellingText : SpellingText,
 		MathText : MathText,
+		GameServer : GameServer
 }

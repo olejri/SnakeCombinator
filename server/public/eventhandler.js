@@ -84,6 +84,7 @@ var eventhandler = new function() {
 		drawPlayerList();
 		updateGameInfo();
 		setRightSize();
+		communicator.updateDB();
 	}
 
 	function onPlayerLeft(event, player) {
@@ -114,6 +115,7 @@ var eventhandler = new function() {
 
 	this.playerLeft = function(player) {
 		console.log("User "+player.id+" disconnected");
+		communicator.updateDB();
 	}
 
 

@@ -1,7 +1,8 @@
 //imports
 
 var SpellingText = require("./public/models").SpellingText;
-
+var MathText = require("./public/models").MathText;
+var GameServer = require("./public/models").GameServer;
 
 /** SECTION 1: Create the node, express and socket.io setup **/
 /*************************************************************/
@@ -75,6 +76,7 @@ io.sockets.on('connection', function (socket) {
 			sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 			sgame.started = true;
 		}
+		updateGameServer(sgame.players.length);
 
 
 
@@ -91,7 +93,7 @@ io.sockets.on('connection', function (socket) {
 			if (sgame.players.length == 0) sgame.resetGame();
 
 			io.sockets.emit('user disconnected', socket.id);
-
+			updateGameServer(sgame.players.length);
 			console.log("It is now "+sgame.players.length+" players left");
 		});
 
@@ -143,6 +145,10 @@ io.sockets.on('connection', function (socket) {
 				}
 			}
 		});
+		
+		socket.on('updateDB', function(object) {
+			//updateGameServer(object.players);
+		});
 
 	});
 
@@ -190,7 +196,7 @@ function getContentFromDB() {
 		});
 		
 	} else if (myArgs[1] == "MATHMODE") {
-		SpellingText.find(query , function(err, items) {
+		GameServer.find(query , function(err, items) {
 			if (items.length == 1) {
 				var sText = items[0];
 				console.log("found "+ sText.name + " in database");
@@ -230,6 +236,7 @@ function createGame(content) {
 	var wallcrashInput = myArgs[5];
     var helppowerupInput = myArgs[6];
 	var password = myArgs[7];
+
 	
 	
 	
@@ -309,6 +316,8 @@ function createGame(content) {
 		sgame.resetGame();
 	});
 	
+	
+	
 };
 
 /**
@@ -316,6 +325,40 @@ function createGame(content) {
  */
 function runGame() {
 	io.sockets.emit('tick', sgame.generateTick());
+}
+
+function updateGameServer (playersInGame) {
+	var gamename = myArgs[8];
+	var query = {'name': gamename};
+	var res;
+	
+	console.log("name" +gamename);
+	console.log("players" +playersInGame);
+
+
+	GameServer.findOne(query , function(err, item) {
+		if (item) {
+			item.players.inGamePlayers = playersInGame;
+			console.log("set players in db to" + playersInGame);
+			if(item.players.playersNeededToStart <= playersInGame) {
+				item.status = "Playing";
+			} else if (item.players.playersNeededToStart > playersInGame){
+				item.status = "Waiting for players...";
+			}
+			item.save(function(err) {
+				if(err){
+					res = {response: 'fail', error: err};
+				}else {
+					console.log("Updated " + item.name + " in database");
+					res = {response: 'success'};
+				}
+			});
+		} else {
+			console.log("Cant find");
+		}
+	});
+
+	return res;
 }
 
 

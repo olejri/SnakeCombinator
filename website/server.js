@@ -2,6 +2,7 @@
 
 var SpellingText = require("./public/models").SpellingText;
 var MathText = require("./public/models").MathText;
+var GameServer = require("./public/models").GameServer;
 
 
 //http server
@@ -14,12 +15,6 @@ var server = http.createServer(app);
 //child_process
 var sys = require('sys')
 var exec = require('child_process').exec;
-
-//list of available games
-var games = [];
-
-//port for gameserver
-var defaultport = 30000;
 
 
 app.configure(function(){
@@ -34,7 +29,9 @@ app.configure(function(){
 server.listen(8888);
 console.log('Server listen on port: 8888');
 
-
+//portFinder, default starting port is set to 30000
+var portfinder = require('portfinder');
+portfinder.basePort = 30000;
 
 /**
  * Navigation
@@ -85,17 +82,18 @@ app.post('/startnode', function(req, res) {
 
 	startnode(req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.wallcrash, req.body.helppowerup , req.body.password, req.body.players, req.body.mapsize);
 	res.contentType('json');
+	var games = findGames();
 	res.send(games);     
 });
 
 
 
-//Ajax from client request available games
-app.post('/getgamelist', function(req, res) {
-	console.log("ajax call inc getgamelist")
-	res.contentType('json');
-	res.send(games);
-});
+//Ajax call from client request available games
+//app.post('/getgamelist', function(req, res) {
+//console.log("ajax call inc getgamelist")
+//res.contentType('json');
+//res.send(games);
+//});
 
 
 
@@ -112,6 +110,7 @@ db.once('open', function callback() {
 	console.log("DB Connection open");
 });
 
+//Methods for SpellingMode
 app.post('/addSpellingText', function(req, res) {
 	res.contentType('json');
 	var contentIn = [];
@@ -203,9 +202,10 @@ app.post('/fillModeDataList', function(req, res) {
 				res.send({response: 'fail', 'error': "Cant find in database"});
 			}
 		});
-		
+
 	}
 });
+
 
 
 app.post('/fillArray', function(req, res) {
@@ -230,6 +230,8 @@ app.post('/joinGame', function(req, res) {
 	}
 });
 
+
+//Methods for MathMode
 app.post('/addMathText', function(req, res) {
 	res.contentType('json');
 	var query = {'name': req.body.name};
@@ -261,60 +263,162 @@ app.post('/addMathText', function(req, res) {
 });
 
 
+//Methods for GameServer model
+
+function addGameServerToDB (data) {
+	var query = {'name': data.name};
+	var players = data.players;
+	var res;
+
+
+	GameServer.findOne(query , function(err, item) {
+		if (item) {
+			item.players.inGamePlayers = players.inGamePlayers;
+			if(item.players.playersNeededToStart == players.inGamePlayers) {
+				item.status = "Playing"
+			}
+			item.save(function(err) {
+				if(err){
+					res = {response: 'fail', error: err};
+				}else {
+					console.log("Updated " + item.name + " in database");
+					res = {response: 'success'};
+				}
+			});
+		} else {
+			var gameServer = new GameServer({name: data.name, players : players, gameMode : data.gameMode, status : data.status, address : data.address});
+			gameServer.save(function(err, product) {
+				if(err) {
+					res = {response: 'fail', error: err};
+				} else {
+					console.log("Added " + product.name + " to database");
+					res = {response: 'success'};
+				}
+
+			});
+		}
+	});
+
+	return res;
+}
+
+
+app.post('/findGameServers', function(req, res) {
+	res.contentType('json');
+	var gameServers = [];
+	var query = {};
+	GameServer.find(query , function(err, items) {
+		if (items.length > 0) {
+			console.log("found "+ items.length + " game servers in the database");
+
+			for (var i = 0; i < items.length; i++) {
+				gameServers.push(items[i]);
+			}
+			res.send(gameServers);
+
+		} else {
+			res.send(gameServers);
+		}
+	});
+});
+
+app.post('/testRemove', function(req, res) {
+	res.contentType('json');
+	var query = {name: req.body.name};
+	GameServer.findOne(query , function(err, item) {
+		if (item) {
+			item.remove(function(err) {
+				if(err){
+					res = {response: 'fail', error: err};
+				}else {
+					console.log("Remove " + item.name + " from database");
+				}
+			});
+		} else {
+			console.log("notrhing to remove");
+		}
+	});
+});
+
+
+
+
+
+
 //starting a new "game" server
 
 function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
-	var portnr = getPort();
-	child = exec("forever start ../server/server.js " + portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+"", function (error, stdout, stderr) {
+	portfinder.getPort(function (err, port) {
+		
+	child = exec("forever start ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename, function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {
 			console.log('exec error: ' + error);
-		} 
-	});
-	addgameserver(gamename, portnr, players, gamemodename, gamemodedata);
-	console.log(+ portnr + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password);
-}
-
-function addgameserver(name, address, playersToStart, gamemodename, gamemodedata){
-	console.log("adding server with gamename: " + name + "on port: " +address);
-	var gameserver = {
-			gamename : name,
-			players : 0,
-			playersBeforeStart : playersToStart,
-			gamemode : gamemodename,
-			themeName : gamemodedata,
-			address : "http://gribb.dyndns.org:" + address,
-	};
-	games.push(gameserver);
-};
-
-
-function updateListOfGames(gamemode, themeName) {
-	console.log("inside update");
-	for (var i = 0; i < games.length; i++){
-		if((gamemode == games[i].gamemode) && (themeName == games[i].themeName)){
-			console.log("YOYOY " + games[i].players);
-			games[i].players = games[i].players + 1;
-			return true;
+		} else {
+			console.log("Spawned node server on port:"+ port + " with args:" +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password);
 		}
+	});
+
+	var data = {name : gamename,
+			players : {
+				inGamePlayers : 0,
+				playersNeededToStart : players
+			},
+			gameMode : gamemodename,
+			status : "waiting for players...",
+			address : "http://gribb.dyndns.org:" + port
 	}
-	return false;
+
+	addGameServerToDB(data);
+	});
 }
 
 
 
 function getPort(){
-	var port = defaultport;
-	defaultport++;
-	return port;
+
+	
+
+	
+	console.log(port);
 }
 
 
-function listCreatedGames(){
+function findGames() {
+	var gameServers = [];
+	var query = {};
+	GameServer.find(query , function(err, items) {
+		if (items.length > 0) {
+			console.log("found "+ items.length + " game servers in the database");
+			for (var i = 0; i < items.length; i++) {
+				gameServers.push(items[i]);
+			}
+			return gameServers;
 
+		} else {
+			return gameServers;
+		}
+	});
 }
+
+
+
+//TESTING
+
+
+app.post('/testing', function(req, res) {
+	res.contentType('json');
+	console.log("PORT" + getPort());
+});
+
+
+
+
+
+
+
 
 
 

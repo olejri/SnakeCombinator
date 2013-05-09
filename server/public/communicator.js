@@ -108,6 +108,12 @@ var communicator = new function() {
 		socket.emit("restartGame", {'id' : this.getID()});
 	}
 	
+	
+	this.updateDB = function() {
+		var players = sgame.players.length;
+		socket.emit("updateDB", {'players' : players});
+	}
+	
 }
 var log = new function() {
 	var smoothFactor = 0.75; // Higher makes the PerSecond change slower and smoother

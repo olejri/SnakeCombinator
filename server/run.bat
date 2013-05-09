@@ -1,2 +1,2 @@
-node %~dp0server.js 8888 MATHMODE Matte1 1 SMALL undfiend undfiend TEST
+node %~dp0server.js 8888 SPELLINGMODE Dyr 1 SMALL wallcrash helppowerup TEST Game1
 pause
