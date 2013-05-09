@@ -397,11 +397,10 @@ function shutDownServer() {
 			console.log("notrhing to remove");
 		}
 	});
-	
 }
 
 function exit() {
-	process.abort();
+	process.exit(1);
 }
 
 

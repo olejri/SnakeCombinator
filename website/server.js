@@ -353,7 +353,7 @@ function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup,
 		if(!password) password = "default";
 		
 		
-	child = exec("forever start ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename, function (error, stdout, stderr) {
+	child = exec("node ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename, function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
 		sys.print('stderr: ' + stderr);
 		if (error !== null) {
