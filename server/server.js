@@ -77,6 +77,7 @@ io.sockets.on('connection', function (socket) {
 			sgame.started = true;
 		}
 		updateGameServer(sgame.players.length);
+		hasPlayers = true;
 
 
 
@@ -95,6 +96,10 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('user disconnected', socket.id);
 			updateGameServer(sgame.players.length);
 			console.log("It is now "+sgame.players.length+" players left");
+			
+			if (hasPlayers == true && sgame.players.length == 0) {
+				shutDownServer();
+			}
 		});
 
 		// Custom triggers
@@ -361,6 +366,43 @@ function updateGameServer (playersInGame) {
 	return res;
 }
 
+
+/** SECTION 7: Exit **/
+/************************************************************
+ * 
+ * 
+ * Getting all args from main server
+ * 
+ * */
+var hasPlayers = false;
+
+
+
+function shutDownServer() {
+	var gamename = myArgs[8];
+	var query = {'name': gamename};
+	GameServer.findOne(query , function(err, item) {
+		if (item) {
+			item.remove(function(err) {
+				if(err){
+					res = {response: 'fail', error: err};
+				}else {
+					console.log("Remove " + item.name + " from database");
+					setTimeout(function(){
+						exit();
+					}, 3000);
+				}
+			});
+		} else {
+			console.log("notrhing to remove");
+		}
+	});
+	
+}
+
+function exit() {
+	process.abort();
+}
 
 
 

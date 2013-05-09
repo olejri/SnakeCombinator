@@ -350,6 +350,8 @@ app.post('/testRemove', function(req, res) {
 function startnode(gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize) {
 	console.log("Trying to spawn node js server");
 	portfinder.getPort(function (err, port) {
+		if(!password) password = "default";
+		
 		
 	child = exec("forever start ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename, function (error, stdout, stderr) {
 		sys.print('stdout: ' + stdout);
