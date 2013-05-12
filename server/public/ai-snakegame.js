@@ -7,8 +7,8 @@ function AiSnakeGame() {
  * Overwrite SnakeGame method, but still run it. In addition this method runs the
  * ai tick decision afterwards.
  */
-AiSnakeGame.prototype.applyTicks = function(newTicks) {
-	SnakeGame.prototype.applyTicks.call(this, newTicks);
+AiSnakeGame.prototype.applyTick = function(newTick) {
+	SnakeGame.prototype.applyTick.call(this, newTick);
 	this.aiMove();
 };
 /**

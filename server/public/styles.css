@@ -138,8 +138,12 @@ left: 50%;
 
 .textInCW {
 	text-align: center;
+	font-size: 20px;
 }
 
+.bluetext {
+	color: #363942;
+}
 
 #gameoverTable{
 	border-spacing: 20px;	

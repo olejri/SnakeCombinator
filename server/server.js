@@ -104,7 +104,6 @@ io.sockets.on('connection', function (socket) {
 			io.sockets.emit('user disconnected', socket.id);
 			updateGameServer(sgame.players.length);
 			console.log("It is now "+sgame.players.length+" players left");
-			clearTimeAttack();
 			if (hasPlayers == true && sgame.players.length == 0) {
 				shutDownServer();
 			}
@@ -165,6 +164,17 @@ io.sockets.on('connection', function (socket) {
 
 		socket.on('updateDB', function(object) {
 			//updateGameServer(object.players);
+		});
+		
+		socket.on('gameTimedOut', function() {
+			console.log("gameover");
+			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
+			io.sockets.emit('sendResult', result);
+			clearInterval(sgame.runGameInterval);
+			sgame.started = false;
+			sgame.resetGame();
+			console.log("GAME ENDED");
+			
 		});
 
 	});
@@ -299,9 +309,9 @@ function createGame(content) {
 	sgame = new ServerSnakeGame({
 		'width': width,
 		'height': height,
-		'playersToStart': 1,
-		'speed': 5,
-		'foodSpawnRate': 1,
+		'playersToStart': playersToStart,
+		'speed': 3,
+		'foodSpawnRate': 5,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
 		'teleportationAllowed': wallcrash,
@@ -417,29 +427,13 @@ function exit() {
 }
 
 
-var timer;
 function timeAttack() {
 	var time = myArgs[10];
 	var getMilli = time * 60000;
-	console.log("Time set to" + time);
+	console.log("Time set to" + getMilli);
 	if (time != "Evig"){
 		io.sockets.emit('startClock', getMilli);
-		
-		timer = setTimeout(function(){
-			console.log("gameover");
-			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
-			io.sockets.emit('sendResult', result);
-			clearInterval(sgame.runGameInterval);
-			sgame.started = false;
-			sgame.resetGame();
-			console.log("GAME ENDED");
-		}, getMilli);
 	}
-
-}
-
-function clearTimeAttack() {
-	if(timer) clearTimeout(timer);
 }
 
 

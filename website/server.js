@@ -336,6 +336,7 @@ function startnode(res, gamename, gamemodename, gamemodedata, wallcrash, helppow
 	console.log("Trying to spawn node js server");
 	portfinder.getPort(function (err, port) {
 		if(!password) password = "default";
+		if(!score) score = 0;
 
 
 		child = exec("node ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename+ " "+score+" "+time+"", function (error, stdout, stderr) {

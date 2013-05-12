@@ -126,6 +126,10 @@ var communicator = new function() {
 		socket.emit("updateDB", {'players' : players});
 	}
 	
+	this.gameTimedOut = function() {
+		socket.emit("gameTimedOut")
+	}
+	
 }
 var log = new function() {
 	var smoothFactor = 0.75; // Higher makes the PerSecond change slower and smoother

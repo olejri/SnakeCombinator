@@ -106,7 +106,6 @@ function connect() {
 		// INITIATE GUI
 		BoardImageElement.prototype.loadImages();
 		gui.draw(sgame.getGUIElements());	
-		//	drawGui(gui, sgame);
 
 	}, nick);
 

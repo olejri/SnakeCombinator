@@ -12,12 +12,18 @@ function Player(id) {
 	this.posForRespawn;
 	this.playingAgain = false;
 	
-	
-	
-	
-	
 	this.killSnake = function() {
 		this.snake = null;
+		var tempScore = this.score;
+		var newScore = Math.round(this.score/2);
+		if (newScore == 1) {
+			this.score = 0;
+			return 1;
+		} else {
+			this.score = newScore;
+			var scoreLost = tempScore - newScore;
+			return scoreLost;
+		}
 	};
 	
 	this.createSnake = function(startX, startY, startDirection, startBody) {

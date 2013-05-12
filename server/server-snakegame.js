@@ -137,8 +137,10 @@ ServerSnakeGame.prototype.generateTick = function() {
 ServerSnakeGame.prototype.checkForPlayerWon = function(player) {
 	console.log("checkForPlayerWon: " + player.nick +"--"+ player.score)
 	console.log(this.settings.score);
-	if (player.score >= this.settings.score){
-		$(this).trigger("gameOver", {'winner' : player, 'players' : this.players});
+	if (this.settings.score != 0){
+		if (player.score >= this.settings.score){
+			$(this).trigger("gameOver", {'winner' : player, 'players' : this.players});
+		}
 	}
 };
 

@@ -64,11 +64,11 @@ SnakeGame.prototype.checkForSelfCrash = function(callback) {
 	for (var i=0; i<this.players.length; i++) {
 		if (this.players[i].snake) {
 			if (this.players[i].snake.hasSelfCrash()) {
-				this.players[i].killSnake();
+				var newScore = this.players[i].killSnake();
 				if(callback){
 					callback(this.players[i]);
 				}
-				$(this).trigger("snakedied", this.players[i]);
+				$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
 			}
 		}
 	}
@@ -85,8 +85,8 @@ SnakeGame.prototype.checkForCrash = function(callback) {
 				var snake = this.players[k].snake;
 				if (!snake) continue;
 				else if (snake.hasPartAtPosition(head.x, head.y)) {
-					this.players[i].killSnake();
-					$(this).trigger("snakedied", this.players[i]);
+					var newScore = this.players[i].killSnake();
+					$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
 					if(callback){
 						callback(this.players[i]);
 					}
@@ -115,11 +115,11 @@ SnakeGame.prototype.checkForTeleportation = function(callback) {
 					if (foodEaten) $(this).trigger("foodeaten", foodEaten);
 				}
 				else{
-					this.players[i].killSnake();
+				var newScore = this.players[i].killSnake();
 					if(callback){
 						callback(this.players[i]);
 					}
-					$(this).trigger("snakedied", this.players[i]);
+					$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
 				}
 			}
 		}

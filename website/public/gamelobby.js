@@ -78,7 +78,7 @@ $("document").ready(function() {
 	});
 
 	$("#slider").slider({
-		min: 2,
+		min: 1,
 		max: 20,
 		slide: function( event, ui ) {
 			$("#players").val(ui.value);
@@ -89,6 +89,7 @@ $("document").ready(function() {
 	$(document).tooltip();
 	$("#time").spinner({
 		min: 0,
+		max: 60,
 		spin: function(event, ui) {
 				spinValue = ui.value;
 	  },

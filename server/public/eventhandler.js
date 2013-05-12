@@ -38,7 +38,11 @@ var eventhandler = new function() {
 	function onStartClock(event, time) {
 		$('#timer').countdown('destroy'); 
 		var seconds = time/1000;
-		$('#timer').countdown({until: +seconds, compact: true});
+		$('#timer').countdown({until: +seconds, compact: true, onExpiry: gameOver});
+	}
+	
+	function gameOver() {
+		communicator.gameTimedOut();
 	}
 
 	function onUpdateResultBoard(event, data) {
@@ -78,8 +82,12 @@ var eventhandler = new function() {
 		$("#dialogShowResult").dialog("open");
 	};
 
-	function onSnakeDied(event, player) {
-		//console.log("Players snake died: "+player.nick);
+	function onSnakeDied(event, data) {
+		if ($("#combatlog p").length > 4) clearFirst(); 	
+		$('<p class="margin2">'+data.nick+' sin snake døde og tapte '+data.score+' poeng!</p>')
+		.appendTo('#combatlog')
+		.hide().fadeIn(1000);
+		drawPlayerList(); 
 	}
 
 	function onFoodSpawn(event, food) {
@@ -94,7 +102,7 @@ var eventhandler = new function() {
 
 	function onValidationSuccess(event, data) {
 		if ($("#combatlog p").length > 4) clearFirst(); 	
-		$('<p class="margin2">'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>')
+		$('<p class="margin2">'+data.player.nick+' validert '+data.word+' for <strong class="bluetext">'+ data.score+'</strong> poeng!</p>')
 		.appendTo('#combatlog')
 		.hide().fadeIn(1000);
 		//combatLog.append('<p>'+data.player.nick+' validated '+data.word+' for '+ data.score+' points!</p>');
@@ -102,13 +110,22 @@ var eventhandler = new function() {
 	}
 
 	function onValidationFailure(event, data) {
-		if ($("#combatlog p").length > 4) clearFirst(); 
-		combatLog.append('<p class="margin2">'+data.player.nick+', '+data.word+' its not a valied word!</p>');
+		if ($("#combatlog p").length > 4) clearFirst();
+		if(data.word){
+			combatLog.append('<p class="margin2">'+data.player.nick+', <'+data.word+'> er ikke et gyldig ord!</p>');
+		}
 	}
 
 	function onJoinedGame(event, game) {
 		console.log("Joined game!")
 		$('#title').text(game.mode.title);
+		if(game.settings.score != 0 && game.settings.time == 0){
+			$('#scorelist').text("SPILLERE! Første som får " + game.settings.score + " poeng vinner!");
+		} else if (game.settings.score != 0 && game.settings.time != 0){
+			$('#scorelist').text("SPILLERE! Først som får " + game.settings.score + " poeng eller har flest poeng når tiden går ut vinner!");
+		} else {
+			$('#scorelist').text("SPILLERE! Den spilleren som har har flest poeng når tiden går ut vinner!");
+		}
 
 	}
 
@@ -162,7 +179,7 @@ var eventhandler = new function() {
 		var scoreList = sortScoreList();
 		console.log(scoreList);
 		for (var i=0; i<scoreList.length; i++) {
-			playerList.append('<p class="margin2">'+scoreList[i].player+' score ' +scoreList[i].score+ '</p>');
+			playerList.append('<p class="margin2">'+scoreList[i].player+' har ' +scoreList[i].score+ ' poeng</p>');
 		}
 	}
 
