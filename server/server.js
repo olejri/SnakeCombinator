@@ -75,6 +75,8 @@ io.sockets.on('connection', function (socket) {
 		if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart)) {
 			sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 			sgame.started = true;
+			timeAttack();
+
 		}
 		updateGameServer(sgame.players.length);
 		hasPlayers = true;
@@ -83,20 +85,26 @@ io.sockets.on('connection', function (socket) {
 
 		// The internal disconnect trigger
 		socket.on('disconnect', function () {
+			
+			for(var i = 0; i < sgame.players.length; i++){
+				if (sgame.players[i].id == socket.id){
+					
+					console.log("YOYOOY");
+					io.sockets.emit('updateResultBoard', {'nick' : sgame.players[i].nick, 'answer' : "NEI"});
+				}
+			}
 			// Remove from game logic
 			sgame.deletePlayerById(socket.id);
-
 			// Stop game if not enough players
 			if (sgame.players.length < sgame.settings.playersToStart) {
 				clearInterval(sgame.runGameInterval);
 				sgame.started = false;
 			}
 			if (sgame.players.length == 0) sgame.resetGame();
-
 			io.sockets.emit('user disconnected', socket.id);
 			updateGameServer(sgame.players.length);
 			console.log("It is now "+sgame.players.length+" players left");
-			
+			clearTimeAttack();
 			if (hasPlayers == true && sgame.players.length == 0) {
 				shutDownServer();
 			}
@@ -117,40 +125,44 @@ io.sockets.on('connection', function (socket) {
 				sgame.started = true;
 			}
 		});
-		
-		
+
+
 		socket.on('exit', function(command) {
 			console.log(command.command);
 			console.log(process.abort());		
 		});
-		
+
 		socket.on('restartGame', function(object) {
 			var restart = true;
-			
+
 			console.log("id " + object.id);
 			for(var i = 0; i < sgame.players.length; i++){
 				if (sgame.players[i].id == object.id){
 					sgame.players[i].playingAgain = true;
+					io.sockets.emit('updateResultBoard', {'nick' : sgame.players[i].nick, 'answer' : "JA"});
 					console.log("playingAgain = true");
 				}
-				
+
 				if (sgame.players[i].playingAgain == false){
 					restart = false;
 					console.log("restart = false");
 				}
 			}
-			
-			
+
+
 			if (!sgame.started && (sgame.players.length >= sgame.settings.playersToStart) && restart) {
 				sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 				sgame.started = true;
+				timeAttack();
+				sgame.resetGame();
+				io.sockets.emit('clearGUI');
 				for(var i = 0; i < sgame.players.length; i++){
 					sgame.timedSnakeRespawn(sgame.players[i]);
 					sgame.players[i].playingAgain = false;
 				}
 			}
 		});
-		
+
 		socket.on('updateDB', function(object) {
 			//updateGameServer(object.players);
 		});
@@ -187,10 +199,10 @@ function getContentFromDB() {
 			if (items.length == 1) {
 				var sText = items[0];
 				console.log("found "+ sText.name + " in database");
-				
+
 				for (var i = 0; i < sText.content.length; i++) {
 					console.log("TEST");
-					
+
 					content.push(sText.content[i].text);
 				}
 			} else {
@@ -199,16 +211,16 @@ function getContentFromDB() {
 			console.log(content);
 			createGame(content);
 		});
-		
+
 	} else if (myArgs[1] == "MATHMODE") {
 		GameServer.find(query , function(err, items) {
 			if (items.length == 1) {
 				var sText = items[0];
 				console.log("found "+ sText.name + " in database");
-				
+
 				for (var i = 0; i < sText.content.length; i++) {
 					console.log("TEST");
-					
+
 					content.push(sText.content[i].text);
 				}
 			} else {
@@ -232,40 +244,40 @@ function getContentFromDB() {
 var sgame;
 function createGame(content) {
 	var contentFromDB;
-	
+
 	//Input from node args
 	var gameModeName = myArgs[1];
-    var themeName = myArgs[2];
+	var themeName = myArgs[2];
 	var playersToStart = myArgs[3];
 	var size = myArgs[4];
 	var wallcrashInput = myArgs[5];
-    var helppowerupInput = myArgs[6];
+	var helppowerupInput = myArgs[6];
 	var password = myArgs[7];
+	var score = myArgs[9];
+	var time = myArgs[10];
+	if (time == "Evig") time = 0;
 
-	
-	
-	
 	//setting gameGUI size
 	var width;
 	var height;
 	if (size == "SMALL") width = 30, height = 30; 
 	else if (size == "MEDIUM") width = 40, height = 40; 
 	else if (size == "BIG") width = 50, height = 50;
-	
-	
-	
+
+
+
 	//setting gamemode and powerups
 	var gameMode;
 	var wallcrash = true;
 	var helpPowerUp = false;
-	
+
 	if (gameModeName == "SPELLINGMODE"){
 		contentFromDB = content;
 		gameMode = new SpellingMode({
 			title: themeName,
 			words: contentFromDB,
 		});
-		
+
 	} else if(gameModeName == "MATHMODE"){
 		contentFromDB = content;
 		gameMode = new MathMode({
@@ -273,46 +285,47 @@ function createGame(content) {
 			range: {'minRange': contentFromDB.minRange, 'maxRange' : contentFromDB.maxRange},
 		});
 	}
-	
+
 	if (wallcrashInput == "wallcrash"){
 		wallcrash = false;
 	}
-	
+
 	if (helppowerupInput == "helppowerup"){
 		helpPowerUp = true;
 	}
-	
+
 
 	//creating game object
 	sgame = new ServerSnakeGame({
 		'width': width,
 		'height': height,
-		'playersToStart': playersToStart,
+		'playersToStart': 1,
 		'speed': 5,
 		'foodSpawnRate': 1,
 		'selfCrashAllowed': false,
 		'otherCrashAllowed': false,
 		'teleportationAllowed': wallcrash,
-		'score' : 100,
+		'score' : score,
 		'helpPowerUp' : helpPowerUp,
+		'time' : time,
 	}, gameMode);
-	
-	
-	
-	
+
+
+
+
 	//setting server triggers
 	$(sgame).on("foodspawn", function(event, food){
 		io.sockets.emit('foodspawn', food);
 	});
-	
+
 	$(sgame).on("sendPos", function(event, pos){
 		io.sockets.emit('sendPos', pos);
 	});
-	
+
 	$(sgame).on("getHelp", function(event, result) {
 		io.sockets.emit('getHelp', result);
 	});
-	
+
 	$(sgame).on("gameOver", function(event, result) {
 		console.log("gameover");
 		io.sockets.emit('sendResult', result);
@@ -320,9 +333,9 @@ function createGame(content) {
 		sgame.started = false;
 		sgame.resetGame();
 	});
-	
-	
-	
+
+
+
 };
 
 /**
@@ -336,7 +349,7 @@ function updateGameServer (playersInGame) {
 	var gamename = myArgs[8];
 	var query = {'name': gamename};
 	var res;
-	
+
 	console.log("name" +gamename);
 	console.log("players" +playersInGame);
 
@@ -346,9 +359,9 @@ function updateGameServer (playersInGame) {
 			item.players.inGamePlayers = playersInGame;
 			console.log("set players in db to" + playersInGame);
 			if(item.players.playersNeededToStart <= playersInGame) {
-				item.status = "Playing";
+				item.status = "Startet";
 			} else if (item.players.playersNeededToStart > playersInGame){
-				item.status = "Waiting for players...";
+				item.status = "Trenger spillere...";
 			}
 			item.save(function(err) {
 				if(err){
@@ -403,5 +416,30 @@ function exit() {
 	process.exit(1);
 }
 
+
+var timer;
+function timeAttack() {
+	var time = myArgs[10];
+	var getMilli = time * 60000;
+	console.log("Time set to" + time);
+	if (time != "Evig"){
+		io.sockets.emit('startClock', getMilli);
+		
+		timer = setTimeout(function(){
+			console.log("gameover");
+			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
+			io.sockets.emit('sendResult', result);
+			clearInterval(sgame.runGameInterval);
+			sgame.started = false;
+			sgame.resetGame();
+			console.log("GAME ENDED");
+		}, getMilli);
+	}
+
+}
+
+function clearTimeAttack() {
+	if(timer) clearTimeout(timer);
+}
 
 

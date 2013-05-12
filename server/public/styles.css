@@ -4,7 +4,7 @@
 
 
 body, html {
-	background-color: lightgrey;
+	background-color: #D8CAA8;
 	height: 100%;
 	width: 100%
 }
@@ -13,19 +13,26 @@ body, html {
 #pageWrapper {
 	width: 80%;
 	height: 100%;
-	background-color: #FFF;
+	background-color: #5C832F;
 	margin-left: auto;
 	margin-right: auto;
-	border: 1px solid black;
+	border: 1px solid #5C832F;
 	font-family: 'Special Elite', cursive;
 	overflow: visible;
+	border-radius: 15px;
 }
 	
 #header {
 	float: left;
 	width: 100%;
 	height: 77px;
-	background-color: lightgreen;
+	background-color: #5C832F;
+	border-top-style: solid;
+	border-top-width: 1px;
+	border-top-left-radius: 15px;
+	border-top-right-radius: 15px;
+	border-color: #5C832F;
+	color: #D8CAA8;
 }
 
 
@@ -33,6 +40,13 @@ body, html {
 	float: left;
 	width: 100%;
 	height: 90%;
+	background-color: #5C832F;
+	border-bottom-style: solid;
+	border-bottom-width: 1px;
+	border-bottom-left-radius: 15px;
+	border-bottom-right-radius: 15px;
+	border-color: #5C832F;
+	color: #D8CAA8;
 }
 
 
@@ -40,7 +54,9 @@ body, html {
 	float: left;
 	height: 100%;
 	width: 20%;
-	background-color: lightgreen;
+	background-color: #5C832F;
+	border-bottom-left-radius: 15px;
+	border-color: #5C832F;
 	
 }
 
@@ -54,13 +70,16 @@ body, html {
 	display: inline-block;
 	margin: 0px auto;
 	height: 100%;
-	background-color: lightgreen;
+	background-color: #5C832F;
 	overflow: visible;
+	border-color: #5C832F;
+	border-radius: 15px;
 }
 
 #title {
-	margin-top: 2%;
-	text-align: center;
+	float: left;
+	margin-left: 33%;
+	margin-top: 3%;
 }
 
 
@@ -76,16 +95,18 @@ p.margin2 {
 	float:right;
 	height:100%;
 	width: 20%;
-	background-color: lightgreen;
+	background-color: #5C832F;
+	border-bottom-right-radius: 15px;
+	border-color: #5C832F;
 }
 
 /*********** Game GUI ****************/
 #gamegui {
 	display: inline-block;
 	margin: 0px auto;
-	border: 1px solid black;
-	background-color: white;
-	/* background-image: url('images/blackboard.jpg'); */
+	border: 1px solid #5C832F;
+	background-color: #D8CAA8;
+	border-radius: 15px;
 }
 #gamegui canvas {
 	clear: both;	
@@ -115,8 +136,20 @@ left: 50%;
 
 
 
+.textInCW {
+	text-align: center;
+}
 
 
+#gameoverTable{
+	border-spacing: 20px;	
+}
+
+#timer{
+	float: right;
+	margin-right: 31%;
+	margin-top: 3%;
+}
 
 
 

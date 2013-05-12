@@ -1,6 +1,7 @@
 var gameLobbyTable;
 var arrayAddress = [];
 var goTo = "";
+var spinValue = 0;
 
 $("document").ready(function() {
 	/**
@@ -49,7 +50,10 @@ $("document").ready(function() {
 
 	$( "#dialog" ).dialog({
 		autoOpen: false,
-		width: 430,
+		title: "Lag spill",
+		draggable: false,
+		width: 600,
+		height: 610,
 		buttons: [
 		          {
 		        	  text: "LAG SPILL!",
@@ -82,7 +86,19 @@ $("document").ready(function() {
 	});
 
 	getlistofgames();
-
+	$(document).tooltip();
+	$("#time").spinner({
+		min: 0,
+		spin: function(event, ui) {
+				spinValue = ui.value;
+	  },
+	  	stop: function( event, ui ) {
+	  		if (spinValue == 0 ) {
+	  			$("#time").spinner("value", "Evig");
+	  		}
+	  },
+	});
+	
 });
 
 
@@ -102,13 +118,17 @@ function addToTable(games) {
 	emptyTable();
 	arrayAddress = [];
 	for (var i = 0; i < games.length; i++) {
+		var mode = games[i].gameMode;
+		if (mode == "SPELLINGMODE") mode = "STAVING";
+		else if (mode == "MATHMODE") mode = "MATTE";
+		
 		var id = "button"+i;
 		gameLobbyTable.fnAddData([
 		                          games[i].name,
 		                          games[i].players.inGamePlayers+"/"+games[i].players.playersNeededToStart,
-		                          games[i].gameMode,
+		                          mode,
 		                          games[i].status,
-		                          '<button class="tablebutton" id="'+id+'" >SPILL</button>',
+		                          '<button class="tablebutton textSize" id="'+id+'" >SPILL</button>',
 		                          ]);
 		arrayAddress.push({'address' : games[i].address, 'buttonid' : id, 'gamemode' : games[i].gamemode, 'themename' : games[i].themeName});
 	}
@@ -161,30 +181,28 @@ function creategame() {
 			wallcrash: $("#wallcrash:checked").val(),
 			helppowerup: $("#helppowerup:checked").val(),
 			adress: "http://" +location.host +"/",
+			score: $("#score").val(),
+			time: $("#time").val(),
 		},
 		dataType: "json",
 		success: function(response) {
-			console.log(response);
-			if (response.length > 0){
-				addToTable(response);
-			};
+			console.log(response.msg);
+			getlistofgames();
 		}
 	});
 };
+
 
 
 function getlistofgames(){
 	$.ajax({
 		type: "POST",
 		url: "./findGameServers",
-		data: {
-
-		},
 		dataType: "json",
 		success: function(response) {
-			console.log(response);
-			if (response.length > 0){
-				addToTable(response);
+			console.log(response.msg);
+			if (response.gameServers.length > 0){
+				addToTable(response.gameServers);
 			} else {
 				console.log("No servers");
 			}

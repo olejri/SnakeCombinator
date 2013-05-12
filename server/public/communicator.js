@@ -89,6 +89,18 @@ var communicator = new function() {
 		socket.on("sendResult", function(result) {
 			sgame.showResult(result);
 		});
+		
+		socket.on("clearGUI", function() {
+			$(sgame).trigger("clearGUI");	
+		});
+		
+		socket.on("updateResultBoard", function(data) {
+			$(sgame).trigger("updateResultBoard", data);	
+		});
+		
+		socket.on("startClock", function(time) {
+			$(sgame).trigger("startClock", time);
+		});
 
 	}
 	

@@ -1,5 +1,5 @@
 body {
-	background-color: lightgrey;
+	background-color: #D8CAA8;
 }
 
 
@@ -10,46 +10,39 @@ body {
    	margin-right: auto;
    	width: 1006px;
    	height: 600px;
-   	border-style: solid;
-  	border-width: 1px;
   	font-family: 'Special Elite', cursive; 
 }
 
 .leftdiv 
 {
-	float: left;
-	border-style: solid;
-	border-width: 1px;
-	height: 600px;
-	width: 200px;
-	background-color: lightgreen;
+	visibility: hidden;
 }
 
 .middlediv
 {
-	float: left;	
 	width: 600px;
 	height: 600px;
 	border-style: solid;
+	border-radius: 15px;
 	border-width: 1px;
-	background-color: green;
+	border-color: #5C832F;
+	background-color: #5C832F;
+	margin-left: auto;
+	margin-right: auto;
 }
 
 .rightdiv
 {
-	float: left;
-	border-style: solid;
-	border-width: 1px;
-	height: 600px;
-	width: 200px;
-	background-color: lightgreen;
+	visibility: hidden;
 }
 
 .pagetitle
 {
-	color: white;
+	color: #D8CAA8;
 	position: relative;
-	left: 130px;
+	text-align: center;
+	margin-top: 40px;
+	
 }
 
 
@@ -59,7 +52,7 @@ body {
 }
 
 .rightcontainer {
-	float: left;
+	float: right;
 }
 	
 
@@ -112,9 +105,7 @@ body {
 }
 
 #refresh {
-	position: relative;
-	top: 10px;
-	left: 500px;
+	float: right;
 }
 
 #gamelobbyframe {
@@ -131,5 +122,22 @@ body {
 	top: -10px;
 }
 
+.textCenter {
+	position: relative;
+	text-align: center;
+}
+
+
+.ui-tooltip {
+    max-width: 400px;
+}
+
+.textSize {
+	font-size: 14px;
+}
+
+#gamelobbytablebody{
+	color: #D8CAA8;
+}
 
 

@@ -218,7 +218,23 @@ SnakeGame.prototype.enableHelp = function(result) {
 		}
 	}
 	
-}
+};
+
+
+SnakeGame.prototype.resetGame = function() {
+	for (var i = 0; i < this.players.length; i++) {
+		if (this.players[i].snake) {
+			this.players[i].killSnake();
+		}
+		this.players[i].score = 0;
+		this.players[i].validated = [];
+	}
+	this.food = [];
+};
+
+
+
+
 /**
  * All methods below are for debugging and testing
  */

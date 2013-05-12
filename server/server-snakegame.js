@@ -21,7 +21,8 @@ function ServerSnakeGame(customSettings, mode) {
 			'validationZoneDim' : 2, //
 			'score' : 1000, // A player wins if he reaches the score set for that level
 			'respawnTimer' : 3000, //milliseconds
-			'helpPowerUp' : true
+			'helpPowerUp' : true,
+			'time' : 0,  // zero means unlimited time
 	};
 
 	// Overwrite default values with given options
@@ -255,15 +256,5 @@ SnakeGame.prototype.testGameRandom = function() {
 	this.testGame(number);
 
 }
-
-SnakeGame.prototype.resetGame = function() {
-	for (var i = 0; i < this.players.length; i++) {
-		if (this.players[i].snake) {
-			this.players[i].killSnake();
-			this.players[i].score = 0;
-		}
-	}
-	this.food = [];
-};
 
 module.exports = ServerSnakeGame; // Can require it in node.js

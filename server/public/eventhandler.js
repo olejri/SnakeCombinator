@@ -18,6 +18,9 @@ var eventhandler = new function() {
 		$(game).on("gameover", onGameOver);
 		$(game).on("tick", onTick);
 		$(game).on("showresults", onShowResults);
+		$(game).on("clearGUI", onClearGUI);
+		$(game).on("updateResultBoard", onUpdateResultBoard);
+		$(game).on("startClock", onStartClock);
 
 	};
 
@@ -29,7 +32,40 @@ var eventhandler = new function() {
 		}
 		//gui.testTransition();
 
+	};
+	
+	
+	function onStartClock(event, time) {
+		$('#timer').countdown('destroy'); 
+		var seconds = time/1000;
+		$('#timer').countdown({until: +seconds, compact: true});
 	}
+
+	function onUpdateResultBoard(event, data) {
+		console.log(data);
+		var table = $('#resultTable');
+		table.find('tr').each(function(index, row){
+			var firstCell = $(row).find('td:eq(0)');
+			if(firstCell.length > 0){
+				var found = false;
+				firstCell.each(function(index, td){
+					var regExp = new RegExp(data.nick, 'i');
+					if(regExp.test($(td).text())){
+						$(row).find('td:eq(2)').text(data.answer);
+					}
+
+				});
+
+			}
+		});
+
+	};
+
+	function onClearGUI(event) {
+		$("#dialogShowResult").dialog("close");
+		playerList.empty();
+		combatLog.empty();
+	};
 
 	function onShowResults(event, results) {
 		$("#resultTable").empty();
@@ -37,7 +73,7 @@ var eventhandler = new function() {
 		var winner = results.winner;
 		var scoreList = sortScoreList(players);
 		for (var i=0; i<scoreList.length; i++) {
-			$("#resultTable").append('<tr><td>'+scoreList[i].player+'</td><td>'+scoreList[i].score+'</td></tr>');
+			$("#resultTable").append('<tr><td>'+scoreList[i].player+'</td><td>'+scoreList[i].score+'</td><td>Bestemmer seg...</td></tr>');
 		}
 		$("#dialogShowResult").dialog("open");
 	};
@@ -73,7 +109,7 @@ var eventhandler = new function() {
 	function onJoinedGame(event, game) {
 		console.log("Joined game!")
 		$('#title').text(game.mode.title);
-		
+
 	}
 
 	function onPlayerJoined(event, player) {
@@ -107,6 +143,8 @@ var eventhandler = new function() {
 			68: 'right',	// d
 			83: 'down',		// s
 	}
+
+
 	function keydown(event) {
 		var moveDirection = keyCodeNameMapper[event.keyCode];
 		if (moveDirection) communicator.emitMovement(moveDirection);
@@ -134,7 +172,7 @@ var eventhandler = new function() {
 		});
 
 	}
-	
+
 	function setRightSize() {
 		var middleContainer = $("#middlecontainer").width();
 		var containerWrapperW = $("#containerWrapper").width();

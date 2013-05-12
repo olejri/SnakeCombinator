@@ -190,7 +190,7 @@ function GameGUI(options) {
 			y: options.GSD*firstValZone.y,
 			width: options.GSD*options.validationZoneDim,
 			height: options.GSD*options.validationZoneDim,
-			stroke: 'green',
+			stroke: '#5C832F',
 			strokeWidth: 2,
 			cornerRadius: 4
 		});
@@ -353,14 +353,14 @@ BoardTextElement.prototype.addToLayer = function(layer, GSD) {
 			text : this.text,
 			fontSize: 13,
 			fontFamily: 'Calibri',
-			textFill: 'black',
+			textFill: '#363942',
 			fontStyle: 'bold',
 			align: 'center',
 			width: GSD,
 			height: GSD,
 			padding: 2,
-			fill: '#ddd',
-			stroke: 'black',
+			fill: '#363942',
+			stroke: '#363942',
 			strokeWidth: 1,
 			cornerRadius: 4,
 		});

@@ -4,19 +4,17 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=2.0, user-scalable=yes" />
 <title>Snake Combinator</title>
-<link href="jqueryui/css/le-frog/jquery-ui-1.10.2.custom.css" rel="stylesheet">
-<link media="Screen" href="styles.css" type="text/css" rel="stylesheet" />
-
+<link href="jqueryui/css/custom-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 <!--[if IEMobile]>
 <link rel="stylesheet" type="text/css" href="mobile.css" media="screen" />
 <![endif]-->
 <link media="handheld, only screen and (max-width: 480px), only screen and (max-device-width: 480px)" href="mobile.css" type="text/css" rel="stylesheet" />
-
 <script src="jqueryui/jquery-1.9.1.js"></script>
 <script src="jqueryui/jquery-ui-1.10.2.custom.js"></script>
 <script src="jqueryui/jquery.dataTables.js"></script>
 <link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
 
+<link media="Screen" href="styles.css" type="text/css" rel="stylesheet" />
 </head>
 <body>
 <div class="pagewrapper">
@@ -31,7 +29,7 @@
 			<table id="gamelobbytable">
 				<thead>
 					<tr>
-						<th>Navn</th>
+						<th title="Navnet på spillet">Navn</th>
 						<th>Antall spillere</th>
 						<th>Spillmodus</th>
 						<th>Status</th>
@@ -42,51 +40,60 @@
 					
 				</tbody>
 			</table>
+			<button id="refresh" title="Refresh spill lobbyen">
+				<img src="/images/refresh.png" width="20" height="20"/>
+			</button>
 		</div>
 		<!-- end of gamelobbyframe -->
 		
 		<div id="dialog">
+		
 			<div class ="leftcontainer" >
-				<p id="debugtest"> NAVN PÅ SPILLET </p>
+				<label class="textCenter"> NAVN PÅ SPILLET </label></br>
 				<input type="text" name="GameName" id="gamename"><br>
-				<p> SPILLEMODUS </p>
+				<label class="textCenter"> SPILLEMODUS  </label></br>
 			 	<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
-	           		<option value = "default">----------------</option>
-	           		<option value = "MATHMODE">Matte</option>
-	              	<option value = "SPELLINGMODE">Staving</option>
+	           		<option value="default">----------------</option>
+	           		<option value="MATHMODE">Matte</option>
+	              	<option value="SPELLINGMODE" title="Sett sammen bokstaver for å lage gyldige ord!">Staving</option>
 	          	</select><br>
-				<p> TEMA </p>
+				<label> TEMA </label> </br>
 			 	<select id = "modedataList">
 				 	<option value = "default">----------------</option>
 		        </select><br>
-				<p>  </p> <br>
+				<br>
 				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
 				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
 				 
 			</div>
 			<!-- end of leftcontainer -->
 			<div class ="rightcontainer" >
-				<p>PASSORD</p>
+				<label class="textCenter">PASSORD</label></br>
 				<input type="text" name="Password" id="password"><br>
-				<p>SPILLERE</p>
+				<label>SPILLERE</label>
 				<div> 
 					<div id="slider" ></div>
 					<input type="text" name="Players" id="players" value=2>
 				</div>
-				<p>KART STØRRELSE</p>
+				<label>KART STØRRELSE</label></br>
 				<select id = "mapsize">
 				 	<option value = "SMALL">Lite</option>
 				 	<option value = "MEDIUM">Medium</option>
 				 	<option value = "BIG">Stor</option>
-		        </select><br>
+		        </select></br>
+		       	<label>POENG</label> </br>
+		       	<input input="text" id="score" title="Bestem hvor mange poeng en spiller trenger for å vinne!"> </br>
+		        <label>TID</label> </br>
+	        	<input input="text" id="time" title="Velg antall minutter spillet skal vare" value="Evig"> </br>
+		        
 			</div>
 			<!-- end of rightcontainer -->
 		</div>
 		<!-- end of dialog -->
 		
-		<button class="buttongamelobby" id="menu">MENY</button> 
-		<button class="buttongamelobby" id="createit">LAG SPILL</button>
-		<button id="refresh">REFRESH</button>
+		<button class="buttongamelobby" id="menu" title="Tilbake til startmenyen">MENY</button> 
+		<button class="buttongamelobby" id="createit" title="Opprett et spill med gitte innstillinger">LAG SPILL</button>
+
 	</div>
 	<!-- end of middlediv -->
 	<div class ="rightdiv">

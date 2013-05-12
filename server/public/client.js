@@ -2,6 +2,7 @@
 var gui;
 var sgame;
 var utils = new Utils();
+var nick;
 //var communicator; In addition a communicator "singleton" created in communicator.js
 //var eventhandler; Singleton created in eventhandler.js
 
@@ -9,20 +10,29 @@ $(document).ready(function() {
 	$("#dialog").dialog({
 		autoOpen: false,
 		width: 430,
+		title: "Hva heter du?",
+		draggable: false,
 		buttons: [
 		          {
 		        	  text: "SPILL",
+		        	  title: "Husk at du må skrive inn navn",
 		        	  click: function() {
-		        		  connect();
-		        		  $( this ).dialog( "close" );
+		        		  var nick = $("#nickname").val();
+		        		  if(nick){
+		        			  connect();
+		        			  $(this).dialog("close");
+		        		  } else {
+
+		        		  }
 
 		        	  }
 		          },
 		          {
-		        	  text: "SLUTT",
+		        	  text: "TILBAKE",
+		        	  title: "Tilbake til spill lobbyen",
 		        	  click: function() {
-		        		  window.location = "http://www.vg.no"
-		        			  $( this ).dialog( "close" );
+		        		  window.location = "http://gribb.dyndns.org:8888/gamelobby"
+		        			  $(this).dialog("close");
 		        	  }
 		          }
 		          ]
@@ -45,30 +55,31 @@ $(document).ready(function() {
 	$("#dialogShowResult").dialog({
 		autoOpen: false,
 		width: 430,
+		title: "Spillet er ferdig!",
+		draggable: false,
 		buttons: [
 		          {
-		        	  text: $("#badcms").html(),
+		        	  text: "SPILL PÅ NYTT",
+		        	  title: "Klikk hvis du ønsker å spille det samme spillet en gang til!",
 		        	  click: function() {
-		        		  $( this ).dialog( "close" );
 		        		  sgame.resetGame();
 		        		  sgame.restartGame();
 
 		        	  }
 		          },
 		          {
-		        	  text: "MENY",
+		        	  text: "SPILL LOBBYEN",
+		        	  title: "Tilbake til spill lobbyen",
 		        	  click: function() {
-		        		  window.location = "http://gribb.dyndns.org:8888";
+		        		  window.location = "http://gribb.dyndns.org:8888/gamelobby";
 		        		  $( this ).dialog( "close" );
 		        	  }
 		          }
 		          ]
 	});
 
-
-
-
-
+	$(document).tooltip();
+	
 });
 
 $(window).resize(function() {
@@ -76,7 +87,7 @@ $(window).resize(function() {
 });
 
 function connect() {
-	var nick = $("#nickname").val();
+	nick = $("#nickname").val();
 	communicator.connect(function(serverGameObj){
 		// This callback is run when the game data has been received
 		sgame = new ClientSnakeGame();
@@ -124,10 +135,10 @@ function setRightSize() {
 	var newWidth = (containerWrapperW-middleContainer)/2;
 	var gameGui = $("#gamegui").height();
 	var header = $("#header").height();
-	
-	
+
+
 	console.log(middleContainer+":" + containerWrapperW +":"+ newWidth +":"+ containerWrapperH+":"+header);
-	
+
 
 
 	$("#leftcontainer").width(newWidth-1);
@@ -136,6 +147,7 @@ function setRightSize() {
 	$("#pageWrapper").height(containerWrapperH+header);
 
 }
+
 
 
 

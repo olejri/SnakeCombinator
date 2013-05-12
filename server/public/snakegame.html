@@ -2,20 +2,24 @@
 <html>
 <head>
 	<link rel="stylesheet" href="/styles.css" />
-	<link href="jqueryui/css/le-frog/jquery-ui-1.10.2.custom.css" rel="stylesheet">
+	<link href="jqueryui/css/custom-theme/jquery-ui-1.10.3.custom.css" rel="stylesheet">
 	<link href='http://fonts.googleapis.com/css?family=Special+Elite' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="jqueryui/jquery.countdown.css">
 	<meta charset="utf-8" />
 </head>
 <body>
 	<div id ="pageWrapper">
 		<div id="header" >
 		<h1 id="title"></h1>
+		<span id ="timer"></span>
 		</div> <!--  End of header --> 
 
 		<div id="containerWrapper">
 			<div id="leftcontainer">
-				<div id ="combatlog">
-				<b>Events that happen:</b>
+				<div>
+				<b class ="textInCW" >Spill-logg</b>
+					<div id ="combatlog">
+					</div>
 				</div>
 			</div> <!--  End of leftcontainer --> 
 			<div id="middlecontainer">
@@ -25,30 +29,30 @@
 					</div>
 				</div>
 				<div id="dialog">
-				<p id="nicklable">DITT NAVN</p> <br>
-					<input type="text" name="nick" id="nickname"><br>
+				<p id="nicklable">DITT NAVN</p>
+				<input type="text" name="nick" id="nickname" title="Skriv inn ditt navn">
 				</div>
 				
 				<audio id="eatSound" src="sounds/eat.mp3"></audio>
 				<div id="dialogShowResult">
 					<b id="winningPlayers"> </b>
-					<table>
-						<thead></thead>
+					<table id="gameoverTable">
+						<thead>
+							<tr>
+								<td>Navn</td><td>Poeng sum</td><td>Spill en gang til?</td>
+							</tr>
+						</thead>
 						<tbody id ="resultTable">
 										
 						</tbody>
 					</table>
 				</div>
-				
-			<div id="badcms" style="display:none">SPILL PÅ NYTT</div>
-			
-			
 			</div> <!--  End of middlecontainer --> 
 			
 			
 			<div id="rightcontainer">
 				<div id="players">
-					<b>Players:</b>
+					<b class ="textInCW">Spillere</b>
 					<div id="players2"></div> 
 				</div>
 			</div> <!--  End of rightcontainer -->
@@ -84,8 +88,9 @@
 	
 	
 	
-	
-    <script src="jqueryui/jquery-1.9.1.js"></script>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+	<script src="jqueryui/jquery.countdown.js"></script>
+   <!--  <script src="jqueryui/jquery-1.9.1.js"></script> -->
 	<script src="jqueryui/jquery-ui-1.10.2.custom.js"></script>
 	<script src="/socket.io/socket.io.js"></script>
 <!-- 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>  -->
