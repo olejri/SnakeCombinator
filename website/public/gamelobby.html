@@ -46,44 +46,52 @@
 		</div>
 		<!-- end of gamelobbyframe -->
 		
-		<div id="dialog">
+		<div id="dialog" class="dialogclass">
 		
 			<div class ="leftcontainer" >
 				<label class="textCenter"> NAVN PÅ SPILLET </label></br>
-				<input type="text" name="GameName" id="gamename"><br>
+				<input type="text" name="GameName" id="gamename" class="inputclass"><br>
 				<label class="textCenter"> SPILLEMODUS  </label></br>
-			 	<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
-	           		<option value="default">----------------</option>
-	           		<option value="MATHMODE">Matte</option>
-	              	<option value="SPELLINGMODE" title="Sett sammen bokstaver for å lage gyldige ord!">Staving</option>
-	          	</select><br>
+			 	<div class="styled"> 
+			 		<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
+			 			<option value="default" class="optionclass">Velg modus</option>
+	           			<option value="MATHMODE" class="optionclass">Matte</option>
+	         	  	   	<option value="SPELLINGMODE" class="optionclass">Staving</option>
+	         	 	</select>
+	          	</div>
 				<label> TEMA </label> </br>
-			 	<select id = "modedataList">
-				 	<option value = "default">----------------</option>
-		        </select><br>
+				<div class="styled">
+				 	<select id = "modedataList">
+			        </select>
+				</div> 
 				<br>
-				<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash">WALLCRASH<br>
-				<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup">HELPPOWERUP
-				 
+				<div>
+					<input id="wallcrash" type="checkbox" name="powerup" value="wallcrash" class="regular-checkbox"><label class = "labelclass">KRASJ I VEGGEN</label><br>
+					<input id="helppowerup" type="checkbox" name="powerup" value="helppowerup" class="regular-checkbox"><label class = "labelclass">HJELPEBUFF</label>
+				</div>
 			</div>
 			<!-- end of leftcontainer -->
 			<div class ="rightcontainer" >
 				<label class="textCenter">PASSORD</label></br>
-				<input type="text" name="Password" id="password"><br>
+				<input type="text" name="Password" id="password" class="inputclass"><br>
 				<label>SPILLERE</label>
-				<div> 
+				<div id="sliderdiv"> 
 					<div id="slider" ></div>
-					<input type="text" name="Players" id="players" value=2>
+					<label id="players">1</label>
 				</div>
+				
+				</br>
 				<label>KART STØRRELSE</label></br>
+				<div class="styled">
 				<select id = "mapsize">
-				 	<option value = "SMALL">Lite</option>
-				 	<option value = "MEDIUM">Medium</option>
-				 	<option value = "BIG">Stor</option>
-		        </select></br>
+				 	<option value = "SMALL" class="optionclass">Lite</option>
+				 	<option value = "MEDIUM" class="optionclass">Medium</option>
+				 	<option value = "BIG" class="optionclass">Stor</option>
+		        </select>
+		        </div>
 		       	<label>POENG</label> </br>
-		       	<input input="text" id="score" title="Bestem hvor mange poeng en spiller trenger for å vinne!"> </br>
-		        <label>TID</label> </br>
+		       	<input input="text" id="score" title="Bestem hvor mange poeng en spiller trenger for å vinne!" class="inputclass"> </br>
+		        <label>TID</label>
 	        	<input input="text" id="time" title="Velg antall minutter spillet skal vare" value="Evig"> </br>
 		        
 			</div>

@@ -128,6 +128,28 @@ body {
 }
 
 
+.inputclass {
+	background-color: #D8CAA8;
+	color: #363942;
+	border-radius: 15px;
+	width: 160px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: none;
+	margin-bottom: 12px;
+	font-family: 'Special Elite', cursive;
+}
+
+
+.dialogclass {
+	font-family: 'Special Elite', cursive;
+}
+
 .ui-tooltip {
     max-width: 400px;
 }
@@ -140,4 +162,93 @@ body {
 	color: #D8CAA8;
 }
 
+.styled select {
+  	background: transparent;
+   	width: 152px;
+   	padding: 5px;
+   	padding-top: 7px;
+	font-size: 20px;
+   	border: 1px solid  #D8CAA8;
+   	height: 34px;
+   	-webkit-appearance: none;
+   	color: #363942;
+   	font-family: 'Special Elite', cursive;
+} 
 
+.styled {
+  	background-image: url('images/arrowdown.png');
+  	width: 152px;	
+	height: 32px;
+	overflow: hidden;
+	background-color: #D8CAA8;
+	border-radius: 15px;
+	background-repeat:no-repeat;
+	background-position-x: 96%;
+	background-position-y: 56%;
+	margin-bottom: 16px;
+	 
+}
+
+.optionclass {
+	background-color: #D8CAA8;
+	color: #363942;
+	font-family: 'Special Elite', cursive;
+}
+
+
+#players{
+	float: right;
+	width: 0px;
+	margin-left: 14px;
+	margin-right: 5px;	
+}
+
+#slider {
+	width : 150px;
+	float : left;
+}
+
+#sliderdiv {
+	margin-bottom: 15px;
+}
+
+#time {
+	width: 60px;
+}
+
+
+.regular-checkbox {
+	-webkit-appearance: none;
+	background-color: #D8CAA8;
+	border: 1px solid #D8CAA8;;
+	box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05);
+	padding: 9px;
+	border-radius: 3px;
+	display: inline-block;
+	position: relative;
+}
+
+.regular-checkbox:active, .regular-checkbox:checked:active {
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px 1px 3px rgba(0,0,0,0.1);
+}
+
+.regular-checkbox:checked {
+    background-color: #D8CAA8;
+    border: 1px solid #adb8c0;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.05), inset 0px -15px 10px -12px rgba(0,0,0,0.05), inset 15px 10px -12px rgba(255,255,255,0.1);
+    color: #363942;
+}
+.regular-checkbox:checked:after {
+    content: '\2714';
+    font-size: 14px;
+    position: absolute;
+    top: 0px;
+    left: 3px;
+    color: #363942;
+}
+
+.labelclass {
+	position: relative;
+	top: -6px;
+	margin-left: 3px;
+}

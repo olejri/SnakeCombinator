@@ -52,8 +52,10 @@ $("document").ready(function() {
 		autoOpen: false,
 		title: "Lag spill",
 		draggable: false,
-		width: 600,
-		height: 610,
+		resizable: false,
+		position: {at : "center", my: "center bottom"},
+		width: 400,
+		height: 420,
 		buttons: [
 		          {
 		        	  text: "LAG SPILL!",
@@ -81,7 +83,7 @@ $("document").ready(function() {
 		min: 1,
 		max: 20,
 		slide: function( event, ui ) {
-			$("#players").val(ui.value);
+			$("#players").text(""+ui.value+"");
 		},
 	});
 
@@ -226,7 +228,7 @@ function fillModeDataList(){
 			console.log(response.response);
 			$('#modedataList').empty();
 			for (var i = 0; i < response.names.length; i++){
-				$('#modedataList').append('<option value = "'+response.names[i]+'">'+response.names[i]+'</option>');
+				$('#modedataList').append('<option value = "'+response.names[i]+'" class="optionclass">'+response.names[i]+'</option>');
 			}
 		}
 	});
