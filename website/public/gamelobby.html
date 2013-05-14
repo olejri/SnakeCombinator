@@ -51,6 +51,7 @@
 			<div class ="leftcontainer" >
 				<label class="textCenter"> NAVN PÅ SPILLET </label></br>
 				<input type="text" name="GameName" id="gamename" class="inputclass"><br>
+				<label id = "checkname"></label></br>
 				<label class="textCenter"> SPILLEMODUS  </label></br>
 			 	<div class="styled"> 
 			 		<select id="gamemodelist" onchange="if (this.selectedIndex) fillModeDataList();">
@@ -90,9 +91,9 @@
 		        </select>
 		        </div>
 		       	<label>POENG</label> </br>
-		       	<input input="text" id="score" title="Bestem hvor mange poeng en spiller trenger for å vinne!" class="inputclass"> </br>
+		       	<input input="text" id="score" title="Bestem hvor mange poeng en spiller trenger for å vinne!" class="inputclass" value="200"> </br>
 		        <label>TID</label>
-	        	<input input="text" id="time" title="Velg antall minutter spillet skal vare" value="Evig"> </br>
+	        	<input input="text" id="time" title="Velg antall minutter spillet skal vare" value="5"> </br>
 		        
 			</div>
 			<!-- end of rightcontainer -->

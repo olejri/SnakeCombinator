@@ -29,6 +29,7 @@ body {
 	background-color: #5C832F;
 	margin-left: auto;
 	margin-right: auto;
+	color: #D8CAA8;
 }
 
 .rightdiv
@@ -119,12 +120,39 @@ body {
 #temaP {
 	float: left;
 	position: relative;
-	top: -10px;
+	top: -21px;
+	padding: 6px;
+	font-size: 23px;
 }
 
 .textCenter {
 	position: relative;
 	text-align: center;
+}
+
+#spellingTable_filter {
+	
+}
+
+#spellingTable_filter label{
+	margin-left: -57px	
+}
+
+#spellingTable_filter input{
+	background-color: #284907;
+	color: #D8CAA8;
+	border-radius: 15px;
+	width: 160px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: none;
+	margin-bottom: 12px;
+	font-family: 'Special Elite', cursive;
 }
 
 
@@ -195,12 +223,25 @@ body {
 	font-family: 'Special Elite', cursive;
 }
 
+#checkSpelling{
+	color: #382513;
+}
+
+#checkwordspelling{
+	color: #382513;
+}
 
 #players{
 	float: right;
 	width: 0px;
 	margin-left: 14px;
 	margin-right: 5px;	
+}
+
+#addtheme {
+	float: right;
+	position: relative;
+	top: -52px;
 }
 
 #slider {
@@ -214,6 +255,12 @@ body {
 
 #time {
 	width: 60px;
+}
+
+#checkname {
+	font-size: 13px;
+	color: #382513;
+	margin-bottom: 5px;
 }
 
 

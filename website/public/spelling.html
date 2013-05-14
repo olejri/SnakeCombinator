@@ -29,13 +29,15 @@
 	
 		<div id="topdiv" >
 			<p id="temaP">TEMA</p>
-		 	<select id = "modedataList" onchange="fillArraySpelling(this);">
-			 	
-	        </select>
+			<div class="styled">
+		 		<select id = "modedataList" onchange="fillArraySpelling(this);">
+	        	</select>
+			</div>
 	       <button id="addtheme">NYTT TEMA</button>
 	       <div id="dialog">
 	       <label>NAVN</label>
-	       <input type="text" name="themename" id="addthemeinput">
+	       <input type="text" name="themename" id="addthemeinput" class="inputclass"></br>
+	       <label id="checkSpelling"></label>
 	       </div>
 	        
 		
@@ -60,8 +62,10 @@
 		<!-- end of bottomdiv -->
 		<div id ="inputDiv">
 			<label>Legg til ord</label>
-			<input type="text" name="Addword" id="addwordinput">
-			<button id="addButton">Legg til</button> </br>
+			<input type="text" name="Addword" id="addwordinput" class="inputclass">
+			<button id="addButton">Legg til</button> 
+			<label  id="checkwordspelling"></label>
+			</br>
 			<button id="saveButton">Lagre</button>
 			<button id="back">Tilbake</button>
 		</div>

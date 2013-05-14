@@ -53,15 +53,22 @@ $("document").ready(function() {
 		title: "Lag spill",
 		draggable: false,
 		resizable: false,
+		modal : true,
 		position: {at : "center", my: "center bottom"},
-		width: 400,
-		height: 420,
+		width: 440,
+		height: 440,
 		buttons: [
 		          {
 		        	  text: "LAG SPILL!",
 		        	  click: function() {
-		        		  creategame();
-		        		  $( this ).dialog( "close" );
+		        		  var check = checkInput();
+		        		  if(check.val){
+		        			  creategame();
+		        			  $( this ).dialog( "close" );
+		        		  } else {
+		        			  $("#checkname").text(check.msg);
+		        		  }
+		        		  
 
 		        	  }
 		          },
@@ -100,6 +107,12 @@ $("document").ready(function() {
 	  			$("#time").spinner("value", "Evig");
 	  		}
 	  },
+	});
+	
+	
+	$("#score").focusout(function() {
+		if ($("#score").val() > 1000) $("#score").val("1000");
+		if ($("#score").val() < 0 ) $("#score").val("0");
 	});
 	
 });
@@ -166,6 +179,34 @@ function goTO() {
 
 }
 
+
+
+
+function checkInput() {
+	var obj = {val : true, msg: "OK"}
+	var gamename = $("#gamename").val();
+	var gamemodename = $("#gamemodelist").val();
+	
+	if (gamename == "") {
+		obj.val = false;
+		obj.msg = "Du må ha spillnavn!";
+		return obj;
+	}
+	
+	if (gamename.indexOf(' ') >= 0) {
+		obj.val = false;
+		obj.msg = "Ingen mellomrom i spillnavnet!";
+		return obj;
+	}
+	
+	if (gamemodename == "default"){
+		obj.val = false;
+		obj.msg = "Husk på å velg spillmodus";
+		return obj;
+	}
+	return obj; 
+}
+
 /**
  * Starting a new node server and creating a game
  */
@@ -179,7 +220,7 @@ function creategame() {
 			gamemodename: $("#gamemodelist").val(),
 			gamemodedata: $("#modedataList").val(),
 			password: $("#password").val(), 
-			players: $("#players").val(),
+			players: $("#players").text(),
 			mapsize: $("#mapsize").val(),
 			wallcrash: $("#wallcrash:checked").val(),
 			helppowerup: $("#helppowerup:checked").val(),
