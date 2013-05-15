@@ -83,3 +83,34 @@ function test(name) {
 	});
 
 }
+
+function test2(name) {
+	$.ajax({
+		type: "POST",
+		url: "./testRemove2",
+		data: {
+			name : name
+		},
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+		}
+	});
+
+}
+
+
+function test3() {
+	$.ajax({
+		type: "POST",
+		url: "./testRemove3",
+		data: {
+		},
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+		}
+	});
+
+}
+

@@ -56,7 +56,7 @@ $("document").ready(function() {
 		modal : true,
 		position: {at : "center", my: "center bottom"},
 		width: 440,
-		height: 440,
+		height: 500,
 		buttons: [
 		          {
 		        	  text: "LAG SPILL!",
@@ -227,6 +227,8 @@ function creategame() {
 			adress: "http://" +location.host +"/",
 			score: $("#score").val(),
 			time: $("#time").val(),
+			crashother: $("#crashother:checked").val(),
+			crashself: $("#crashself:checked").val(),
 		},
 		dataType: "json",
 		success: function(response) {

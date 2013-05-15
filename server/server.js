@@ -176,6 +176,8 @@ io.sockets.on('connection', function (socket) {
 			console.log("GAME ENDED");
 			
 		});
+		
+		
 
 	});
 
@@ -265,6 +267,8 @@ function createGame(content) {
 	var password = myArgs[7];
 	var score = myArgs[9];
 	var time = myArgs[10];
+	var crashotherInput = myArgs[11];
+	var crashselfInput = myArgs[12];
 	if (time == "Evig") time = 0;
 
 	//setting gameGUI size
@@ -279,6 +283,8 @@ function createGame(content) {
 	//setting gamemode and powerups
 	var gameMode;
 	var wallcrash = true;
+	var selfcrash = false;
+	var othercrash = false;
 	var helpPowerUp = false;
 
 	if (gameModeName == "SPELLINGMODE"){
@@ -299,6 +305,15 @@ function createGame(content) {
 	if (wallcrashInput == "wallcrash"){
 		wallcrash = false;
 	}
+	
+	if (crashotherInput == "crashother"){
+		othercrash = true;
+	}
+
+	if (crashselfInput == "crashself"){
+		selfcrash = true;
+	}
+
 
 	if (helppowerupInput == "helppowerup"){
 		helpPowerUp = true;
@@ -312,8 +327,8 @@ function createGame(content) {
 		'playersToStart': playersToStart,
 		'speed': 3,
 		'foodSpawnRate': 5,
-		'selfCrashAllowed': false,
-		'otherCrashAllowed': false,
+		'selfCrashAllowed': selfcrash,
+		'otherCrashAllowed': othercrash,
 		'teleportationAllowed': wallcrash,
 		'score' : score,
 		'helpPowerUp' : helpPowerUp,
@@ -343,9 +358,9 @@ function createGame(content) {
 		sgame.started = false;
 		sgame.resetGame();
 	});
-
-
-
+	
+	
+	
 };
 
 /**

@@ -17,8 +17,7 @@ $("document").ready(function() {
 			"sInfo": "Det er totalt _TOTAL_ ord i dette tema!",
 			"sInfoEmpty": "Ingen ord",
 			"sInfoFiltered": "Filtrert etter spill",
-			"sFilter" : "Søk",
-			"sSearch": "Søk: "
+			"sFilter" : "Søk"
 		},
 		"bPaginate": false,
 		"bLengthChange": true,
@@ -26,7 +25,7 @@ $("document").ready(function() {
 		"bSort": true,
 		"bInfo": true,
 		"bAutoWidth": true,
-		"sScrollY": "250px",
+		"sScrollY": "300px",
 		"bScrollCollapse": false
 
 	});
@@ -72,31 +71,12 @@ $("document").ready(function() {
 	$( "#dialog" ).dialog({
 		autoOpen: false,
 		width: 430,
-		title: "Navn til tema",
-		draggable: false,
-		resizable: false,
-		modal : true,
-		position: {at : "center", my: "center bottom"},
 		buttons: [
 		          {
 		        	  text: "LAG TEMA!",
 		        	  click: function() {
-		        		 var themename = $("#addthemeinput").val();
-		        		 var check = true;
-		        		
-		        		 if (themename == 0) {
-		        			 $("#checkSpelling").text("Du må skirve inn et navn!");
-		        			 check = false;
-		        		 }
-		        		 if (themename.indexOf(' ') >= 0) {
-		        			 $("#checkSpelling").text("Ingen mellomrom!");
-		        			 check = false;
-		        		 }
-		        		  
-		        		 if (check){
-		        			 addTheme();
-		        			 $( this ).dialog( "close" );
-		        		 }
+		        		  addTheme();
+		        		  $( this ).dialog( "close" );
 
 		        	  }
 		          },
@@ -109,8 +89,7 @@ $("document").ready(function() {
 		          ]
 	});
 	
-	
-	
+
 });
 
 
@@ -139,10 +118,10 @@ function fillModeDataList(){
 			$('#modedataList').empty();
 			for (var i = 0; i < response.names.length; i++){
 				if(i == 0){
-					$('#modedataList').append('<option value = "'+response.names[i]+' "class="optionclass">'+response.names[i]+'</option>');
+					$('#modedataList').append('<option value = "'+response.names[i]+'">'+response.names[i]+'</option>');
 					initFillArraySpelling(response.names[i]);
 				}else{
-					$('#modedataList').append('<option value = "'+response.names[i]+' "class="optionclass">'+response.names[i]+'</option>');
+					$('#modedataList').append('<option value = "'+response.names[i]+'">'+response.names[i]+'</option>');
 				}
 			}
 		}
@@ -196,31 +175,16 @@ function addToTable(content) {
 
 
 function addAWordToTable() {
-	 var check = true;
-	 var word = $("#addwordinput").val();	
-	 if (word == 0) {
-		 $("#checkwordspelling").text("Du må skirve inn et ord!");
-		 check = false;
-	 }
-	 if (word.indexOf(' ') >= 0) {
-		 $("#checkwordspelling").text("Ingen mellomrom!");
-		 check = false;
-	 }
-	
-	
-	if (check) {
-		var index = spellingTable.fnSettings().fnRecordsTotal();
-		console.log(index);
-		spellingTable.fnAddData([
-		                         word,
-		                         '<button class="spellingButtons" onClick="removeRowFromTable('+index+')"> Fjern </button>'
-		                         ]);
-		$(".spellingButtons").button();
-		//$(".spellingButtons").bind('click', this, removeRowFromTable);
-		$("#addwordinput").val("");
-	}
-	
-	
+	var word = $("#addwordinput").val();
+	var index = spellingTable.fnSettings().fnRecordsTotal();
+	console.log(index);
+	spellingTable.fnAddData([
+	                         word,
+	                         '<button class="spellingButtons" onClick="removeRowFromTable('+index+')"> Fjern </button>'
+	                         ]);
+	$(".spellingButtons").button();
+	//$(".spellingButtons").bind('click', this, removeRowFromTable);
+	$("#addwordinput").val("");
 
 }
 
@@ -265,5 +229,4 @@ function saveArray(name, content) {
 		}
 	});
 };
-
 

@@ -81,7 +81,7 @@ app.post('/startnode', function(req, res) {
 			+ req.body.players +  ":"
 			+ req.body.mapsize);
 
-	startnode(res, req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.wallcrash, req.body.helppowerup , req.body.password, req.body.players, req.body.mapsize, req.body.score, req.body.time);
+	startnode(res, req.body.gamename, req.body.gamemodename, req.body.gamemodedata, req.body.wallcrash, req.body.helppowerup , req.body.password, req.body.players, req.body.mapsize, req.body.score, req.body.time, req.body.crashother, req.body.crashself);
 
 });
 
@@ -209,6 +209,7 @@ app.post('/fillModeDataList', function(req, res) {
 app.post('/fillArray', function(req, res) {
 	var query = {name : req.body.name};
 	SpellingText.find(query , function(err, items) {
+		console.log(items);
 		if (items.length > 0) {
 			res.send({respones: 'success', content: items[0].content});	
 		}else {
@@ -320,7 +321,51 @@ app.post('/testRemove', function(req, res) {
 				}
 			});
 		} else {
-			console.log("notrhing to remove");
+			console.log("nothing to remove");
+		}
+	});
+});
+
+app.post('/testRemove2', function(req, res) {
+	res.contentType('json');
+	var query = {};
+	SpellingText.find(query , function(err, item) {
+		console.log("Found");
+		console.log(item);
+		if (item) {
+			for (var i = 0; i < item.length; i++){
+				item[i].remove(function(err) {
+					if(err){
+						res = {response: 'fail', error: err};
+					}else {
+						console.log("Remove " + item.name + " from database");
+					}
+				});
+			}
+		} else {
+			console.log("nothing to remove");
+		}
+	});
+});
+
+app.post('/testRemove3', function(req, res) {
+	res.contentType('json');
+	var query = {};
+	SpellingText.find(query , function(err, item) {
+		console.log("Found");
+		console.log(item);
+		if (item) {
+			for (var i = 0; i < item.length; i++){
+				item[i].remove(function(err) {
+					if(err){
+						res = {response: 'fail', error: err};
+					}else {
+						console.log("Remove " + item.name + " from database");
+					}
+				});
+			}
+		} else {
+			console.log("nothing to remove");
 		}
 	});
 });
@@ -329,17 +374,16 @@ app.post('/testRemove', function(req, res) {
 
 
 
-
 //starting a new "game" server
 
-function startnode(res, gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize, score, time) {
+function startnode(res, gamename, gamemodename, gamemodedata, wallcrash, helppowerup, password, players, mapsize, score, time, crashother, crashself) {
 	console.log("Trying to spawn node js server");
 	portfinder.getPort(function (err, port) {
 		if(!password) password = "default";
 		if(!score) score = 0;
 
 
-		child = exec("node ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename+ " "+score+" "+time+"", function (error, stdout, stderr) {
+		child = exec("node ../server/server.js " + port + " " +gamemodename+ " " +gamemodedata+ " " +players+ " "+mapsize+ " "+wallcrash+" "+helppowerup+" "+password+" "+ gamename+ " "+score+" "+time+" "+crashother+" "+crashself+"", function (error, stdout, stderr) {
 			sys.print('stdout: ' + stdout);
 			sys.print('stderr: ' + stderr);
 			if (error !== null) {
