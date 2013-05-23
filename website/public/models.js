@@ -46,7 +46,25 @@ var GameServer = mongoose.model('GameSever', gameServerSchema);
 
 
 
+//**************  Saved game model *****************
+var savedGameSchema = mongoose.Schema({
+	date : String,
+	gametime : Number,
+	gamescore : Number,
+	gamename : String,
+	gamemode : String,
+	themename : String,
+	players : [{
+		playername : String,
+		score : Number,
+		words : [{
+			text: String
+		}]
+	}]
+});
 
+
+var SavedGame = mongoose.model('SavedGame', savedGameSchema);
 
 
 
@@ -55,5 +73,6 @@ var GameServer = mongoose.model('GameSever', gameServerSchema);
 module.exports = {
 		SpellingText : SpellingText,
 		MathText : MathText,
-		GameServer : GameServer
+		GameServer : GameServer,
+		SavedGame : SavedGame
 }

@@ -3,7 +3,7 @@
 var SpellingText = require("./public/models").SpellingText;
 var MathText = require("./public/models").MathText;
 var GameServer = require("./public/models").GameServer;
-
+var SavedGame = require("./public/models").SavedGame;
 
 //http server
 var http = require("http");
@@ -55,6 +55,14 @@ app.get('/levelmanager', function (req, res) {
 
 app.get('/spelling', function (req, res) {
 	res.sendfile(__dirname + '/public/spelling.html');
+});
+
+app.get('/statistics', function (req, res) {
+	res.sendfile(__dirname + '/public/statistics.html');
+});
+
+app.get('/tutorial', function (req, res) {
+	res.sendfile(__dirname + '/public/tutorial.html');
 });
 
 app.get('/math', function (req, res) {
@@ -351,7 +359,7 @@ app.post('/testRemove2', function(req, res) {
 app.post('/testRemove3', function(req, res) {
 	res.contentType('json');
 	var query = {};
-	SpellingText.find(query , function(err, item) {
+	SavedGame.find(query , function(err, item) {
 		console.log("Found");
 		console.log(item);
 		if (item) {
@@ -360,13 +368,93 @@ app.post('/testRemove3', function(req, res) {
 					if(err){
 						res = {response: 'fail', error: err};
 					}else {
-						console.log("Remove " + item.name + " from database");
+						console.log("Remove " + item.gamename + " from database");
 					}
 				});
 			}
 		} else {
 			console.log("nothing to remove");
 		}
+	});
+});
+
+
+app.post('/findSavedGamesByName', function(req, res) {
+	res.contentType('json');
+	var query = {};
+	var results = [];
+	
+	console.log("FINDSAVEDGAMESBYNAME");
+	SavedGame.find(query, function(err, item) {
+		if (item) {
+			for ( var i = 0; i < item.length; i++){
+				for (var k = 0; k <item[i].players.length; k++){
+					if (item[i].players[k].playername == req.body.nick){
+						results.push({gamename : item[i].gamename,
+							date : item[i].date,
+							gametime : item[i].gametime,
+							gamescore :item[i].gamescore,
+							gamemode : item[i].gamemode,
+							themename : item[i].themename,
+							playername: req.body.nick,
+							score : item[i].players[k].score,
+							words : item[i].players[k].words});
+					}
+				}
+			
+			}
+			
+			res.send(results);
+			
+		} else {
+			console.log("zero saved game in database");
+		}
+	});
+//	SavedGame.find(query , function(err, item) {
+//		if (item) {
+//			console.log("SKJER");
+//			console.log(item[0].players[0].words.length);
+//			
+//		} else {
+//			console.log("zero saved game in database");
+//		}
+//	});
+});
+
+app.post('/addSavedGame', function(req, res) {
+	
+	var date = new Date();
+	var min = date.getMinutes();
+	var hours = date.getHours();
+	var day = date.getDate();
+	var month = date.getMonth()+1;
+	var year = date.getFullYear();
+	var dateString = hours+":"+min+ " " + day+"/"+month+"/"+year; 
+	
+	var words = [{text : "NORGE"}, { text : "DANMARK"}, {text : "FINLAND"}]
+	var players = [{playername : "ole", score : 145, words : words},
+	               {playername : "lars", score : 245, words : words},
+	               {playername : "per", score : 45, words : words},
+	               {playername : "kine", score : 305, words : words}]
+	
+	var savedGame = new SavedGame({
+		date : dateString,
+		gametime : 5,
+		gamescore : 200,
+		gamename : "Test1",
+		gamemode : "SPELLINGMODE",
+		themename : "Land",
+		players : players 
+	});
+	
+	
+	savedGame.save(function(err, product) {
+		if(err) {
+			console.log(err);
+		} else {
+			console.log("Added " + product.gamename + " to database");
+		}
+
 	});
 });
 

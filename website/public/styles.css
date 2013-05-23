@@ -67,14 +67,27 @@ body {
 	font-family: 'Special Elite', cursive;	
 }
 
+
+#tutorial{
+	top: 70px;
+}
+
 #gamelobby
 {
-	top: 70px;
+	top: 80px;
 }
 
 #levelmanager
 {
-	top: 80px;
+	top: 90px;
+}
+
+#statistics {
+	top: 100px;
+}
+
+#about{
+	top: 110px;
 }
 
 #spellingbutton {
@@ -89,6 +102,36 @@ body {
 	top :90px;
 }
 
+#left {
+	float: left;
+}
+
+#right {
+	float: right;
+}
+
+#tutorialText {
+	float : right;
+	margin-top: 52px;
+	padding-right: 3px;
+}
+
+#frameForPictures{
+	width: 600px;
+	height: 400px;
+}
+
+#frameForPicturesLeft{
+	float: left;
+	width: 400px;
+	height: 400px;
+}
+
+#frameForPicturesRight{
+	float: right;
+	width: 200px;
+	height: 400px;
+}
 
 .buttongamelobby {
 	position: relative;
@@ -238,6 +281,14 @@ body {
 	margin-right: 5px;	
 }
 
+#findByName{
+	float: right;
+	position: relative;
+	top: -36px;
+	left: -204px;
+	font-size: 12px;
+}
+
 #addtheme {
 	float: right;
 	position: relative;
@@ -247,6 +298,12 @@ body {
 #slider {
 	width : 150px;
 	float : left;
+}
+
+#back {
+	position: relative;
+	left: 260px;
+	top: 15px;
 }
 
 #sliderdiv {

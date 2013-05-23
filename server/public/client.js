@@ -134,12 +134,6 @@ function setRightSize() {
 	var newWidth = (containerWrapperW-middleContainer)/2;
 	var gameGui = $("#gamegui").height();
 	var header = $("#header").height();
-
-
-	console.log(middleContainer+":" + containerWrapperW +":"+ newWidth +":"+ containerWrapperH+":"+header);
-
-
-
 	$("#leftcontainer").width(newWidth-1);
 	$("#rightcontainer").width(newWidth+0.5);
 	$("#containerWrapper").height(gameGui+50);

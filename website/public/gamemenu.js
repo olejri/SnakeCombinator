@@ -3,12 +3,43 @@ $("document").ready(function() {
 	/**
 	 * Binding buttons
 	 */
+	$('#tutorial').button()
+	.bind('click', "tutorial", redirect);
+	
 	$('#gamelobby').button()
 	.bind('click', "gamelobby", redirect);
 
 	$('#levelmanager').button()
 	.bind('click', "levelmanager", redirect);
 
+	$('#statistics').button()
+	.bind('click', "statistics", redirect);
+	
+	$('#about').button()
+	.bind('click', "", about);
+	
+	
+	$( "#dialog" ).dialog({
+		autoOpen: false,
+		title: "Om Snake Combinator",
+		draggable: false,
+		resizable: false,
+		modal : true,
+		position: {at : "center", my: "center bottom"},
+		width: 440,
+		height: 510,
+		buttons: [
+		          {
+		        	  text: "TILBAKE",
+		        	  click: function() {
+		        		  $( this ).dialog( "close" );
+		        	  }
+		          }
+		          ]
+	});
+
+	
+	
 	/**
 	 * testing
 	 */
@@ -33,6 +64,35 @@ function redirect(url) {
 function getip(json){
 	alert(json.ip); // alerts the ip address
 }
+
+
+
+function about() {
+	$("#aboutText").empty();
+	$("#aboutText").append("<p> Snake Combinator er en læringsplattform basert på den klassiske versjon av Snake. Du som spiller skal ved hjelp av en slange prøve å validere forskjellige kombinasjoner	av tall eller bokstaver ved å spise dem opp.  Den spilleren som klarer å få mest riktig kombinasjoner vinner. Du som spiller har muligheten til å lage egne temaer med egendefinerte ord som du og dine venner kan spille." +
+			"</p>");
+	$("#aboutText").append("<p>Snake Combinator er utviklet av: </br> Ole Jørgen Rishoff</p>");
+	$("#aboutText").append("<p>Konsept av: Alf Inge Wang</p>");
+	
+	
+	$("#dialog").dialog("open");
+	
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //testing hide and show
 
@@ -104,6 +164,35 @@ function test3() {
 	$.ajax({
 		type: "POST",
 		url: "./testRemove3",
+		data: {
+		},
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+		}
+	});
+
+}
+
+function loadSave(nick) {
+	$.ajax({
+		type: "POST",
+		url: "./findSavedGamesByName",
+		data: {
+			nick : nick
+		},
+		dataType: "json",
+		success: function(response) {
+			console.log(response);
+		}
+	});
+
+}
+
+function save() {
+	$.ajax({
+		type: "POST",
+		url: "./addSavedGame",
 		data: {
 		},
 		dataType: "json",

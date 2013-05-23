@@ -3,6 +3,7 @@
 var SpellingText = require("./public/models").SpellingText;
 var MathText = require("./public/models").MathText;
 var GameServer = require("./public/models").GameServer;
+var SavedGame = require("./public/models").SavedGame;
 
 /** SECTION 1: Create the node, express and socket.io setup **/
 /*************************************************************/
@@ -170,11 +171,7 @@ io.sockets.on('connection', function (socket) {
 			console.log("gameover");
 			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
 			io.sockets.emit('sendResult', result);
-			clearInterval(sgame.runGameInterval);
-			sgame.started = false;
-			sgame.resetGame();
-			console.log("GAME ENDED");
-			
+			saveGame();
 		});
 		
 		
@@ -354,9 +351,7 @@ function createGame(content) {
 	$(sgame).on("gameOver", function(event, result) {
 		console.log("gameover");
 		io.sockets.emit('sendResult', result);
-		clearInterval(sgame.runGameInterval);
-		sgame.started = false;
-		sgame.resetGame();
+		saveGame();
 	});
 	
 	
@@ -449,6 +444,50 @@ function timeAttack() {
 	if (time != "Evig"){
 		io.sockets.emit('startClock', getMilli);
 	}
+}
+
+
+
+function saveGame(){
+	var date = new Date();
+	var min = date.getMinutes();
+	var hours = date.getHours();
+	var day = date.getDate();
+	var month = date.getMonth()+1;
+	var year = date.getFullYear();
+	var dateString = hours+":"+min+ " " + day+"/"+month+"/"+year; 
+	var players = [];
+	for(var i = 0; i < sgame.players.length; i++){
+		var words = [];
+		for(var k = 0; k < sgame.players[i].validated.length; k++){
+			words.push({text : sgame.players[i].validated[k]});
+		}
+		
+		var player = {playername : sgame.players[i].nick.toLowerCase(), score : sgame.players[i].score, words : words}
+		players.push(player);
+	}
+	
+	var savedGame = new SavedGame({
+		date : dateString,
+		gametime : myArgs[10],
+		gamescore : myArgs[9],
+		gamename : myArgs[8],
+		gamemode : myArgs[1],
+		themename : myArgs[2],
+		players : players 
+	});
+	
+	savedGame.save(function(err, product) {
+		if(err) {
+			console.log("ERROR = " + err);
+		} else {
+			console.log("Saved " + product.gamename + " to database with " +product.players.length+ " players");
+			clearInterval(sgame.runGameInterval);
+			sgame.started = false;
+			sgame.resetGame();
+		}
+
+	});
 }
 
 

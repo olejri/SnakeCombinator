@@ -34,6 +34,10 @@ SpellingMode.prototype.validateSnake = function(player, snake) {
 };
 
 SpellingMode.prototype.getHelp = function(string) {
+	if (string == "") {
+		var randWord = this.words[utils.rand(0,this.words.length-1)].toUpperCase();
+		return  {'append':false, 'string':randWord[0]+randWord[1]};
+	}
 	for (var k=0; k < this.words.length; k++){
 		if (string.toUpperCase() == (this.words[k].substring(0, string.length)).toUpperCase()) {
 			return {'append':true, 'string':this.words[k].substring(string.length, string.length+2).toUpperCase()};
@@ -41,9 +45,6 @@ SpellingMode.prototype.getHelp = function(string) {
 	}
 	var randWord = this.words[utils.rand(0,this.words.length-1)].toUpperCase();
 	return  {'append':false, 'string':randWord[0]+randWord[1]};
-
-	
-	
 }
 
 
