@@ -317,6 +317,20 @@ body {
 	font-size: 15px;
 }
 
+#backTutorial{
+	position: relative;
+	left: 170px;
+	top: 1px;
+	font-size: 15px;
+}
+
+#backStats{
+	position: relative;
+	left: 254px;
+	top: 16px;
+	font-size: 15px;
+}
+
 #sliderdiv {
 	margin-bottom: 15px;
 }

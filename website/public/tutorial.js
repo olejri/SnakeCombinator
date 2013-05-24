@@ -21,7 +21,7 @@ $("document").ready(function() {
 	
 	
 	
-	$('#back').button()
+	$('#backTutorial').button()
 	.bind('click', "", redirect);
 
 

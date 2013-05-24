@@ -50,7 +50,7 @@ $("document").ready(function() {
 	$('#findByName').button()
 	.bind('click', "", findInDB);
 
-	$('#back').button()
+	$('#backStats').button()
 	.bind('click', "", redirect);
 
 
