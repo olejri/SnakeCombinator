@@ -67,7 +67,12 @@ ServerSnakeGame.prototype.checkForTeleportation = function(){
 ServerSnakeGame.prototype.enablePowerUps = function() {
 	var self = this;
 	SnakeGame.prototype.enablePowerUps.call(this, function(player) {
-		self.getWordForHelpPowerUp(player);
+		if(player.buff == "help"){
+			self.getWordForHelpPowerUp(player);
+		}
+		else if (player.buff == "fast"){
+			self.setFastSpawn();
+		}
 
 	});
 }
@@ -145,6 +150,16 @@ ServerSnakeGame.prototype.checkForPlayerWon = function(player) {
 };
 
 
+ServerSnakeGame.prototype.setFastSpawn = function() {
+	var foodSpawnRate = this.settings.foodSpawnRate;
+	this.settings.foodSpawnRate = 10
+	var self = this;
+	setTimeout(function(){
+		self.settings.foodSpawnRate = foodSpawnRate;
+	},10000);
+};
+
+
 
 
 
@@ -171,6 +186,7 @@ SnakeGame.prototype.rollForFoodSpawn = function() {
 			if(this.settings.helpPowerUp){
 				if (this.settings.powerUpSpawnRate < this.savedPowerUpSpawnChance) {
 					this.savedPowerUpSpawnChance = 0;
+					
 					return this.getRandomPowerUp(foodPos);
 				}
 			}
@@ -233,9 +249,23 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 }
 
 SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
+	var random = "1222222333333333";	
+	var ran = random[utils.rand(0,random.length-1)];
+	
+	console.log("RAN = " +ran);
+	
+	if (ran == "1"){
+		powerUp.details = "fast";
+		powerUp.type = "powerup";
+		return powerUp;
+	} else if (ran == "2"){
 		powerUp.details = "help";
 		powerUp.type = "powerup";
-	return powerUp;
+		return powerUp;
+	} else {
+		
+		return this.mode.convertToModeFood(powerUp);
+	}
 
 };
 

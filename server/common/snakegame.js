@@ -50,7 +50,7 @@ SnakeGame.prototype.applyTick = function(newTick) {
 	this.checkForTeleportation(this.settings.teleportationAllowed);
 	this.checkForValidation();
 	this.enablePowerUps();
-	
+
 	//this.checkForRespawn();
 	//this.checkForGameOver();
 	//	this.testForId();
@@ -115,7 +115,7 @@ SnakeGame.prototype.checkForTeleportation = function(callback) {
 					if (foodEaten) $(this).trigger("foodeaten", foodEaten);
 				}
 				else{
-				var newScore = this.players[i].killSnake();
+					var newScore = this.players[i].killSnake();
 					if(callback){
 						callback(this.players[i]);
 					}
@@ -148,7 +148,7 @@ SnakeGame.prototype.checkForValidation = function(callback) {
 							console.log("insidecallback");
 							callback(player);
 						}
-						
+
 					}else {
 						$(this).trigger("validationfailure", {'player': this.players[i], 'word': word.word, 'score' : word.score.score});
 						snake.removeAndAwardParts(0);
@@ -163,8 +163,6 @@ SnakeGame.prototype.checkForValidation = function(callback) {
 	}
 
 };
-
-
 
 SnakeGame.prototype.enablePowerUps = function(callback) {
 	for (var s=0; s<this.players.length; s++){
@@ -183,18 +181,27 @@ SnakeGame.prototype.enablePowerUps = function(callback) {
 						}
 					}
 					if(callback){
-						var player = {'player' : this.players[s], 'string' : snakeText, 'indexOfLastPlain' : indexOfLastPlain};
+						var player = {'player' : this.players[s], 'string' : snakeText, 'indexOfLastPlain' : indexOfLastPlain, 'buff' : "help"};
 						callback(player);
 					}
-					
-					
-					
-					
+
+
+
+
 					snake.powerup = "zero";
 				}
-				
-			}
-			
+				else if (snake.powerup == "fast") {
+					snake.powerup = "zero";
+					var foodSpawnRate = this.settings.foodSpawnRate;
+					this.settings.foodSpawnRate = 0.1;
+					var self = this;
+					setTimeout(function(){
+						self.settings.foodSpawnRate = foodSpawnRate;
+					},3000);
+				}
+
+			} 
+
 		}
 	}
 
@@ -211,13 +218,13 @@ SnakeGame.prototype.respawn = function(pos) {
 }
 
 SnakeGame.prototype.enableHelp = function(result) {
-	
+
 	for (var i=0; i<this.players.length; i++){
 		if (this.players[i].id == result.playerID){
 			this.players[i].setHelpPowerUp(result);
 		}
 	}
-	
+
 };
 
 
@@ -269,7 +276,7 @@ SnakeGame.prototype.testForId = function() {
 			console.log(this.players[i].id + "==" + this.socketId);
 		}
 	}
-	
+
 }
 
 

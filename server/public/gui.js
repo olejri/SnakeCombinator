@@ -258,6 +258,7 @@ BoardImageElement.prototype.loadImages = function() {
 			tail: 'snaketail_v01_right.png',
 			snakesprite: 'Snake_sprite_v01.png',
 			help: 'info.png',
+			fast: 'fast.png',
 	};
 	var images = {};
 	var loadedImages = 0;
