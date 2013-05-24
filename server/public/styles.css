@@ -119,12 +119,22 @@ p.margin2 {
 		
 }
 
+#gameInfoList{
+	width: 206px;
+	height: 297px;
+	float: right;
+	position: relative;
+	top: -61px;
+	
+}
+
 
 .center_outer {
 margin-top: 235px;
 position: absolute;
 float: left;
 left: 50%;
+color: black;
 } /* USE TOGETHER */
 
 
@@ -152,6 +162,23 @@ left: 50%;
 	float: right;
 	margin-right: 31%;
 	margin-top: 3%;
+}
+
+.inputclass {
+	background-color: #D8CAA8;
+	color: #363942;
+	border-radius: 15px;
+	width: 160px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	padding-left: 8px;
+	padding-right: 8px;
+	padding-top: 3px;
+	padding-bottom: 3px;
+	border: none;
+	margin-bottom: 12px;
+	font-family: 'Special Elite', cursive;
 }
 
 

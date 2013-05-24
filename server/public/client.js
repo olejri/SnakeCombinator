@@ -10,8 +10,14 @@ $(document).ready(function() {
 	$("#dialog").dialog({
 		autoOpen: false,
 		width: 430,
+		height: 450,
+		resizable: false,
+		modal : true,
 		title: "Hva heter du?",
 		draggable: false,
+		 open: function (event, ui) {
+			    $('#dialog').css('overflow', 'hidden'); //this line does the actual hiding
+			  },
 		buttons: [
 		          {
 		        	  text: "SPILL",
@@ -46,11 +52,8 @@ $(document).ready(function() {
 			$( this ).dialog( "close" );
 		}
 	});
-	$( "#dialog" ).dialog( "open" );
-
-
-
-
+	pullInfo();
+	
 
 	$("#dialogShowResult").dialog({
 		autoOpen: false,
@@ -140,6 +143,17 @@ function setRightSize() {
 	$("#pageWrapper").height(containerWrapperH+header);
 
 }
+
+
+
+
+function pullInfo(){
+	communicator.getInfoAboutGame();
+}
+
+
+
+
 
 
 

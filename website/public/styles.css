@@ -173,6 +173,11 @@ body {
 	text-align: center;
 }
 
+
+.spellingButtons{
+	font-size: 15px;
+}
+
 #spellingTable_filter {
 	
 }
@@ -300,10 +305,16 @@ body {
 	float : left;
 }
 
+
+#addButton{
+	font-size: 15px;
+}
+
 #back {
 	position: relative;
-	left: 260px;
-	top: 15px;
+	left: 423px;
+	top: -39px;
+	font-size: 15px;
 }
 
 #sliderdiv {

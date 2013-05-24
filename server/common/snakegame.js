@@ -68,7 +68,7 @@ SnakeGame.prototype.checkForSelfCrash = function(callback) {
 				if(callback){
 					callback(this.players[i]);
 				}
-				$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
+				$(this).trigger("snakedied", {'player' : this.players[i], 'score' : newScore});
 			}
 		}
 	}
@@ -86,7 +86,7 @@ SnakeGame.prototype.checkForCrash = function(callback) {
 				if (!snake) continue;
 				else if (snake.hasPartAtPosition(head.x, head.y)) {
 					var newScore = this.players[i].killSnake();
-					$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
+					$(this).trigger("snakedied", {'player' :this.players[i], 'score' : newScore});
 					if(callback){
 						callback(this.players[i]);
 					}
@@ -119,7 +119,7 @@ SnakeGame.prototype.checkForTeleportation = function(callback) {
 					if(callback){
 						callback(this.players[i]);
 					}
-					$(this).trigger("snakedied", {'nick' :this.players[i].nick, 'score' : newScore});
+					$(this).trigger("snakedied", {'player' :this.players[i], 'score' : newScore});
 				}
 			}
 		}
@@ -139,9 +139,9 @@ SnakeGame.prototype.checkForValidation = function(callback) {
 			if(snake.isInValidationZone(this.settings.width, this.settings.height, this.settings.validationZoneDim)){
 				var word = this.mode.validateSnake(player, snake);
 				if (!snake.insideValidationZone){
-					if(word.score > 0){
-						player.addToScore(word.score);
-						$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score, 'word': word.word});
+					if(word.score.score > 0){
+						player.addToScore(word.score.score);
+						$(this).trigger("validationsuccess", {'player': this.players[i],'score': word.score.score, 'word': word.word, 'count' : word.score.count});
 						snake.removeAndAwardParts(1);
 						snake.insideValidationZone = true;
 						if(callback) {
@@ -150,7 +150,7 @@ SnakeGame.prototype.checkForValidation = function(callback) {
 						}
 						
 					}else {
-						$(this).trigger("validationfailure", {'player': this.players[i], 'word': word.word});
+						$(this).trigger("validationfailure", {'player': this.players[i], 'word': word.word, 'score' : word.score.score});
 						snake.removeAndAwardParts(0);
 						snake.insideValidationZone = true;
 					}

@@ -45,10 +45,6 @@ $("document").ready(function() {
 	$("#addButton").button()
 	.bind('click', "", addAWordToTable);
 	
-	$("#saveButton").button()
-	.bind('click', "", makeStringFromArray);
-
-	
 	$("#back").button()
 	.bind('click', "levelmanager", redirect);
 	
@@ -164,7 +160,7 @@ function addToTable(content) {
 	for (var i = 0; i < content.length; i++) {
 		spellingTable.fnAddData([
 		                         content[i].text,
-		                         '<button class="spellingButtons" onClick="removeRowFromTable('+i+')"> Fjern </button>'
+		                         '<button class="spellingButtons" onClick="removeRowFromTable('+i+')"> FJERN </button>'
 		                         ]);
 	};
 
@@ -180,17 +176,18 @@ function addAWordToTable() {
 	console.log(index);
 	spellingTable.fnAddData([
 	                         word,
-	                         '<button class="spellingButtons" onClick="removeRowFromTable('+index+')"> Fjern </button>'
+	                         '<button class="spellingButtons" onClick="removeRowFromTable('+index+')"> FJERN </button>'
 	                         ]);
 	$(".spellingButtons").button();
 	//$(".spellingButtons").bind('click', this, removeRowFromTable);
 	$("#addwordinput").val("");
-
+	makeStringFromArray();
 }
 
 
 function removeRowFromTable(rowNr) {
-	spellingTable.fnDeleteRow(rowNr); 
+	spellingTable.fnDeleteRow(rowNr);
+	makeStringFromArray();
 }
 
 

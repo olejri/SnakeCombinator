@@ -22,8 +22,28 @@ var communicator = new function() {
 	 * of connecting to a server is receiving the game object afterwards. The
 	 * callback is run when this happen.
 	 */
-	this.connect = function(gameReceivedCallback, nick) {
+	
+	
+	this.getInfoAboutGame = function() {
 		socket = io.connect();
+		socket.emit('getGameInfo');
+		
+		
+		socket.on('gotGameInfo', function(words) {
+			$("#gameInfoList").empty();
+			var max = 6;
+			if (max > words.length) max = words.length;
+			
+			$("#gameInfoList").append('<p>NOEN GYLDIGE ORD:</p>');
+			for (var i = 0; i<max; i++){
+				$("#gameInfoList").append('<p>'+words[i]+'</p>');
+			}
+			$( "#dialog" ).dialog( "open" );
+		});
+	}
+	
+	
+	this.connect = function(gameReceivedCallback, nick) {
 		var nickObject = {'nick' : nick};
 		socket.emit('nick', nickObject);
 		
@@ -129,6 +149,8 @@ var communicator = new function() {
 	this.gameTimedOut = function() {
 		socket.emit("gameTimedOut")
 	}
+	
+	
 	
 }
 var log = new function() {

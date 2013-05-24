@@ -29,7 +29,7 @@ SpellingMode.prototype.validateSnake = function(player, snake) {
 			return {'word': word, 'score': this.getScore(player.addToValidated(word))};
 		} 
 	}
-	return {'word': word, 'score': 0};
+	return {'word': word, 'score': {'score' : -1, 'count' : 0}};
 	
 };
 
@@ -49,10 +49,10 @@ SpellingMode.prototype.getHelp = function(string) {
 
 
 SpellingMode.prototype.getScore = function(word) {
-	if (word.count == 1) return (word.word.length * 10);
-	else if (word.count == 2) return ((word.word.length * 10)/2);
-	else if (word.count == 3) return ((word.word.length * 10)/4);
-	else if (word.count > 3) return 0;
+	if (word.count == 1) return {'score' : (word.word.length * 10), 'count' : word.count};
+	else if (word.count == 2) return {'score' : ((word.word.length * 10)/2), 'count' : word.count};
+	else if (word.count == 3) return {'score' : ((word.word.length * 10)/4), 'count' : word.count};
+	else if (word.count > 3) return {'score' : 0, 'count' : word.count};
 }
 
 

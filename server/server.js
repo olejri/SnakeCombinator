@@ -31,6 +31,7 @@ var MathMode = require('./common/modes/math');
 utils = new Utils();
 var ServerSnakeGame = require('./server-snakegame');
 var Player = require('./common/player');
+var gameover = false;
 $ = require('jquery');
 
 /** SECTION 3: Http request handling **/
@@ -52,6 +53,9 @@ app.use(express.static(__dirname + '/common'));
 /*************************************************************/
 
 io.sockets.on('connection', function (socket) {
+	socket.on('getGameInfo', function() {
+		socket.emit('gotGameInfo', sgame.mode.words); 
+	});
 	var nick = "";
 	socket.on('nick', function(nickObject) {
 		console.log("recieved nick from client");
@@ -154,6 +158,7 @@ io.sockets.on('connection', function (socket) {
 				sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 				sgame.started = true;
 				timeAttack();
+				gameover = false;
 				sgame.resetGame();
 				io.sockets.emit('clearGUI');
 				for(var i = 0; i < sgame.players.length; i++){
@@ -168,10 +173,12 @@ io.sockets.on('connection', function (socket) {
 		});
 		
 		socket.on('gameTimedOut', function() {
-			console.log("gameover");
-			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
-			io.sockets.emit('sendResult', result);
-			saveGame();
+			if (gameover){
+				console.log("gameover");
+				var result = {'winner' : sgame.players[0], 'players' : sgame.players}
+				io.sockets.emit('sendResult', result);
+				saveGame();
+			}
 		});
 		
 		
@@ -280,8 +287,8 @@ function createGame(content) {
 	//setting gamemode and powerups
 	var gameMode;
 	var wallcrash = true;
-	var selfcrash = false;
-	var othercrash = false;
+	var selfcrash = true;
+	var othercrash = true;
 	var helpPowerUp = false;
 
 	if (gameModeName == "SPELLINGMODE"){
@@ -304,11 +311,11 @@ function createGame(content) {
 	}
 	
 	if (crashotherInput == "crashother"){
-		othercrash = true;
+		othercrash = false;
 	}
 
 	if (crashselfInput == "crashself"){
-		selfcrash = true;
+		selfcrash = false;
 	}
 
 
@@ -351,6 +358,7 @@ function createGame(content) {
 	$(sgame).on("gameOver", function(event, result) {
 		console.log("gameover");
 		io.sockets.emit('sendResult', result);
+		gameover = true;
 		saveGame();
 	});
 	
