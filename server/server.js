@@ -31,7 +31,6 @@ var MathMode = require('./common/modes/math');
 utils = new Utils();
 var ServerSnakeGame = require('./server-snakegame');
 var Player = require('./common/player');
-var gameover = false;
 $ = require('jquery');
 
 /** SECTION 3: Http request handling **/
@@ -90,10 +89,10 @@ io.sockets.on('connection', function (socket) {
 
 		// The internal disconnect trigger
 		socket.on('disconnect', function () {
-			
+
 			for(var i = 0; i < sgame.players.length; i++){
 				if (sgame.players[i].id == socket.id){
-					
+
 					console.log("YOYOOY");
 					io.sockets.emit('updateResultBoard', {'nick' : sgame.players[i].nick, 'answer' : "NEI"});
 				}
@@ -158,7 +157,6 @@ io.sockets.on('connection', function (socket) {
 				sgame.runGameInterval = setInterval(runGame, 1000/sgame.settings.speed);
 				sgame.started = true;
 				timeAttack();
-				gameover = false;
 				sgame.resetGame();
 				io.sockets.emit('clearGUI');
 				for(var i = 0; i < sgame.players.length; i++){
@@ -171,17 +169,15 @@ io.sockets.on('connection', function (socket) {
 		socket.on('updateDB', function(object) {
 			//updateGameServer(object.players);
 		});
-		
+
 		socket.on('gameTimedOut', function() {
-			if (gameover){
-				console.log("gameover");
-				var result = {'winner' : sgame.players[0], 'players' : sgame.players}
-				io.sockets.emit('sendResult', result);
-				saveGame();
-			}
+			console.log("gameover");
+			var result = {'winner' : sgame.players[0], 'players' : sgame.players}
+			io.sockets.emit('sendResult', result);
+			saveGame();
 		});
-		
-		
+
+
 
 	});
 
@@ -309,7 +305,7 @@ function createGame(content) {
 	if (wallcrashInput == "wallcrash"){
 		wallcrash = false;
 	}
-	
+
 	if (crashotherInput == "crashother"){
 		othercrash = false;
 	}
@@ -358,12 +354,11 @@ function createGame(content) {
 	$(sgame).on("gameOver", function(event, result) {
 		console.log("gameover");
 		io.sockets.emit('sendResult', result);
-		gameover = true;
 		saveGame();
 	});
-	
-	
-	
+
+
+
 };
 
 /**
@@ -470,11 +465,11 @@ function saveGame(){
 		for(var k = 0; k < sgame.players[i].validated.length; k++){
 			words.push({text : sgame.players[i].validated[k]});
 		}
-		
+
 		var player = {playername : sgame.players[i].nick.toLowerCase(), score : sgame.players[i].score, words : words}
 		players.push(player);
 	}
-	
+
 	var savedGame = new SavedGame({
 		date : dateString,
 		gametime : myArgs[10],
@@ -484,7 +479,7 @@ function saveGame(){
 		themename : myArgs[2],
 		players : players 
 	});
-	
+
 	savedGame.save(function(err, product) {
 		if(err) {
 			console.log("ERROR = " + err);

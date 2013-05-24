@@ -249,7 +249,7 @@ SnakeGame.prototype.getRandomOpenPos = function() {
 }
 
 SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
-	var random = "1222222333333333";	
+	var random = "12222223444444";	
 	var ran = random[utils.rand(0,random.length-1)];
 	
 	console.log("RAN = " +ran);
@@ -262,8 +262,11 @@ SnakeGame.prototype.getRandomPowerUp = function(powerUp) {
 		powerUp.details = "help";
 		powerUp.type = "powerup";
 		return powerUp;
+	} else if (ran == "3"){
+		powerUp.details = "bomb";
+		powerUp.type = "powerup";
+		return powerUp;
 	} else {
-		
 		return this.mode.convertToModeFood(powerUp);
 	}
 

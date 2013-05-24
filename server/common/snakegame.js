@@ -198,6 +198,9 @@ SnakeGame.prototype.enablePowerUps = function(callback) {
 					setTimeout(function(){
 						self.settings.foodSpawnRate = foodSpawnRate;
 					},3000);
+				} else if (snake.powerup == "bomb") {
+					snake.powerup = "zero";
+					this.food = [];
 				}
 
 			} 

@@ -259,6 +259,7 @@ BoardImageElement.prototype.loadImages = function() {
 			snakesprite: 'Snake_sprite_v01.png',
 			help: 'info.png',
 			fast: 'fast.png',
+			bomb: 'bomb.png',
 	};
 	var images = {};
 	var loadedImages = 0;
